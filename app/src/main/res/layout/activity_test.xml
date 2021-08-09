@@ -4,13 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-<<<<<<<< HEAD:app/src/main/res/layout/activity_test.xml
-    tools:context=".view.activity.TestActivity">
-========
-    tools:context="com.qg.qgtaxiapp.view.activity.MainActivity">
->>>>>>>> origin/master:app/src/main/res/layout/activity_main.xml
-
+    android:gravity="center">
     <!--地图-->
     <com.amap.api.maps.MapView
         android:id="@+id/map_view"

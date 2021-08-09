@@ -27,9 +27,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QGTaxiApp">
-        <activity android:name=".view.activity.test">
-
-        </activity>
         <!-- 定位service -->
         <service android:name="com.amap.api.location.APSService" />
 

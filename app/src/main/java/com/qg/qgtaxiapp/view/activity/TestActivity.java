@@ -7,6 +7,8 @@ import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,16 +19,16 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.TileOverlayOptions;
-import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
 import com.qg.qgtaxiapp.utils.MapUtils;
 
 import static com.amap.api.maps.model.HeatmapTileProvider.DEFAULT_GRADIENT;
