@@ -1,14 +1,15 @@
 package com.qg.qgtaxiapp.view.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -18,20 +19,20 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
+public class TestActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
 
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
-
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
-
+    private ActivityTestBinding binding;
     //内容
     //private TextView tvContent;
     private MapView mapView;
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        //tvContent = findViewById(R.id.tv_content);
-
-        mapView = findViewById(R.id.map_view);
+        setContentView(binding.getRoot());
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        mapView = binding.mapView;
         mapView.onCreate(savedInstanceState);
         //初始化定位
         initLocation();
