@@ -19,19 +19,16 @@ import com.amap.api.services.route.RouteSearch;
  * @author: Hx
  * @date: 2021年08月09日 9:19
  */
-public class Navigation {
+public class LocationUtils {
 
     private static final String TAG = "TAG_Navigation";
 
     private Context context;
-    public Navigation(Context context){
+    public LocationUtils(Context context){
         this.context = context;
     }
-
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient;
-    //声明AMapLocationClientOption对象
-    private AMapLocationClientOption mLocationOption;
     //声明AMapLocationListener对象
     private AMapLocationListener mLocationListener;
     //地图
@@ -54,9 +51,9 @@ public class Navigation {
     /**
      * 初始化定位
      */
-    public void initNavigation() {
+    public void initLocationClient() {
 
-        mLocationOption = new AMapLocationClientOption();
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
         mLocationListener = new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
@@ -76,7 +73,6 @@ public class Navigation {
                 }
             }
         };
-
 
         //初始化定位
         mLocationClient = new AMapLocationClient(context);
@@ -98,8 +94,6 @@ public class Navigation {
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
     }
-
-
 
 
 }
