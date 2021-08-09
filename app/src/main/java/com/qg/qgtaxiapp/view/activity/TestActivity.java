@@ -4,7 +4,7 @@ import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
+import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -16,15 +16,24 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.HeatmapTileProvider;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.TileOverlayOptions;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
+
+import java.util.Arrays;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class TestActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
+import static com.amap.api.maps.model.HeatmapTileProvider.DEFAULT_GRADIENT;
+
+public class TestActivity extends AppCompatActivity implements AMapLocationListener, LocationSource {
 
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
@@ -46,7 +55,7 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        binding=ActivityTestBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -56,8 +65,42 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
         initLocation();
         //初始化地图
         initMap(savedInstanceState);
+        initHotMap();
         //检查安卓版本
+        deleteLogo();
         checkingAndroidVersion();
+    }
+
+    private void initHotMap() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //生成热力点坐标列表
+                LatLng[] latlngs = new LatLng[500];
+                double x = 21.904979;
+                double y = 113.40964;
+
+                for (int i = 0; i < 500; i++) {
+                    double x_ = 0;
+                    double y_ = 0;
+                    x_ = Math.random() * 0.5 - 0.25;
+                    y_ = Math.random() * 0.5 - 0.25;
+                    latlngs[i] = new LatLng(x + x_, y + y_);
+                }
+                // 构建热力图 HeatmapTileProvider
+                HeatmapTileProvider.Builder builder = new HeatmapTileProvider.Builder();
+                builder.data(Arrays.asList(latlngs)) // 设置热力图绘制的数据
+                        .gradient(DEFAULT_GRADIENT); // 设置热力图渐变，有默认值 DEFAULT_GRADIENT，可不设置该接口
+// Gradient 的设置可见参考手册
+// 构造热力图对象
+                HeatmapTileProvider heatmapTileProvider = builder.build();
+                // 初始化 TileOverlayOptions
+                TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
+                tileOverlayOptions.tileProvider(heatmapTileProvider); // 设置瓦片图层的提供者
+// 向地图上添加 TileOverlayOptions 类对象
+                aMap.addTileOverlay(tileOverlayOptions);
+            }
+        });
     }
 
     /**
@@ -73,12 +116,12 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
                 String address = aMapLocation.getAddress();
                 //tvContent.setText(address == null ? "无地址" : address);
 
-                Log.d("MAinActivity",address);
+                Log.d("MAinActivity", address);
                 showMsg(address);
 
                 mLocationClient.stopLocation();
 
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onLocationChanged(aMapLocation);
                 }
             } else {
@@ -95,11 +138,11 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
      * 检查Android版本
      */
     private void checkingAndroidVersion() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //Android6.0及以上先获取权限再定位
             requestPermission();
 
-        }else {
+        } else {
             //Android6.0以下直接定位
             mLocationClient.startLocation();
         }
@@ -131,6 +174,7 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
 
     /**
      * 请求权限结果
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -144,10 +188,11 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
 
     /**
      * Toast提示
+     *
      * @param msg 提示内容
      */
-    private void showMsg(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    private void showMsg(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -189,12 +234,14 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mapView.onResume();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
         mapView.onPause();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -204,6 +251,7 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
 
     /**
      * 初始化地图
+     *
      * @param savedInstanceState
      */
     private void initMap(Bundle savedInstanceState) {
@@ -241,6 +289,15 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
+    }
+
+    private void deleteLogo(){
+        UiSettings settings=aMap.getUiSettings();
+        settings.setCompassEnabled(true);
+        settings.setMyLocationButtonEnabled(true);
+        settings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
+        settings.setLogoBottomMargin(-100);
+        settings.setScaleControlsEnabled(true);
     }
 
 }
