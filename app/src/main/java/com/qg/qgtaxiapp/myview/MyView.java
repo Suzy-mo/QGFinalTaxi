@@ -1,4 +1,4 @@
-package com.qg.qgtaxiapp.view;
+package com.qg.qgtaxiapp.myview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
 
-import com.qg.qgtaxiapp.view.MyView;
+import com.qg.qgtaxiapp.myview.MyView;
 
 public class test extends AppCompatActivity {
 
