@@ -4,6 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="view.activity.test">
+    tools:context="com.qg.qgtaxiapp.view.activity.test">
+
+    <com.qg.qgtaxiapp.view.MyView
+        android:id="@+id/linechart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:XPoint="50dp"
+        app:XScale="10dp"
+        app:YScale="40dp"
+        app:XLength="200dp"
+        app:YLength="200dp">
+    </com.qg.qgtaxiapp.view.MyView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

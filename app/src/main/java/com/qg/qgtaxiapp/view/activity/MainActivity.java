@@ -1,16 +1,12 @@
-package view.activity;
+package com.qg.qgtaxiapp.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -21,20 +17,14 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.TileOverlay;
 import com.amap.api.maps.model.TileOverlayOptions;
-import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
-
-import java.util.Arrays;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-import utils.MapUtils;
+import com.qg.qgtaxiapp.utils.MapUtils;
 
 public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
     private ActivityMainBinding binding;
