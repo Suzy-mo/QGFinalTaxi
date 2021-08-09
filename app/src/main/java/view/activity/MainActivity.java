@@ -1,13 +1,16 @@
-package com.qg.qgtaxiapp.view.activity;
+package view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -17,13 +20,23 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.Gradient;
+import com.amap.api.maps.model.HeatmapTileProvider;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.TileOverlay;
+import com.amap.api.maps.model.TileOverlayOptions;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
+
+import java.util.Arrays;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
-
+    private ActivityMainBinding binding;
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
 
@@ -31,33 +44,69 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
-
+    private UiSettings uiSettings;
     //内容
     //private TextView tvContent;
     private MapView mapView;
-
+    private Button button;
     //地图控制器
     private AMap aMap = null;
     //位置更改监听
     private OnLocationChangedListener mListener;
+    private LatLng[] latlngs;
+    private MyLocationStyle myLocationStyle;
+
+    private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
+            Color.rgb( 0, 0, 255),
+            Color.rgb( 0, 211, 248),
+            Color.rgb(0, 255, 0),
+            Color.rgb(185, 71, 0),
+            Color.rgb(255, 0, 0)
+    };
+
+    public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = { 0.1f,
+            0.2f, 0.25f, 0.4f, 1f };
+
+    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(
+            ALT_HEATMAP_GRADIENT_COLORS, ALT_HEATMAP_GRADIENT_START_POINTS);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         //tvContent = findViewById(R.id.tv_content);
+        setContentView(binding.getRoot());
+        button = binding.btn;
 
-        mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
         //初始化定位
         initLocation();
         //初始化地图
         initMap(savedInstanceState);
+
+
         //检查安卓版本
         checkingAndroidVersion();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG","btn");
+                initHeatMapData();
+
+                HeatmapTileProvider heatmapTileProvider = buildHeatmapTileProvider();
+                TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
+                tileOverlayOptions.tileProvider(heatmapTileProvider);
+                aMap.addTileOverlay(tileOverlayOptions);
+            }
+        });
     }
+
+
+
+
+
 
     /**
      * 接收异步返回的定位结果
@@ -72,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 String address = aMapLocation.getAddress();
                 //tvContent.setText(address == null ? "无地址" : address);
 
+                Log.d("TAG",aMapLocation.getLatitude() + "");
+                Log.d("TAG",aMapLocation.getLongitude() + "");
                 Log.d("MAinActivity",address);
                 showMsg(address);
 
@@ -153,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
      * 初始化定位
      */
     private void initLocation() {
+
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -172,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         mLocationOption.setLocationCacheEnable(false);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
+
+
     }
 
     @Override
@@ -206,16 +260,16 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
      * @param savedInstanceState
      */
     private void initMap(Bundle savedInstanceState) {
-        mapView = findViewById(R.id.map_view);
+        mapView = binding.mapView;
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mapView.onCreate(savedInstanceState);
         //初始化地图控制器对象
         aMap = mapView.getMap();
-
         // 设置定位监听
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.setMyLocationEnabled(true);
+        aMap.showIndoorMap(true);
     }
 
     /**
@@ -240,6 +294,29 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
+    }
+
+    //生成热力点坐标列表
+    private void initHeatMapData(){
+
+        latlngs = new LatLng[500];
+        double x = 22.497917;
+        double y = 113.377698;
+
+        for (int i = 0; i < 500; i++) {
+            double x_ = 0;
+            double y_ = 0;
+            x_ = Math.random() * 0.5 - 0.25;
+            y_ = Math.random() * 0.5 - 0.25;
+            latlngs[i] = new LatLng(x + x_, y + y_);
+        }
+    }
+    public HeatmapTileProvider buildHeatmapTileProvider() {
+        HeatmapTileProvider.Builder builder = new HeatmapTileProvider.Builder();
+        builder.data(Arrays.asList(latlngs));
+        builder.gradient(ALT_HEATMAP_GRADIENT);
+        HeatmapTileProvider heatmapTileProvider = builder.build();
+        return heatmapTileProvider;
     }
 
 }
