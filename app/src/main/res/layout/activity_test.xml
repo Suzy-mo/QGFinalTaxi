@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.qg.qgtaxiapp.view.activity.test">
 
-    <com.qg.qgtaxiapp.myview.MyView
+    <com.qg.qgtaxiapp.myview.LineChart
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/linechart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:XPoint="50dp"
-        app:XScale="10dp"
-        app:YScale="40dp"
-        app:XLength="200dp"
-        app:YLength="200dp">
-    </com.qg.qgtaxiapp.myview.MyView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
