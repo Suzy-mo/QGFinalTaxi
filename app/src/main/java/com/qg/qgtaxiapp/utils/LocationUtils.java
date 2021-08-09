@@ -1,4 +1,4 @@
-package utils;
+package com.qg.qgtaxiapp.utils;
 
 import android.content.Context;
 import android.util.Log;

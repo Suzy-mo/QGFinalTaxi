@@ -1,10 +1,7 @@
-package utils;
+package com.qg.qgtaxiapp.utils;
 
 import android.graphics.Color;
-import android.os.Bundle;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
