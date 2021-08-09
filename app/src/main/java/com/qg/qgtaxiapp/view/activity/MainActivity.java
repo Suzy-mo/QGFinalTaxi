@@ -4,8 +4,6 @@ import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,46 +16,53 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-import com.qg.qgtaxiapp.R;
-import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.HeatmapTileProvider;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.TileOverlayOptions;
+import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import com.qg.qgtaxiapp.utils.MapUtils;
 
-public class TestActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
+public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
 
+    private ActivityMainBinding binding;
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
+
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
-    private ActivityTestBinding binding;
+    private UiSettings uiSettings;
     //内容
     //private TextView tvContent;
     private MapView mapView;
-
     //地图控制器
     private AMap aMap = null;
     //位置更改监听
     private OnLocationChangedListener mListener;
 
+    private MapUtils mapUtils = new MapUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        //tvContent = findViewById(R.id.tv_content);
         setContentView(binding.getRoot());
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         mapView = binding.mapView;
-        mapView.onCreate(savedInstanceState);
         //初始化定位
         initLocation();
         //初始化地图
         initMap(savedInstanceState);
+
         //检查安卓版本
         checkingAndroidVersion();
+
     }
 
     /**
@@ -73,10 +78,18 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
                 String address = aMapLocation.getAddress();
                 //tvContent.setText(address == null ? "无地址" : address);
 
+                Log.d("TAG",aMapLocation.getLatitude() + "");
+                Log.d("TAG",aMapLocation.getLongitude() + "");
                 Log.d("MAinActivity",address);
                 showMsg(address);
-
                 mLocationClient.stopLocation();
+
+                LatLng[] latlngs = mapUtils.initHeatMapData(aMapLocation.getLatitude(),aMapLocation.getLongitude());
+
+                HeatmapTileProvider heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(latlngs);
+                TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
+                tileOverlayOptions.tileProvider(heatmapTileProvider);
+                aMap.addTileOverlay(tileOverlayOptions);
 
                 if(mListener != null){
                     mListener.onLocationChanged(aMapLocation);
@@ -154,6 +167,7 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
      * 初始化定位
      */
     private void initLocation() {
+
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -207,16 +221,16 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
      * @param savedInstanceState
      */
     private void initMap(Bundle savedInstanceState) {
-        mapView = findViewById(R.id.map_view);
+
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mapView.onCreate(savedInstanceState);
         //初始化地图控制器对象
         aMap = mapView.getMap();
-
         // 设置定位监听
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.setMyLocationEnabled(true);
+        aMap.showIndoorMap(true);
     }
 
     /**

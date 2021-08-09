@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LineChartView">
+        <attr name="XPoint" format="reference|dimension"/>
+        <attr name="XScale" format="reference|dimension"/>
+        <attr name="YScale" format="reference|dimension"/>
+        <attr name="XLength" format="reference|dimension"/>
+        <attr name="YLength" format="reference|dimension"/>
+    </declare-styleable>
+</resources>
