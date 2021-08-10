@@ -33,7 +33,7 @@ import com.qg.qgtaxiapp.utils.MapUtils;
 
 import static com.amap.api.maps.model.HeatmapTileProvider.DEFAULT_GRADIENT;
 
-public class TestActivity extends AppCompatActivity implements AMapLocationListener, LocationSource {
+public class MainActivity extends AppCompatActivity implements AMapLocationListener, LocationSource {
 
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
