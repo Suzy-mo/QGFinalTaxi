@@ -236,7 +236,11 @@ public class TestActivity extends AppCompatActivity implements AMapLocationListe
         mapView.onCreate(savedInstanceState);
         //初始化地图控制器对象
         aMap = mapView.getMap();
-
+        aMap.setCustomMapStyle(
+                new com.amap.api.maps.model.CustomMapStyleOptions()
+                        .setEnable(true)
+                        .setStyleId("7f431e5f5cf8c616d10cfaa2907a229e")//官网控制台-自定义样式 获取
+        );
         // 设置定位监听
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
