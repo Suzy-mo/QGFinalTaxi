@@ -12,7 +12,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
 
