@@ -36,7 +36,6 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-
 }
 
 
@@ -67,6 +66,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     //Retrofit库
     implementation'com.squareup.retrofit2:converter-gson:2.6.1'
-    //GSON库
 
+    //GSON库
+    implementation 'com.google.code.gson:gson:2.8.7'
+    //MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

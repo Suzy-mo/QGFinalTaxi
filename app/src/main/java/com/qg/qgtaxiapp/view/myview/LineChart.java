@@ -1,4 +1,4 @@
-package com.qg.qgtaxiapp.myview;
+package com.qg.qgtaxiapp.view.myview;
 
 import android.content.Context;
 import android.graphics.Canvas;
