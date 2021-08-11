@@ -8,23 +8,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#292929">
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/car_search_view"
-            android:background="@drawable/car_owner_search_view_background"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/car_owner_search_view_background" />
+
         <TextView
-            android:layout_marginTop="25dp"
-            android:layout_centerHorizontal="true"
-            android:text="输入车牌号/时间"
             android:id="@+id/car_search_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#999999"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="输入车牌号/时间"
+            android:textColor="#999999" />
     </RelativeLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_below="@id/search_rl"

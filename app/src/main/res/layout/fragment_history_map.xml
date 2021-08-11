@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <com.google.android.material.tabs.TabLayout
-        android:background="@drawable/history_tab_background"
-        app:tabIndicatorFullWidth="false"
         android:id="@+id/history_tab_layout"
         android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@drawable/history_tab_background"
         app:tabIndicatorColor="#03DAC5"
-        app:tabSelectedTextColor="#03DAC5"
-        android:layout_height="?android:attr/actionBarSize"/>
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="#03DAC5" />
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/history_viewpager2"
         android:layout_below="@id/history_tab_layout"
