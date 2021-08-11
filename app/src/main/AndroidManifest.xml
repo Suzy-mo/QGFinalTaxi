@@ -29,15 +29,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QGTaxiApp">
         <activity android:name=".view.activity.TestChartActivity"/>
-        <activity android:name=".view.activity.TestActivity"/>
-        <!--定位service-->
-        <service android:name="com.amap.api.location.APSService"/>
-
-        <activity android:name="com.qg.qgtaxiapp.view.activity.MainActivity">
+        <activity android:name=".view.activity.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!--定位service-->
+        <service android:name="com.amap.api.location.APSService"/>
+
+        <activity android:name="com.qg.qgtaxiapp.view.activity.MainActivity">
+
         </activity>
         <!-- &lt;!&ndash;设置高德Key&ndash;&gt; -->
         <!-- <meta-data android:name="com.amap.api.v2.apikey" android:value="74fa96d685d4f1f6c7094487f8c26979"/> -->
