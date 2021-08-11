@@ -1,8 +1,13 @@
 package com.qg.qgtaxiapp.view.activity;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -12,12 +17,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.core.AMapException;
+import com.amap.api.services.district.DistrictItem;
+import com.amap.api.services.district.DistrictResult;
+import com.amap.api.services.district.DistrictSearch;
+import com.amap.api.services.district.DistrictSearchQuery;
 import com.qg.qgtaxiapp.databinding.ActivityTestBinding;
-import com.qg.qgtaxiapp.utils.MapUtils;
+
+import java.util.ArrayList;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -29,13 +43,13 @@ public class TestActivity extends AppCompatActivity{
 
     private ActivityTestBinding binding;
     private UiSettings uiSettings;
-
     private MapView mapView;
     //地图控制器
     private AMap aMap = null;
 
-    private MapUtils mapUtils = new MapUtils();
-
+    private DistrictSearch districtSearch;
+    private DistrictSearchQuery districtSearchQuery;
+    private PolygonRunnable polygonRunnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +63,56 @@ public class TestActivity extends AppCompatActivity{
         //初始化地图
         initMap(savedInstanceState);
         //检查安卓版本
-        deleteLogo();
         checkingAndroidVersion();
 
+        districtSearch = new DistrictSearch(this);
+        /*
+            获取边界数据回调
+         */
+        districtSearch.setOnDistrictSearchListener(new DistrictSearch.OnDistrictSearchListener() {
+            @Override
+            public void onDistrictSearched(DistrictResult districtResult) {
+
+                if (districtResult != null && districtResult.getDistrict() != null){
+                    if (districtResult.getAMapException().getErrorCode() == AMapException.CODE_AMAP_SUCCESS){
+
+                        ArrayList<DistrictItem> districtItems = districtResult.getDistrict();
+                        DistrictItem item = null;
+                        if (districtItems != null && districtItems.size() > 0){
+                            //广州市 adcode：440100
+                            for (DistrictItem districtItem : districtItems){
+                                if(districtItem.getAdcode().equals("440100")){
+                                    item = districtItem;
+                                    break;
+                                }
+                            }
+                            if (item == null){
+                                return;
+                            }
+                            Log.d("TAG_Hx","创建子线程");
+                            polygonRunnable = new PolygonRunnable(item,handler);
+                            new Thread(polygonRunnable).start();
+                        }
+                    }
+                }
+            }
+        });
+        drawBoundary();
+    }
+
+    /*
+        地图上圈出广州
+     */
+    private void drawBoundary(){
+        String city = "广州";
+        districtSearchQuery = new DistrictSearchQuery();
+        //设置关键字
+        districtSearchQuery.setKeywords(city);
+        //设置是否返回边界值
+        districtSearchQuery.setShowBoundary(true);
+
+        districtSearch.setQuery(districtSearchQuery);
+        districtSearch.searchDistrictAsyn();
     }
 
     /**
@@ -152,19 +213,110 @@ public class TestActivity extends AppCompatActivity{
                         .setEnable(true)
                         .setStyleId("7f431e5f5cf8c616d10cfaa2907a229e")//官网控制台-自定义样式 获取
         );
+        uiSettings = aMap.getUiSettings();
+        uiSettings.setCompassEnabled(true);
+        uiSettings.setMyLocationButtonEnabled(false);
+        uiSettings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
+        uiSettings.setLogoBottomMargin(-100);
+        uiSettings.setScaleControlsEnabled(true);
 
-        LatLng latLng = new LatLng(23.129112,113.264385);//广州市
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+        LatLng northeast = new LatLng(23.955343,114.054936);
+        LatLng southwest = new LatLng(22.506530,112.968270);
+        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
+        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));
+        aMap.setMapStatusLimits(bounds);
+
+        /*LatLng latLng = new LatLng(23.129112,113.264385);//广州市
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));*/
     }
 
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
 
-    private void deleteLogo(){
-        UiSettings settings=aMap.getUiSettings();
-        settings.setCompassEnabled(true);
-        settings.setMyLocationButtonEnabled(true);
-        settings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
-        settings.setLogoBottomMargin(-100);
-        settings.setScaleControlsEnabled(true);
+                case 0:{
+
+                }break;
+
+                case 1:{
+                    PolylineOptions options = (PolylineOptions) msg.obj;
+                    aMap.addPolyline(options);
+                }break;
+
+            }
+        }
+    };
+
+}
+
+/**
+ * 画地图边界
+ */
+ class PolygonRunnable implements Runnable{
+    private DistrictItem item;
+    private Handler handler;
+    private boolean isCancel = false;
+    /**
+     * districtBoundary()
+     * 以字符串数组形式返回行政区划边界值。
+     * 字符串拆分规则： 经纬度，经度和纬度之间用","分隔，坐标点之间用";"分隔。
+     * 例如：116.076498,40.115153;116.076603,40.115071;116.076333,40.115257;116.076498,40.115153。
+     * 字符串数组由来： 如果行政区包括的是群岛，则坐标点是各个岛屿的边界，各个岛屿之间的经纬度使用"|"分隔。
+     * 一个字符串数组可包含多个封闭区域，一个字符串表示一个封闭区域
+     */
+
+    public PolygonRunnable(DistrictItem districtItem, Handler handler){
+        this.item = districtItem;
+        this.handler = handler;
     }
 
+    public void cancel(){
+        isCancel = true;
+    }
+
+    @Override
+    public void run() {
+
+        if (!isCancel){
+            try{
+                String[] boundary = item.districtBoundary();
+                if (boundary != null && boundary.length > 0){
+                    Log.d("TAG_Hx","boundary:" + boundary.toString());
+
+                    for (String b : boundary){
+                        if (!b.contains("|")){
+                            String[] split = b.split(";");
+                            PolylineOptions polylineOptions = new PolylineOptions();
+                            boolean isFirst = true;
+                            LatLng firstLatLng = null;
+
+                            for (String s : split){
+                                String[] ll = s.split(",");
+                                if (isFirst){
+                                    isFirst = false;
+                                    firstLatLng = new LatLng(Double.parseDouble(ll[1]),Double.parseDouble(ll[0]));
+                                }
+                                polylineOptions.add(new LatLng(Double.parseDouble(ll[1]), Double.parseDouble(ll[0])));
+                            }
+                            if (firstLatLng != null){
+                                polylineOptions.add(firstLatLng);
+                            }
+
+                            polylineOptions.width(10).color(Color.BLUE).setDottedLine(true);
+                            Message message = handler.obtainMessage();
+
+                            message.what = 1;
+                            message.obj = polylineOptions;
+                            handler.sendMessage(message);
+
+
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
