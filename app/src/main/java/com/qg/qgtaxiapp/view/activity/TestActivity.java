@@ -101,7 +101,7 @@ public class TestActivity extends AppCompatActivity{
     }
 
     /*
-        地图上圈出广州
+        获取边界点的设置
      */
     private void drawBoundary(){
         String city = "广州";
@@ -221,6 +221,9 @@ public class TestActivity extends AppCompatActivity{
         uiSettings.setLogoBottomMargin(-100);
         uiSettings.setScaleControlsEnabled(true);
 
+        /*
+            设置地图的范围
+         */
         LatLng northeast = new LatLng(23.955343,114.054936);
         LatLng southwest = new LatLng(22.506530,112.968270);
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
@@ -231,6 +234,9 @@ public class TestActivity extends AppCompatActivity{
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));*/
     }
 
+    /*
+        消息处理
+     */
     private Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -253,6 +259,7 @@ public class TestActivity extends AppCompatActivity{
 
 /**
  * 画地图边界
+ * 获取广州全部边界点的经纬度数据
  */
  class PolygonRunnable implements Runnable{
     private DistrictItem item;
@@ -310,8 +317,6 @@ public class TestActivity extends AppCompatActivity{
                             message.what = 1;
                             message.obj = polylineOptions;
                             handler.sendMessage(message);
-
-
                         }
                     }
                 }
