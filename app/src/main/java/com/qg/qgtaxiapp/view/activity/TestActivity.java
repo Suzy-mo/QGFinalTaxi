@@ -208,11 +208,12 @@ public class TestActivity extends AppCompatActivity{
         mapView.onCreate(savedInstanceState);
         //初始化地图控制器对象
         aMap = mapView.getMap();
-        aMap.setCustomMapStyle(
-                new com.amap.api.maps.model.CustomMapStyleOptions()
-                        .setEnable(true)
-                        .setStyleId("7f431e5f5cf8c616d10cfaa2907a229e")//官网控制台-自定义样式 获取
-        );
+        aMap.setMapType(AMap.MAP_TYPE_NIGHT);
+//        aMap.setCustomMapStyle(
+//                new com.amap.api.maps.model.CustomMapStyleOptions()
+//                        .setEnable(true)
+//                        .setStyleId("7f431e5f5cf8c616d10cfaa2907a229e")//官网控制台-自定义样式 获取
+//        );
         uiSettings = aMap.getUiSettings();
         uiSettings.setCompassEnabled(true);
         uiSettings.setMyLocationButtonEnabled(false);

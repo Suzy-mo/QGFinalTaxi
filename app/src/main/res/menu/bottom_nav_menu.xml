@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_heat"
+        android:icon="@mipmap/bottom1"
         android:title="热力图" />
 
     <item
         android:id="@+id/navigation_flow"
+        android:icon="@mipmap/bottom2"
         android:title="流向图" />
 
     <item
         android:id="@+id/navigation_history"
+        android:icon="@mipmap/bottom3"
         android:title="历史记录" />
 </menu>

@@ -87,4 +87,5 @@ dependencies {
     //lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 }

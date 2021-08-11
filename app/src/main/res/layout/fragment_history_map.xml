@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.tabs.TabLayout
+        android:background="@drawable/history_tab_background"
+        app:tabIndicatorFullWidth="false"
+        android:id="@+id/history_tab_layout"
+        android:layout_width="match_parent"
+        app:tabIndicatorColor="#03DAC5"
+        app:tabSelectedTextColor="#03DAC5"
+        android:layout_height="?android:attr/actionBarSize"/>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/history_viewpager2"
+        android:layout_below="@id/history_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tab_item_top"
+        android:layout_width="28dp"
+        android:layout_height="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="车主信息"
+        android:textColor="#ff03dac5"
+        android:textSize="7sp" />
+    <View
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/tab_item_bottom"
+        android:layout_below="@id/tab_item_top"
+        android:layout_width="10dp"
+        android:layout_height="2dp" />
+</RelativeLayout>
