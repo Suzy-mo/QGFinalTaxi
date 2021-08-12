@@ -1,11 +1,19 @@
 package com.qg.qgtaxiapp.utils;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
 import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.district.DistrictItem;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +65,52 @@ public class MapUtils {
             latlngs[i] = new LatLng(x + x_, y + y_);
         }
         return latlngs;
+    }
+
+    /*
+        获取自定义地图样式
+     */
+    public static byte[] getAssetsStyle(Context context){
+        byte[] buffer = null;
+        InputStream is = null;
+        try {
+            is = context.getResources().getAssets().open("style.data");
+            int len = is.available();
+            buffer = new byte[len];
+            is.read(buffer);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (is != null){
+                    is.close();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return buffer;
+    }
+    public static byte[] getAssetsStyleExtra(Context context){
+        byte[] buffer = null;
+        InputStream is = null;
+        try {
+            is = context.getResources().getAssets().open("style_extra.data");
+            int len = is.available();
+            buffer = new byte[len];
+            is.read(buffer);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (is != null){
+                    is.close();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return buffer;
     }
 }
 

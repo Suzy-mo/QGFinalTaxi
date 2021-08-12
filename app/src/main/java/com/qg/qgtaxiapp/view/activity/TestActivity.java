@@ -58,7 +58,6 @@ public class TestActivity extends AppCompatActivity{
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         mapView = binding.mapView;
-        mapView.onCreate(savedInstanceState);
 
         //初始化地图
         initMap(savedInstanceState);
