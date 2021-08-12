@@ -1,5 +1,8 @@
 package com.qg.qgtaxiapp.view.fragment;
 
+import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyle;
+import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,6 +39,8 @@ import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
 import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
+import com.qg.qgtaxiapp.utils.MapUtils;
+import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
@@ -67,7 +72,6 @@ public class HeatMapFragment extends Fragment{
     private DistrictSearch districtSearch;
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,52 +109,6 @@ public class HeatMapFragment extends Fragment{
                 }
             }
         });
-    }
-
-    /*
-        获取自定义地图样式
-     */
-    private static byte[] getAssetsStyle(Context context){
-        byte[] buffer = null;
-        InputStream is = null;
-        try {
-            is = context.getResources().getAssets().open("style.data");
-            int len = is.available();
-            buffer = new byte[len];
-            is.read(buffer);
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            try {
-                if (is != null){
-                    is.close();
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-        return buffer;
-    }
-    private static byte[] getAssetsStyleExtra(Context context){
-        byte[] buffer = null;
-        InputStream is = null;
-        try {
-            is = context.getResources().getAssets().open("style_extra.data");
-            int len = is.available();
-            buffer = new byte[len];
-            is.read(buffer);
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            try {
-                if (is != null){
-                    is.close();
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-        return buffer;
     }
 
     @Nullable
@@ -223,14 +181,7 @@ public class HeatMapFragment extends Fragment{
         customMapStyleOptions.setStyleData(getAssetsStyle(getContext()));
         customMapStyleOptions.setStyleExtraData(getAssetsStyleExtra(getContext()));
         aMap.setCustomMapStyle(customMapStyleOptions);
-       // aMap.setMapType(AMap.MAP_TYPE_NIGHT);
 
-        //7f431e5f5cf8c616d10cfaa2907a229e
-        /*aMap.setCustomMapStyle(
-                new com.amap.api.maps.model.CustomMapStyleOptions()
-                        .setEnable(true)
-                        .setStyleId("b7c4327cb2b97bc56dc146ff70bb72b9")
-        );*/
         uiSettings = aMap.getUiSettings();
         uiSettings.setCompassEnabled(true);
         uiSettings.setMyLocationButtonEnabled(false);
@@ -246,11 +197,6 @@ public class HeatMapFragment extends Fragment{
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));
         aMap.setMapStatusLimits(bounds);
-
-
-
-        /*LatLng latLng = new LatLng(23.129112,113.264385);广州市
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));*/
     }
 
     /** 接收MainActivity的Touch回调的对象，重写其中的onTouchEvent函数 */
@@ -336,74 +282,3 @@ public class HeatMapFragment extends Fragment{
         }
     };
 }
-
-/**
- * 画地图边界
- * 获取广州全部边界点的经纬度数据
- */
-class PolygonRunnable implements Runnable{
-    private DistrictItem item;
-    private Handler handler;
-    private boolean isCancel = false;
-    /**
-     * districtBoundary()
-     * 以字符串数组形式返回行政区划边界值。
-     * 字符串拆分规则： 经纬度，经度和纬度之间用","分隔，坐标点之间用";"分隔。
-     * 例如：116.076498,40.115153;116.076603,40.115071;116.076333,40.115257;116.076498,40.115153。
-     * 字符串数组由来： 如果行政区包括的是群岛，则坐标点是各个岛屿的边界，各个岛屿之间的经纬度使用"|"分隔。
-     * 一个字符串数组可包含多个封闭区域，一个字符串表示一个封闭区域
-     */
-
-    public PolygonRunnable(DistrictItem districtItem, Handler handler){
-        this.item = districtItem;
-        this.handler = handler;
-    }
-
-    public void cancel(){
-        isCancel = true;
-    }
-
-    @Override
-    public void run() {
-
-        if (!isCancel){
-            try{
-                String[] boundary = item.districtBoundary();
-                if (boundary != null && boundary.length > 0){
-                    Log.d("TAG_Hx","boundary:" + boundary.toString());
-
-                    for (String b : boundary){
-                        if (!b.contains("|")){
-                            String[] split = b.split(";");
-                            PolylineOptions polylineOptions = new PolylineOptions();
-                            boolean isFirst = true;
-                            LatLng firstLatLng = null;
-
-                            for (String s : split){
-                                String[] ll = s.split(",");
-                                if (isFirst){
-                                    isFirst = false;
-                                    firstLatLng = new LatLng(Double.parseDouble(ll[1]),Double.parseDouble(ll[0]));
-                                }
-                                polylineOptions.add(new LatLng(Double.parseDouble(ll[1]), Double.parseDouble(ll[0])));
-                            }
-                            if (firstLatLng != null){
-                                polylineOptions.add(firstLatLng);
-                            }
-
-                            polylineOptions.width(10).color(Color.BLUE).setDottedLine(true);
-                            Message message = handler.obtainMessage();
-
-                            message.what = 0;
-                            message.obj = polylineOptions;
-                            handler.sendMessage(message);
-                        }
-                    }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-}
-
