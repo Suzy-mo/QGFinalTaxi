@@ -24,10 +24,9 @@ public class CarOwnerAdapter extends BaseQuickAdapter<CarOwnerItem, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, CarOwnerItem carOwnerItem) {
-//        baseViewHolder.setText(R.id.car_id,carOwnerItem.getCarID());
+//        baseViewHolder.setText(R.id.car_id_tv,carOwnerItem.getCarID());
 //        baseViewHolder.setText(R.id.company_tv,carOwnerItem.getCompanyID());
 //        baseViewHolder.setText(R.id.mile_tv,carOwnerItem.getMile());
 //        baseViewHolder.setText(R.id.score_tv,carOwnerItem.getScore());
-//        baseViewHolder.setText(R.id.date_tv,carOwnerItem.getDate());
     }
 }

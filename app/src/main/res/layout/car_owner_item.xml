@@ -5,63 +5,49 @@
     android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
+    android:background="@drawable/car_owner_item_layout"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:background="@drawable/car_owner_item_layout">
+    android:paddingRight="8dp">
 
     <TextView
-        android:id="@+id/car_id"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/car_id_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@id/mile_tv"
         android:text="粤Q66666"
-        android:textColor="#ffffffff"
-        android:textSize="13sp" />
+        android:textColor="#DEFFFFFF"
+        android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/company_tv"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/company_id_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/car_id"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@id/mile_tv"
+        android:layout_below="@id/car_id_tv"
+        android:layout_marginTop="5dp"
         android:text="公司ID:123456789"
         android:textColor="#61FFFFFF"
-        android:textSize="10sp" />
-
-    <TextView
-        android:id="@+id/mile_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_10"
-        android:text="1873.95公里"
-        android:textColor="#99FFFFFF"
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/score_tv"
+        android:id="@+id/score_id_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_toRightOf="@id/mile_tv"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
         android:text="4.8"
         android:textColor="#FF03DAC5"
-        android:textSize="15sp" />
+        android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/date_tv"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/score_id_tv"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/score_tv"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/mile_tv"
-        android:text="2021.08.11"
-        android:textColor="#61FFFFFF"
-        android:textSize="10sp" />
+        android:text="1873.95公里"
+        android:textColor="#99FFFFFF"
+        android:textSize="15sp"
+        />
 </RelativeLayout>
