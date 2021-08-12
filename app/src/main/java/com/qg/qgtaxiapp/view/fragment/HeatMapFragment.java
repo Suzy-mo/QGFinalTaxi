@@ -1,5 +1,6 @@
 package com.qg.qgtaxiapp.view.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.PolylineOptions;
@@ -37,6 +39,8 @@ import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -103,6 +107,52 @@ public class HeatMapFragment extends Fragment{
         });
     }
 
+    /*
+        获取自定义地图样式
+     */
+    private static byte[] getAssetsStyle(Context context){
+        byte[] buffer = null;
+        InputStream is = null;
+        try {
+            is = context.getResources().getAssets().open("style.data");
+            int len = is.available();
+            buffer = new byte[len];
+            is.read(buffer);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (is != null){
+                    is.close();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return buffer;
+    }
+    private static byte[] getAssetsStyleExtra(Context context){
+        byte[] buffer = null;
+        InputStream is = null;
+        try {
+            is = context.getResources().getAssets().open("style_extra.data");
+            int len = is.available();
+            buffer = new byte[len];
+            is.read(buffer);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (is != null){
+                    is.close();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return buffer;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -167,11 +217,19 @@ public class HeatMapFragment extends Fragment{
         mapView.onCreate(savedInstanceState);
         //初始化地图控制器对象
         aMap = mapView.getMap();
-        aMap.setMapType(AMap.MAP_TYPE_NIGHT);
+
+        CustomMapStyleOptions customMapStyleOptions = new CustomMapStyleOptions();
+        customMapStyleOptions.setEnable(true);
+        customMapStyleOptions.setStyleData(getAssetsStyle(getContext()));
+        customMapStyleOptions.setStyleExtraData(getAssetsStyleExtra(getContext()));
+        aMap.setCustomMapStyle(customMapStyleOptions);
+       // aMap.setMapType(AMap.MAP_TYPE_NIGHT);
+
+        //7f431e5f5cf8c616d10cfaa2907a229e
         /*aMap.setCustomMapStyle(
                 new com.amap.api.maps.model.CustomMapStyleOptions()
                         .setEnable(true)
-                        .setStyleId("7f431e5f5cf8c616d10cfaa2907a229e")官网控制台-自定义样式 获取
+                        .setStyleId("b7c4327cb2b97bc56dc146ff70bb72b9")
         );*/
         uiSettings = aMap.getUiSettings();
         uiSettings.setCompassEnabled(true);
@@ -188,6 +246,8 @@ public class HeatMapFragment extends Fragment{
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
         aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));
         aMap.setMapStatusLimits(bounds);
+
+
 
         /*LatLng latLng = new LatLng(23.129112,113.264385);广州市
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));*/
@@ -331,7 +391,7 @@ class PolygonRunnable implements Runnable{
                                 polylineOptions.add(firstLatLng);
                             }
 
-                            polylineOptions.width(10).color(Color.WHITE).setDottedLine(true);
+                            polylineOptions.width(10).color(Color.BLUE).setDottedLine(true);
                             Message message = handler.obtainMessage();
 
                             message.what = 0;
