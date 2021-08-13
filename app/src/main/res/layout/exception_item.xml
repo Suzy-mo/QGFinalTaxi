@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/exception_item_background"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <TextView
+        android:id="@+id/exception_car_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="粤Q66666"
+        android:textColor="#DEFFFFFF"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/exception_car_company_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="20dp"
+        android:text="公司ID:123456789"
+        android:textColor="#61FFFFFF"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/exception_address_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_car_id_tv"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="广东省广州市天河区天河南街道天河路999号"
+        android:textColor="#ff03dac5"
+        android:textSize="17sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_address_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="壬戌之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，诵明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。白露横江，水光接天。纵一苇之所如，凌万顷之茫然。浩浩乎如冯虚御风，而不知其所止；飘飘乎如遗世独立，羽化而登仙。"
+        android:textColor="#99FFFFFF"
+        android:textSize="14sp" />
+</RelativeLayout>

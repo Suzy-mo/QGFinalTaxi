@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/car_search_owner_history_item_background">
+    <ImageView
+        android:id="@+id/car_iv"
+        android:layout_marginRight="20dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/car_search_owner_id_tv"
+        android:background="@mipmap/car_id_background" />
+    <TextView
+        android:id="@+id/car_search_owner_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="粤A66666"
+        android:textColor="#DEFFFFFF"
+        android:textSize="18sp" />
+</RelativeLayout>
