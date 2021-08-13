@@ -23,6 +23,7 @@ import com.qg.qgtaxiapp.databinding.HistoryTabItemBinding;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -34,33 +35,39 @@ import java.util.ArrayList;
  * @Description:
  */
 public class HistoryMapFragment extends Fragment {
+
     private FragmentHistoryMapBinding binding;
     private String tabList[] = {"行驶路径", "车主信息", "异常情况"};
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private HistoryMapFragmentAdapter adapter;
     private TabLayout tabLayout;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHistoryMapBinding.inflate(inflater, container, false);
+        if(savedInstanceState==null){
+            fragments.add(new HistoryRouteFragment());
+            fragments.add(new HistoryCarOwnerFragment());
+            fragments.add(new HistoryExceptionFragment());
+            adapter = new HistoryMapFragmentAdapter(getActivity(), fragments);
+            binding.historyViewpager2.setAdapter(adapter);
+        }
         return binding.getRoot();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (fragments.size() == 0) {
-            fragments.add(new HistoryRouteFragment());
-            fragments.add(new HistoryCarOwnerFragment());
-            fragments.add(new HistoryExceptionFragment());
-            adapter = new HistoryMapFragmentAdapter(getActivity(), fragments);
-            binding.historyViewpager2.setAdapter(adapter);
-            tabLayout = binding.historyTabLayout;
-            for (int i = 0; i < tabList.length; i++) {
-                tabLayout.addTab(tabLayout.newTab());
-
-            }
+        tabLayout = binding.historyTabLayout;
+        for (int i = 0; i < tabList.length; i++) {
+            tabLayout.addTab(tabLayout.newTab());
             new TabLayoutMediator(binding.historyTabLayout, binding.historyViewpager2, new TabLayoutMediator.TabConfigurationStrategy() {
                 @Override
                 public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -76,11 +83,14 @@ public class HistoryMapFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
-    private View getTabView(int index){
-        View view=LayoutInflater.from(getContext()).inflate(R.layout.history_tab_item,null);
-        TextView textView=view.findViewById(R.id.tab_item_top);
-        textView.setText(tabList[index]);
-        return view;
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("key",1);
     }
 }

@@ -1,11 +1,13 @@
 package com.qg.qgtaxiapp.view.activity;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.databinding.ActivitySeachCarOwnerLayoutBinding;
 
 /**
  * Created with Android studio
@@ -15,9 +17,11 @@ import com.qg.qgtaxiapp.R;
  * @Description:
  */
 public class SkipSearchCarOwnerActivity extends AppCompatActivity {
+    private ActivitySeachCarOwnerLayoutBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seach_car_owner_layout);
+        binding=ActivitySeachCarOwnerLayoutBinding.inflate(LayoutInflater.from(this));
+        setContentView(binding.getRoot());
     }
 }
