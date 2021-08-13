@@ -6,20 +6,19 @@
     android:background="@drawable/timepicker_background">
 
     <TextView
-        android:id="@+id/timepicker_date_title"
+        android:id="@+id/timepicker_timeslot_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/timepicker_date_title"
+        android:text="@string/timepicker_timeslot_title"
         android:textColor="#ff03dac5"
         android:textSize="16sp"
-        android:clickable="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"/>
 
     <ImageView
-        android:id="@+id/timepicker_date_cancel"
+        android:id="@+id/timepicker_timeslot_cancel"
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,75 +28,72 @@
         android:src="@mipmap/dismiss"/>
 
     <LinearLayout
-        android:id="@+id/timepicker"
-        android:minHeight="150dp"
+        android:id="@+id/optionspicker"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:minHeight="150dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/timepicker_date_title"
+        app:layout_constraintTop_toBottomOf="@id/timepicker_timeslot_title"
         android:layout_marginTop="10dp"
         android:paddingHorizontal="17dp">
 
+        <com.contrarywind.view.WheelView
+            android:id="@+id/options1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/year2017"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2017    年"
-            android:clickable="false"
+            android:text=":"
             android:textSize="20sp"
-            android:textColor="#ff03dac5"
-            android:layout_marginEnd="16sp"/>
-
+            android:textColor="#DEFFFFFF"/>
 
         <com.contrarywind.view.WheelView
-            android:id="@+id/year"
+            android:id="@+id/options2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textSize="20sp"
+            android:textColor="#DEFFFFFF"/>
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/options3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:textSize="20sp"
+            android:textColor="#DEFFFFFF"/>
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/options4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <com.contrarywind.view.WheelView
-
-            android:id="@+id/month"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
-
-        <com.contrarywind.view.WheelView
-            android:id="@+id/day"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
-
-        <com.contrarywind.view.WheelView
-            android:id="@+id/hour"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
-
-        <com.contrarywind.view.WheelView
-            android:id="@+id/min"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
-
-        <com.contrarywind.view.WheelView
-            android:id="@+id/second"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
     </LinearLayout>
 
 
     <TextView
-        android:id="@+id/timepicker_date_next"
+        android:id="@+id/timepicker_timeslot_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="下一步"
+        android:text="确定"
         android:textColor="#99FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/timepicker"
+        app:layout_constraintTop_toBottomOf="@id/optionspicker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
