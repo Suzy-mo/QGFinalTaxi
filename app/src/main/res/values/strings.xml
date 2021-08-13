@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">QGTaxiApp</string>
+    <string name="timepicker_date_title">时间选择 • 日期</string>
 </resources>
