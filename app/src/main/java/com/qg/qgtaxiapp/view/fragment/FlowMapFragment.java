@@ -44,7 +44,7 @@ public class FlowMapFragment extends Fragment {
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
 
-    private UiSettings uiSettings;
+    //private UiSettings uiSettings;
 
     @Nullable
     @Override
