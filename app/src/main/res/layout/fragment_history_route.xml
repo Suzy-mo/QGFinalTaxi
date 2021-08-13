@@ -19,13 +19,15 @@
             android:id="@+id/route_search_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="70dp"
             android:layout_marginTop="25dp"
-            android:text="输入车牌号\时间段"
+            android:text="输入车牌号"
             android:textColor="#999999" />
     </RelativeLayout>
     <com.amap.api.maps.TextureMapView
-        android:layout_below="@id/route_search_rl"
+        android:layout_marginTop="15dp"
+        android:id="@+id/route_map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/route_search_rl" />
 </RelativeLayout>

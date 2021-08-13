@@ -27,10 +27,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network"
         android:theme="@style/Theme.QGTaxiApp">
         <activity android:name=".view.activity.TestChartActivity"/>
-        <activity android:name=".view.activity.SkipSearchCarOwnerActivity"/>
         <activity android:name=".view.activity.SkipSearchCarRouteActivity"/>
+        <activity android:name=".view.activity.SkipSearchCarOwnerActivity"/>
         <activity android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
