@@ -32,7 +32,7 @@ import java.util.Date;
 public class TimePickerUtils{
 
     private TimePickerView timePickerView = null;
-
+    private String mDate = null;
     /*
        获取时间
        yyyy-MM-dd HH:mm:ss
@@ -41,10 +41,19 @@ public class TimePickerUtils{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
+
+    private String getTimeslot(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return format.format(date);
+    }
+
     /*
-        初始化时间选择器
+        初始化时间选择器(日期)
      */
     public TimePickerView initDatePicker(Context context, Activity activity){
+        /*
+        设置时间跨度
+         */
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         startDate.set(2017,0,1);
@@ -56,7 +65,8 @@ public class TimePickerUtils{
 
                 @Override
                 public void onTimeSelect(Date date, View v) {//选项数据回调
-                    Log.d("TAG",getDate(date));
+                    mDate = getDate(date);
+                    Log.d("TAG",mDate);
                 }
             })
                     //自定义布局
@@ -84,11 +94,11 @@ public class TimePickerUtils{
                         }
                     })
                     .isDialog(true)//显示模式
-                    .setTitleText("时间选择 • 日期")//标题
+                    //.setTitleText("时间选择 • 日期")
                     .setOutSideCancelable(false)//外部是否可以点击
-                    .setRangDate(startDate,endDate)//设置时间
+                    .setRangDate(startDate,endDate)//设置时间跨度
                     .setOutSideColor(activity.getResources().getColor(R.color.timepicker_outside))//外部背景颜色
-                    .setBgColor(activity.getResources().getColor(R.color.timepicker_background))
+                    .setBgColor(activity.getResources().getColor(R.color.timepicker_background))//背景颜色
                     .setTextColorCenter(activity.getResources().getColor(R.color.timepicker_selectText))//选中字体颜色
                     .setTextColorOut(activity.getResources().getColor(R.color.timepicker_unselectText))//未选中字体颜色
                     .isCenterLabel(true)//只显示中央标签
@@ -97,6 +107,9 @@ public class TimePickerUtils{
                     .isAlphaGradient(true)//滚轮透明
                     .build();
         }
+    /*
+     *  设置dialog的宽度
+     */
         Dialog timePickerDialog;
         timePickerDialog = timePickerView.getDialog();
         Window window = timePickerDialog.getWindow();
@@ -108,5 +121,10 @@ public class TimePickerUtils{
 
         return timePickerView;
     }
+
+
+
+
+
 
 }

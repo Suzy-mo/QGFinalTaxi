@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="15dp"/>
 
     <ImageView
         android:id="@+id/timepicker_date_cancel"
@@ -45,7 +45,8 @@
             android:layout_height="wrap_content"
             android:text="2017    年"
             android:textSize="20sp"
-            android:textColor="#ff03dac5"/>
+            android:textColor="#ff03dac5"
+            android:layout_marginEnd="16sp"/>
 
 
         <com.contrarywind.view.WheelView

@@ -39,6 +39,7 @@ import com.amap.api.services.district.DistrictSearchQuery;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
+import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
@@ -75,7 +76,7 @@ public class HeatMapFragment extends Fragment{
     private TextView tv_setTime;
     private TimePickerView datePickerView;
     private TimePickerUtils timePickerUtils;
-
+    private MapUtils mapUtils;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,7 @@ public class HeatMapFragment extends Fragment{
         gestureDetector = new GestureDetector(getContext(), myGestureDetector);
         districtSearch = new DistrictSearch(getContext());
         timePickerUtils = new TimePickerUtils();
+        mapUtils = new MapUtils();
         /*
             获取边界数据回调
          */
@@ -148,7 +150,7 @@ public class HeatMapFragment extends Fragment{
             }
         });
 
-        initMap(savedInstanceState);
+        aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
         return binding.getRoot();
     }
@@ -175,48 +177,6 @@ public class HeatMapFragment extends Fragment{
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
-    }
-    /*
-        获取时间
-        yyyy-MM-dd HH:mm:ss
-     */
-    private String getDate(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
-
-    /**
-     * 初始化地图
-     * @param savedInstanceState
-     */
-    private void initMap(Bundle savedInstanceState) {
-
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        mapView.onCreate(savedInstanceState);
-        //初始化地图控制器对象
-        aMap = mapView.getMap();
-
-        CustomMapStyleOptions customMapStyleOptions = new CustomMapStyleOptions();
-        customMapStyleOptions.setEnable(true);
-        customMapStyleOptions.setStyleData(getAssetsStyle(getContext()));
-        customMapStyleOptions.setStyleExtraData(getAssetsStyleExtra(getContext()));
-        aMap.setCustomMapStyle(customMapStyleOptions);
-
-        uiSettings = aMap.getUiSettings();
-        uiSettings.setCompassEnabled(true);
-        uiSettings.setMyLocationButtonEnabled(false);
-        uiSettings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
-        uiSettings.setLogoBottomMargin(-100);
-        uiSettings.setScaleControlsEnabled(true);
-        uiSettings.setZoomControlsEnabled(false);
-        /*
-            设置地图的范围
-         */
-        LatLng northeast = new LatLng(23.955343,114.054936);
-        LatLng southwest = new LatLng(22.506530,112.968270);
-        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
-        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));
-        aMap.setMapStatusLimits(bounds);
     }
 
     /** 接收MainActivity的Touch回调的对象，重写其中的onTouchEvent函数 */
