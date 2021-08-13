@@ -17,16 +17,4 @@
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="android:textColorSecondary">@color/home_tab_selected</item>
     </style>
-
-
-    <style name="Theme.picker" parent="Theme.AppCompat.Light">
-        <!--分割线颜色-->
-        <item name="colorControlNormal">#292929</item>
-        <item name="android:editTextStyle">@style/Widget.EditText.White</item>
-    </style>
-    <style name="Widget.EditText.White" parent="@android:style/Widget.EditText">
-        <!--文字颜色-->
-        <item name="android:textColor">#DEFFFFFF</item>
-    </style>
-
 </resources>

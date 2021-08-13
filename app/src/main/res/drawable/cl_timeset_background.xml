@@ -3,7 +3,7 @@
     <item android:width="188dp" android:height="32dp">
         <shape android:shape="rectangle">
             <solid android:color="#ff292929" />
-            <item android:name="android:shadowColor">#33000000</item>
+            <item name="android:shadowColor">#33000000</item>
             <item android:name="android:shadowDx">0</item>
             <item android:name="android:shadowDy">2</item>
         </shape>

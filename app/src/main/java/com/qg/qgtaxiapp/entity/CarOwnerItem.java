@@ -12,8 +12,17 @@ public class CarOwnerItem {
     private String mile;//公里
     private String score;//评分
     private String companyID;//公司ID
+    private String date;
 
     public CarOwnerItem() {
+    }
+
+    public CarOwnerItem(String carID, String mile, String score, String companyID, String date) {
+        this.carID = carID;
+        this.mile = mile;
+        this.score = score;
+        this.companyID = companyID;
+        this.date = date;
     }
 
     public String getCarID() {
@@ -48,10 +57,11 @@ public class CarOwnerItem {
         this.companyID = companyID;
     }
 
-    public CarOwnerItem(String carID, String mile, String score, String companyID) {
-        this.carID = carID;
-        this.mile = mile;
-        this.score = score;
-        this.companyID = companyID;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

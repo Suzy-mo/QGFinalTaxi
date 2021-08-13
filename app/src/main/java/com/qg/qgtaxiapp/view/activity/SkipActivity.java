@@ -11,13 +11,13 @@ import com.qg.qgtaxiapp.R;
  * Created with Android studio
  *
  * @Author: EDGClearlove7
- * @Date: 2021/08/12/21:42
+ * @Date: 2021/08/11/21:23
  * @Description:
  */
-public class SkipSearchCarRouteActivity extends AppCompatActivity {
+public class SkipActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_route_layout);
+        setContentView(R.layout.test);
     }
 }
