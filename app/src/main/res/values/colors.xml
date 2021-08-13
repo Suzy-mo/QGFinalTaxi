@@ -10,4 +10,6 @@
     <color name="home_tab_selected">#FF03DAC5</color>
     <color name="home_tab_unselected">#FFFFFFFF</color>
     <color name="bottom_item_background">#292929</color>
+    <color name="timepicker_outside">#B3000000</color>
+    <color name="timepicker_background">#FF292929</color>
 </resources>
