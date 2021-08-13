@@ -29,14 +29,23 @@
 
     <LinearLayout
         android:id="@+id/timepicker"
-        android:minHeight="150dp"
+        android:minHeight="100dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="150dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/timepicker_date_title"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="17dp">
+        android:paddingHorizontal="17dp">
+
+
+        <TextView
+            android:id="@+id/year2017"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017    年"
+            android:textSize="20sp"
+            android:textColor="#ff03dac5"/>
 
 
         <com.contrarywind.view.WheelView

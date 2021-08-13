@@ -12,4 +12,6 @@
     <color name="bottom_item_background">#292929</color>
     <color name="timepicker_outside">#B3000000</color>
     <color name="timepicker_background">#FF292929</color>
+    <color name="timepicker_selectText">#FF03DAC5</color>
+    <color name="timepicker_unselectText">#99FFFFFF</color>
 </resources>

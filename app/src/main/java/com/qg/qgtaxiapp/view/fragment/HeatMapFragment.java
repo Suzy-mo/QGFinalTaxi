@@ -3,10 +3,6 @@ package com.qg.qgtaxiapp.view.fragment;
 import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyle;
 import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,14 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,23 +36,16 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.CustomListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.material.tabs.TabLayout;
-import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
-import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
+import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 
@@ -73,9 +59,9 @@ import java.util.Date;
 public class HeatMapFragment extends Fragment{
 
     private static final int MIN_DISTANCE = 200; //最小滑动距离
+    private String tabList[] = {"热力图","载客热点","广告牌"};
     private FragmentHeatMapBinding binding;
     private HeatMapViewModel heatMapViewModel;
-    private String tabList[] = {"热力图","载客热点","广告牌"};
     private TabLayout tabLayout;
     private int tabPosition = 0; //Tab显示位置
     private MyGestureDetector myGestureDetector;
@@ -87,13 +73,17 @@ public class HeatMapFragment extends Fragment{
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
     private TextView tv_setTime;
-    private TimePickerView timePickerView;
+    private TimePickerView datePickerView;
+    private TimePickerUtils timePickerUtils;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        heatMapViewModel = new ViewModelProvider(getActivity()).get(HeatMapViewModel.class);
+        myGestureDetector = new MyGestureDetector();
+        gestureDetector = new GestureDetector(getContext(), myGestureDetector);
         districtSearch = new DistrictSearch(getContext());
+        timePickerUtils = new TimePickerUtils();
         /*
             获取边界数据回调
          */
@@ -127,23 +117,19 @@ public class HeatMapFragment extends Fragment{
         });
     }
 
-    @SuppressLint("NewApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHeatMapBinding.inflate(inflater,container,false);
         tabLayout = binding.fragmentHeatTabLayout;
-        heatMapViewModel = new ViewModelProvider(getActivity()).get(HeatMapViewModel.class);
-        myGestureDetector = new MyGestureDetector();
-        gestureDetector = new GestureDetector(getContext(), myGestureDetector);
         mapView = binding.fragmentHeatMapView;
         mapView.onCreate(savedInstanceState);
         tv_setTime = binding.tvSetTime;
-        initTimePicker();
+        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
         tv_setTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timePickerView.show();
+                datePickerView.show();
             }
         });
 
@@ -192,59 +178,13 @@ public class HeatMapFragment extends Fragment{
     }
     /*
         获取时间
+        yyyy-MM-dd HH:mm:ss
      */
-    private String getTime(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private String getDate(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
-    /*
-        初始化时间选择器
-     */
-    private void initTimePicker(){
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-        startDate.set(2017,0,1);
-        endDate.set(2017,11,31);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            timePickerView = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-                @Override
-                public void onTimeSelect(Date date, View v) {
-                    showLog(getTime(date));
-                }
-            }).setLayoutRes(R.layout.timepicker_date, new CustomListener() {
-                @Override
-                public void customLayout(View v) {
-                    TextView next = v.findViewById(R.id.timepicker_date_next);
-                    ImageView cancel = v.findViewById(R.id.timepicker_date_cancel);
-                    next.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            timePickerView.dismiss();
-                        }
-                    });
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            timePickerView.dismiss();
-                        }
-                    });
-
-                }
-            })
-                .setTitleText("时间选择 • 日期")
-                .setOutSideCancelable(false)
-                .isCyclic(true)
-                .setRangDate(startDate,endDate)
-                .setOutSideColor(getResources().getColor(R.color.timepicker_outside))
-                .setBgColor(getResources().getColor(R.color.timepicker_background))
-                .isDialog(true)
-                .isCenterLabel(true)
-                .setType(new boolean[]{false,true,true,false,false,false})
-                .build();
-        }
-
-    }
     /**
      * 初始化地图
      * @param savedInstanceState

@@ -41,7 +41,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2017.08.22"
+            android:text="2017-12-01"
             android:textColor="#99FFFFFF"
             android:textSize="14sp"
             app:layout_constraintTop_toTopOf="parent"
