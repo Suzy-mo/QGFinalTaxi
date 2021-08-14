@@ -54,14 +54,14 @@ public class TimePickerUtils{
     /*
        获取日期 yyyy-MM-dd
     */
-    private String getDate(Date date) {//可根据需要自行截取数据显示
+    public String getDate(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
     /*
        获取时间段 HH:mm:ss
     */
-    private String getTimeslot(Date date) {//可根据需要自行截取数据显示
+    public String getTimeslot(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         return format.format(date);
     }
@@ -69,7 +69,7 @@ public class TimePickerUtils{
     /*
         初始化日期选择器
      */
-    public TimePickerView initDatePicker(Context context, Activity activity){
+    public TimePickerView initDatePicker(Context context, Activity activity,OnTimeSelectListener onTimeSelectListener){
         /*
         设置时间跨度
          */
@@ -77,16 +77,7 @@ public class TimePickerUtils{
         Calendar endDate = Calendar.getInstance();
         startDate.set(2017,1,1);
         endDate.set(2017,2,31);
-
-        timePickerView = new TimePickerBuilder(context, new OnTimeSelectListener() {
-
-            @Override
-            public void onTimeSelect(Date date, View v) {//选项数据回调
-                mDate = getDate(date);
-                EventBus.getDefault().post(new EventBusEvent.showTimeSlotSet(mDate));
-                Log.d("TAG",mDate);
-            }
-        })
+        timePickerView = new TimePickerBuilder(context,onTimeSelectListener)
         //自定义布局
         .setLayoutRes(R.layout.timepicker_date, new CustomListener() {
             @Override
@@ -272,13 +263,6 @@ public class TimePickerUtils{
             buffer.append(":" + m2 + ":00");
         }
         return buffer.toString();
-    }
-
-    /*
-     *  获取日期
-     */
-    public String getDate(){
-        return mDate;
     }
 
     /*

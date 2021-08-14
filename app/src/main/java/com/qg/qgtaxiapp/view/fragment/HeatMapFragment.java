@@ -35,6 +35,7 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -54,6 +55,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -96,6 +98,8 @@ public class HeatMapFragment extends Fragment{
     private NetUtils netUtils = NetUtils.getInstance();
     private HeatmapTileProvider heatmapTileProvider;
     private TileOverlayOptions tileOverlayOptions;
+    private OnTimeSelectListener onTimeSelectListener;
+    private String mDate = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,7 +158,17 @@ public class HeatMapFragment extends Fragment{
         cl_chooseTime = binding.fragmentHeatClChooseTime;
         cl_timeSet = binding.fragmentHeatClTime;
 
-        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
+
+        onTimeSelectListener = new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                mDate = timePickerUtils.getDate(date);
+                EventBus.getDefault().post(new EventBusEvent.showTimeSlotSet(mDate));
+                Log.d("TAG",mDate);
+            }
+        };
+
+        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
 
         for (String tabName : tabList){
             tabLayout.addTab(tabLayout.newTab().setText(tabName));
@@ -370,7 +384,7 @@ public class HeatMapFragment extends Fragment{
     /*
         显示时间段设置Dialog
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.POSTING)
     public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
         dialog = timePickerUtils.initTimeSlotDialog(getContext());
         dialog.show();
@@ -385,20 +399,20 @@ public class HeatMapFragment extends Fragment{
     /*
         完成时间设置
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.POSTING)
     public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
         if (cl_chooseTime.getVisibility() == View.VISIBLE) {
             cl_chooseTime.setVisibility(View.GONE);
             cl_timeSet.setVisibility(View.VISIBLE);
         }
         if (heatMapViewModel.tab == 0) {
-            heatMapViewModel.heat_date.setValue(timePickerUtils.getDate());
+            heatMapViewModel.heat_date.setValue(mDate);
             heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
             heatMapViewModel.heatTime = timePickerUtils.getTime();
             getHeatData();
         }
         else if (heatMapViewModel.tab == 1){
-            heatMapViewModel.passage_date.setValue(timePickerUtils.getDate());
+            heatMapViewModel.passage_date.setValue(mDate);
             heatMapViewModel.passage_timeslot.setValue(timePickerUtils.getTimeslot());
             heatMapViewModel.passageTime = timePickerUtils.getTime();
         }
