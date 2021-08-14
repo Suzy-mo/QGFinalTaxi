@@ -47,8 +47,8 @@ public class TimePickerUtils{
     private AlertDialog dialog = null;
     private List<Integer> hour;
     private List<Integer> min;
-    private int h1;
-    private int h2;
+    public int h1;
+    public int h2;
     private int m1;
     private int m2;
     /*
@@ -151,7 +151,7 @@ public class TimePickerUtils{
     /*
      *  初始化时间段选择器
      */
-    public AlertDialog initTimeSlotDialog(Context context){
+    public AlertDialog initTimeSlotDialog(Context context, View.OnClickListener onClickListener){
         TextView tv_confirm;
         ImageView iv_cancel;
         initTimeslotData();
@@ -164,17 +164,8 @@ public class TimePickerUtils{
         tv_confirm = view.findViewById(R.id.timepicker_timeslot_confirm);
         iv_cancel = view.findViewById(R.id.timepicker_timeslot_cancel);
 
-        tv_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (h2 != 0 && h2 < h1) {
-                    Toast.makeText(context,"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
-                } else {
-                    EventBus.getDefault().post(new EventBusEvent.setTimeFinish("finish"));
-                    dialog.dismiss();
-                }
-            }
-        });
+        tv_confirm.setOnClickListener(onClickListener);
+
         iv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

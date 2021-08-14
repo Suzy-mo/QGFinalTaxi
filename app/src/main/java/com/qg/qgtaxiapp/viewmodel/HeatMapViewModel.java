@@ -14,8 +14,8 @@ import java.util.List;
  * @date: 2021年08月12日 15:48
  */
 public class HeatMapViewModel extends ViewModel {
-    public int tab;
-    public MutableLiveData<Integer> selectTab = new MutableLiveData<>();
+
+
     public PolylineOptions polylineOptions = null;
 
     public MutableLiveData<String> heat_date = new MutableLiveData<>();
@@ -24,7 +24,8 @@ public class HeatMapViewModel extends ViewModel {
     public MutableLiveData<List<LatLng>> heatData = new MutableLiveData<>();
 
 
-    public MutableLiveData<String> passage_date = new MutableLiveData<>();
-    public MutableLiveData<String> passage_timeslot = new MutableLiveData<>();
-    public String passageTime = null;
+    public MutableLiveData<String> passenger_date = new MutableLiveData<>();
+    public MutableLiveData<String> passenger_timeslot = new MutableLiveData<>();
+    public String passengerTime = null;
+    public MutableLiveData<List<LatLng>> passengerData = new MutableLiveData<>();
 }

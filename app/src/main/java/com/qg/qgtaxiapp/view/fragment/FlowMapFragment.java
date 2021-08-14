@@ -99,8 +99,6 @@ public class FlowMapFragment extends Fragment {
 
     }
 
-
-
     /**
      * 方法必须重写
      */
