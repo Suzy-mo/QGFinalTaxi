@@ -6,14 +6,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,22 +34,24 @@ import com.amap.api.services.district.DistrictSearchQuery;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentFlowMapBinding;
-import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
-import com.qg.qgtaxiapp.entity.EventBusEvent;
+import com.qg.qgtaxiapp.entity.BaseCreator;
 import com.qg.qgtaxiapp.entity.FlowAllData;
+import com.qg.qgtaxiapp.entity.IPost;
+import com.qg.qgtaxiapp.entity.ResponseData;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.FlowMapViewModel;
-import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -143,11 +142,17 @@ public class FlowMapFragment extends Fragment {
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
 
 
-        flowMapViewModel.heat_date.observe(getActivity(), new Observer<String>() {
+        flowMapViewModel.flow_date.observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 tv_date.setText(s);
                 tv_setTime.setText(s);
+                if(flowMapViewModel.selectTab.getValue() == TAB_ALL){
+                    getAllLineData(s);
+                }else {
+                    getMainData(s);
+                }
+
             }
         });
 
@@ -163,29 +168,6 @@ public class FlowMapFragment extends Fragment {
 
             }
         });
-//        flowMapViewModel.polyline.observe(getActivity(), new Observer<Polyline>() {
-//            @Override
-//            public void onChanged(Polyline polyline) {
-//                if(flowMapViewModel.selectTab.getValue()==TAB_ALL){
-//                    mPolyline = polyline;
-//                }else {
-//
-//                }
-//            }
-//        });
-
-//        flowMapViewModel.selectTab.observe(getActivity(), new Observer<Integer>() {
-//            @Override
-//            public void onChanged(Integer integer) {
-//                if(integer == TAB_ALL){
-//                    //全流图
-//
-//                } else {
-//                    //主流图
-//
-//                }
-//            }
-//        });
 
 
         tv_setTime.setOnClickListener(new View.OnClickListener() {
@@ -213,6 +195,41 @@ public class FlowMapFragment extends Fragment {
         aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
         return binding.getRoot();
+    }
+
+    private void getMainData(String s) {
+
+    }
+
+    /**
+     * @param s
+     * @return void
+     * @description  开子线程获取所有的流向
+     * @author Suzy.Mo
+     * @time
+     */
+
+    private void getAllLineData(String s) {
+        new Thread(()->{
+            IPost iPost = BaseCreator.create(IPost.class);
+            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
+                @Override
+                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
+                    showLog(response.body().getMsg());
+                    getActivity().runOnUiThread(()->{
+                        flowMapViewModel.allData.setValue(response.body().getData().getData());
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
+                    getActivity().runOnUiThread(()->{
+                        showLog("获取失败");
+                    });
+
+                }
+            });
+        }).start();
     }
 
     @Override

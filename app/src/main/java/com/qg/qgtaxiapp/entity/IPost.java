@@ -14,11 +14,11 @@ import retrofit2.http.POST;
 public interface IPost {
 
     @FormUrlEncoded
-    @POST("user/login")
-    Call<ResponseData<FlowAllData>> loginData(@Field("data")String data);
+    @POST("flow/all")
+    Call<ResponseData<FlowAllData>> getFlowAllData(@Field("day")String day);
 
     @FormUrlEncoded
-    @POST("user/login")
-    Call<ResponseData<FlowMainData>> loginData(@Field("username")String username, @Field("password")String password);
+    @POST("flow/main")
+    Call<ResponseData<FlowMainData>> getFlowMainData(@Field("day")String day);
 
 }

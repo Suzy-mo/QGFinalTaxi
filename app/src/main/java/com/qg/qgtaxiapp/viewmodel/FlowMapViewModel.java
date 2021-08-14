@@ -21,7 +21,7 @@ public class FlowMapViewModel extends ViewModel {
 
     public MutableLiveData<Integer> selectTab = new MutableLiveData<>();
     public PolylineOptions polylineOptions = null;
-    public MutableLiveData<String> heat_date = new MutableLiveData<>();
+    public MutableLiveData<String> flow_date = new MutableLiveData<>();
 
     public MutableLiveData<List<FlowAllData.DataBean>> allData = new MutableLiveData<>();
 
