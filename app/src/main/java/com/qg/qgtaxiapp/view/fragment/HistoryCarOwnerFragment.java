@@ -31,6 +31,7 @@ import java.util.Calendar;
  * @Description:
  */
 public class HistoryCarOwnerFragment extends Fragment {
+
     private FragmentHistoryCarOwnerBinding binding;
     private GridLayoutManager manager;
     private ArrayList<CarOwnerItem> list = new ArrayList<>();

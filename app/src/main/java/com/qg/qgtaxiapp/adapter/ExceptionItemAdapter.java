@@ -2,6 +2,7 @@ package com.qg.qgtaxiapp.adapter;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.entity.ExceptionItem;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class ExceptionItemAdapter extends BaseQuickAdapter<ExceptionItem, BaseVi
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, ExceptionItem exceptionItem) {
-
+        baseViewHolder.setText(R.id.exception_car_id_tv, exceptionItem.getCarID());
+        baseViewHolder.setText(R.id.exception_car_company_id_tv,exceptionItem.getCompanyID());
+        baseViewHolder.setText(R.id.exception_address_tv,exceptionItem.getAddress());
+        baseViewHolder.setText(R.id.exception_information_tv,exceptionItem.getExceptionText());
     }
 }
