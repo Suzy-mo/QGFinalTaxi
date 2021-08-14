@@ -158,13 +158,15 @@ public class HeatMapFragment extends Fragment{
         cl_chooseTime = binding.fragmentHeatClChooseTime;
         cl_timeSet = binding.fragmentHeatClTime;
 
-
+        /*
+            日期选择监听
+         */
         onTimeSelectListener = new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 mDate = timePickerUtils.getDate(date);
-                EventBus.getDefault().post(new EventBusEvent.showTimeSlotSet(mDate));
-                Log.d("TAG",mDate);
+                showTimeSlotSet();
+
             }
         };
 
@@ -384,8 +386,7 @@ public class HeatMapFragment extends Fragment{
     /*
         显示时间段设置Dialog
      */
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
+    private void showTimeSlotSet(){
         dialog = timePickerUtils.initTimeSlotDialog(getContext());
         dialog.show();
 
