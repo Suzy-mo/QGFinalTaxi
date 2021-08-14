@@ -141,6 +141,8 @@ public class TimePickerUtils{
         return timePickerView;
     }
 
+
+
     /*
      *  初始化时间段数据
      */
@@ -238,6 +240,7 @@ public class TimePickerUtils{
 
         return dialog;
     }
+
     /*
      *   获取完整的起始时间和终止时间
      */
