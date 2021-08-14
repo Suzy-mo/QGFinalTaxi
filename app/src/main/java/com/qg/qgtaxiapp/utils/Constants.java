@@ -10,4 +10,6 @@ package com.qg.qgtaxiapp.utils;
 public class Constants {
     public static int ROUTE_CODE=1;
     public static int REQUEST_ROUTE_CODE=1;
+    public static int CAR_OWNER_CODE=1;
+    public static int REQUEST_CAR_OWNER_CODE=1;
 }

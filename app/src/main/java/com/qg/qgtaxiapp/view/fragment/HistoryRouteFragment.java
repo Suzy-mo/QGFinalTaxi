@@ -13,16 +13,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,20 +40,16 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
-import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.contrarywind.listener.OnItemSelectedListener;
-import com.contrarywind.view.WheelView;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHistoryRouteBinding;
 import com.qg.qgtaxiapp.databinding.SearchDateLayoutBinding;
 import com.qg.qgtaxiapp.databinding.SelectBinLayoutBinding;
 import com.qg.qgtaxiapp.utils.Constants;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
-import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity;
 import com.qg.qgtaxiapp.viewmodel.MainAndHistoryRouteViewModel;
 
@@ -64,7 +57,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created with Android studio
@@ -182,15 +174,15 @@ public class HistoryRouteFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
+                dialog.show();
                 WindowManager windowManager= getActivity().getWindowManager();
                 DisplayMetrics dm = new DisplayMetrics();
                 Window window=dialog.getWindow();
                 WindowManager.LayoutParams p =window.getAttributes();
                 windowManager.getDefaultDisplay().getMetrics(dm);
-                p.height= (int) (dm.heightPixels*0.2);
-                p.width= (int) (dm.widthPixels*0.2);
+                p.height= (int) (dm.heightPixels*0.22);
+                p.width= (int) (dm.widthPixels*0.7);
                 window.setAttributes(p);
-                dialog.show();
             }
         });
     }
@@ -242,6 +234,7 @@ public class HistoryRouteFragment extends Fragment {
                 .build();
         Dialog timePickerDialog;
         timePickerDialog = timePickerView.getDialog();
+        timePickerDialog.show();
         Window window = timePickerDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();
         DisplayMetrics dm = new DisplayMetrics();
@@ -249,7 +242,7 @@ public class HistoryRouteFragment extends Fragment {
         WindowManager.LayoutParams params = window.getAttributes();
         params.width = (int) (dm.widthPixels * 0.95);
         window.setAttributes(params);
-        timePickerDialog.show();
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.qg.qgtaxiapp.entity;
 
+import java.io.Serializable;
+
 /**
  * Created with Android studio
  *
@@ -7,7 +9,7 @@ package com.qg.qgtaxiapp.entity;
  * @Date: 2021/08/11/19:56
  * @Description:
  */
-public class CarOwnerItem {
+public class CarOwnerItem implements Serializable {
     private String carID;//车牌
     private String mile;//公里
     private String score;//评分

@@ -16,7 +16,7 @@ import okhttp3.Request;
 public class NetUtils {
     private String getRouteBaseURL ="http://39.98.41.126:31100/";
     private String getCarOwnerURL="http://39.98.41.126:31100/";
-    private String getExceptionURL="http://39.98.41.126:31103/";
+    private String getExceptionURL="http://39.98.41.126:31100/";
     private static NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
 
