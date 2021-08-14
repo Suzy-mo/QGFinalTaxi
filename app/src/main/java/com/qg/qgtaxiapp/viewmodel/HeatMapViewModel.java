@@ -12,7 +12,7 @@ import com.amap.api.maps.model.PolylineOptions;
 public class HeatMapViewModel extends ViewModel {
     public MutableLiveData<Integer> selectTab = new MutableLiveData<>();
     public PolylineOptions polylineOptions = null;
-    public MutableLiveData<String> heat_date = null;
-    public MutableLiveData<String> heat_timeslot = null;
+    public MutableLiveData<String> heat_date = new MutableLiveData<>();
+    public MutableLiveData<String> heat_timeslot = new MutableLiveData<>();
 
 }

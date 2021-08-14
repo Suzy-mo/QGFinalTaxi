@@ -13,12 +13,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
-import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
-import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -46,8 +45,12 @@ public class TimePickerUtils{
     private String mDate = null;
     private String mTimeslot = null;
     private AlertDialog dialog = null;
-    private List<String> hour;
-    private List<String> min;
+    private List<Integer> hour;
+    private List<Integer> min;
+    private int h1;
+    private int h2;
+    private int m1;
+    private int m2;
     /*
        获取日期 yyyy-MM-dd
     */
@@ -64,7 +67,7 @@ public class TimePickerUtils{
     }
 
     /*
-        初始化时间选择器(日期)
+        初始化日期选择器
      */
     public TimePickerView initDatePicker(Context context, Activity activity){
         /*
@@ -96,9 +99,6 @@ public class TimePickerUtils{
                     public void onClick(View v) {
                         timePickerView.returnData();
                         timePickerView.dismiss();
-
-                        /*initTimeslotPicker(context,activity);
-                        optionsPickerView.show();*/
                     }
                 });
                 //点击取消
@@ -141,18 +141,23 @@ public class TimePickerUtils{
         return timePickerView;
     }
 
+    /*
+     *  初始化时间段数据
+     */
     private void initTimeslotData(){
         hour = new ArrayList<>();
         min = new ArrayList<>();
 
         for (int i = 0; i < 24; i++){
-            hour.add(i + "");
+            hour.add(i);
         }
         for (int i = 0; i < 60; i++){
-            min.add(i + "");
+            min.add(i);
         }
     }
-
+    /*
+     *  初始化时间段选择器
+     */
     public AlertDialog initTimeSlotDialog(Context context){
         TextView tv_confirm;
         ImageView iv_cancel;
@@ -169,7 +174,12 @@ public class TimePickerUtils{
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                if (h2 != 0 && h2 < h1) {
+                    Toast.makeText(context,"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
+                } else {
+                    EventBus.getDefault().post(new EventBusEvent.setTimeFinish("finish"));
+                    dialog.dismiss();
+                }
             }
         });
         iv_cancel.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +194,10 @@ public class TimePickerUtils{
         WheelView hour2 = view.findViewById(R.id.options3);
         WheelView min2 = view.findViewById(R.id.options4);
 
+        hour1.setCyclic(false);
+        min1.setCyclic(false);
+        hour2.setCyclic(false);
+        min2.setCyclic(false);
         hour1.setDividerColor(Color.argb(0,0,0,0));
         min1.setDividerColor(Color.argb(0,0,0,0));
         hour2.setDividerColor(Color.argb(0,0,0,0));
@@ -197,33 +211,94 @@ public class TimePickerUtils{
         hour1.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-
+               h1 = hour.get(index);
             }
         });
 
         min1.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-
+                m1 = min.get(index);
             }
         });
 
         hour2.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-
+                h2 = hour.get(index);
             }
         });
 
         min2.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-
+                m2 = min.get(index);
             }
         });
 
         return dialog;
     }
+    /*
+     *   获取完整的起始时间和终止时间
+     */
+    public String getTime(){
+        StringBuffer buffer = new StringBuffer();
+        if (h1 < 10){
+            buffer.append(mDate + "_" + "0" + h1);
+        }else {
+            buffer.append(mDate + "_" + h1);
+        }
 
+        if (m1 < 10){
+            buffer.append(":" + "0" + m1 + ":00");
+        }else {
+            buffer.append(":" + m1 + ":00");
+        }
+
+        buffer.append("/");
+
+        if (h2 < 10){
+            buffer.append(mDate + "_" + "0" + h2);
+        }else {
+            buffer.append(mDate + "_" + h2);
+        }
+
+        if (m2 < 10){
+            buffer.append(":" + "0" + m2 + ":00");
+        }else {
+            buffer.append(":" + m2 + ":00");
+        }
+        return buffer.toString();
+    }
+
+    /*
+     *  获取日期
+     */
+    public String getDate(){
+        return mDate;
+    }
+
+    /*
+     * 获取时间段
+     */
+    public String getTimeslot(){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("" + h1);
+
+        if (m1 < 10){
+            buffer.append("：" + "0" + m1);
+        }else {
+            buffer.append("：" + m1);
+        }
+
+        buffer.append(" - ");
+        buffer.append("" + h2);
+        if (m2 < 10){
+            buffer.append("：" + "0" + m2);
+        }else {
+            buffer.append("：" + m2);
+        }
+        return buffer.toString();
+    }
 
 }

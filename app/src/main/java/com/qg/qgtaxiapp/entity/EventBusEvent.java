@@ -15,4 +15,14 @@ public class EventBusEvent {
             return date;
         }
     }
+
+    public static class setTimeFinish{
+        private String msg;
+        public setTimeFinish(String msg){
+            this.msg = msg;
+        }
+        public String getMsg(){
+            return msg;
+        }
+    }
 }
