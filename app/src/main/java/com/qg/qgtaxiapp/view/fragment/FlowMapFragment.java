@@ -90,7 +90,7 @@ public class FlowMapFragment extends Fragment {
         districtSearch = new DistrictSearch(getContext());
         timePickerUtils = new TimePickerUtils();
         mapUtils = new MapUtils();
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
         /*
             获取边界数据回调
          */
@@ -285,22 +285,22 @@ public class FlowMapFragment extends Fragment {
     };
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
-        dialog = timePickerUtils.initTimeSlotDialog(getContext());
-        dialog.show();
-
-        Window window = dialog.getWindow();
-        WindowManager manager = getActivity().getWindowManager();
-        Display display = manager.getDefaultDisplay();
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.width = (int) (display.getWidth() * 0.98);
-        window.setAttributes(params);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
-        flowMapViewModel.heat_date.setValue(timePickerUtils.getDate());
-        flowMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
+//        dialog = timePickerUtils.initTimeSlotDialog(getContext());
+//        dialog.show();
+//
+//        Window window = dialog.getWindow();
+//        WindowManager manager = getActivity().getWindowManager();
+//        Display display = manager.getDefaultDisplay();
+//        WindowManager.LayoutParams params = window.getAttributes();
+//        params.width = (int) (display.getWidth() * 0.98);
+//        window.setAttributes(params);
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
+//        flowMapViewModel.heat_date.setValue(timePickerUtils.getDate());
+//        flowMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
+//    }
 }
