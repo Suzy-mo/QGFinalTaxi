@@ -15,6 +15,7 @@ import okhttp3.Request;
  */
 public class NetUtils {
     private String getRouteBaseURL ="http://39.98.41.126:31100/";
+    private String getCarOwnerURL="http://39.98.41.126:31100/";
     private String getExceptionURL="http://39.98.41.126:31103/";
     private static NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
@@ -38,6 +39,12 @@ public class NetUtils {
     public void getExceptionData(int pagerID,int limit,Callback callback){
         String requestStr="findErrorTaxis2/"+pagerID+"/"+limit;
         Request request=new Request.Builder().url(getExceptionURL+requestStr).build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
+
+    public void getCarOwnerData(String carID,Callback callback){
+        String requestStr="findCarInfoByPlate/"+carID;
+        Request request=new Request.Builder().url(getCarOwnerURL+requestStr).build();
         okHttpClient.newCall(request).enqueue(callback);
     }
 }

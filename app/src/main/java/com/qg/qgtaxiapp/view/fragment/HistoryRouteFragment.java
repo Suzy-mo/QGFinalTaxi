@@ -168,6 +168,20 @@ public class HistoryRouteFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setView(binLayoutBinding.getRoot());
                 AlertDialog dialog=builder.create();
+                binLayoutBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                binLayoutBinding.sureBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        aMap.clear();
+                        drawBoundary();
+                        dialog.dismiss();
+                    }
+                });
                 WindowManager windowManager= getActivity().getWindowManager();
                 DisplayMetrics dm = new DisplayMetrics();
                 Window window=dialog.getWindow();
@@ -177,8 +191,6 @@ public class HistoryRouteFragment extends Fragment {
                 p.width= (int) (dm.widthPixels*0.2);
                 window.setAttributes(p);
                 dialog.show();
-//                aMap.clear();
-//                drawBoundary();
             }
         });
     }
