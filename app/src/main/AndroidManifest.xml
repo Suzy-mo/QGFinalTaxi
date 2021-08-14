@@ -29,10 +29,10 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network"
         android:theme="@style/Theme.QGTaxiApp">
-        <activity android:name=".view.activity.TestChartActivity"/>
-        <activity android:name=".view.activity.SkipSearchCarRouteActivity"/>
-        <activity android:name=".view.activity.SkipSearchCarOwnerActivity"/>
-        <activity android:name=".view.activity.MainActivity"
+        <activity android:name="com.qg.qgtaxiapp.view.activity.TestChartActivity"/>
+        <activity android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity"/>
+        <activity android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarOwnerActivity"/>
+        <activity android:name="com.qg.qgtaxiapp.view.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

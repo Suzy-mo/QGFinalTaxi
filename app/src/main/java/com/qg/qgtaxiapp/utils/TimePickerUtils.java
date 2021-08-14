@@ -129,7 +129,7 @@ public class TimePickerUtils{
     /*
      *  设置dialog的宽度
      */
-        Dialog timePickerDialog;
+        Dialog timePickerDialog ;
         timePickerDialog = timePickerView.getDialog();
         Window window = timePickerDialog.getWindow();
         WindowManager manager = activity.getWindowManager();

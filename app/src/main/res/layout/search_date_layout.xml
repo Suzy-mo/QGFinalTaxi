@@ -20,13 +20,14 @@
         android:layout_marginTop="15dp"
         android:layout_toRightOf="@id/date_picker"
         android:background="@mipmap/dismiss" />
+
     <DatePicker
-        android:layout_marginTop="6dp"
-        android:layout_below="@id/time_tv"
         android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/time_tv"
         android:layout_centerInParent="true"
+        android:layout_marginTop="6dp"
         android:background="@drawable/search_layout_background"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"

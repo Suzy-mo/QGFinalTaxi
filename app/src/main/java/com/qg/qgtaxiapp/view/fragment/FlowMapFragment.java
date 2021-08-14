@@ -1,30 +1,54 @@
 package com.qg.qgtaxiapp.view.fragment;
 
-import android.graphics.Color;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+import android.view.Display;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.core.AMapException;
 import com.amap.api.services.district.DistrictItem;
+import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
-import com.qg.qgtaxiapp.R;
+import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentFlowMapBinding;
+import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
+import com.qg.qgtaxiapp.entity.EventBusEvent;
+import com.qg.qgtaxiapp.utils.MapUtils;
+import com.qg.qgtaxiapp.utils.PolygonRunnable;
+import com.qg.qgtaxiapp.utils.TimePickerUtils;
+import com.qg.qgtaxiapp.view.activity.MainActivity;
+import com.qg.qgtaxiapp.viewmodel.FlowMapViewModel;
+import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -35,114 +59,248 @@ import java.util.List;
  * @Description:
  */
 public class FlowMapFragment extends Fragment {
-
+    private static final int MIN_DISTANCE = 200; //最小滑动距离
+    private String tabList[] = {"全流图","主流图"};
     private FragmentFlowMapBinding binding;
-
-    private AMap aMap;
-    private TextureMapView mapView;
-
-    //请求权限码
-    private static final int REQUEST_PERMISSIONS = 9527;
-
+    private FlowMapViewModel flowMapViewModel;
+    private TabLayout tabLayout;
+    private int tabPosition = 0; //Tab显示位置
+    private FlowMapFragment.MyGestureDetector myGestureDetector;
+    private GestureDetector gestureDetector;
     private UiSettings uiSettings;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding=FragmentFlowMapBinding.inflate(inflater,container,false);
-        Log.d("=================","daozhelile");
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
+    private MapView mapView;
+    private AMap aMap = null;//地图控制器
+    private DistrictSearch districtSearch;
+    private DistrictSearchQuery districtSearchQuery;
+    private PolygonRunnable polygonRunnable;
+    private TextView tv_setTime;
+    private TimePickerView datePickerView;
+    private TimePickerUtils timePickerUtils;
+    private MapUtils mapUtils;
+    private AlertDialog dialog = null;
+    private TextView tv_date;
+    private TextView tv_timeslot;
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mapView = view.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-        initMap();
-        binding.choiceTurnBtn.setOnClickListener(new View.OnClickListener() {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        flowMapViewModel = new ViewModelProvider(getActivity()).get(FlowMapViewModel.class);
+        myGestureDetector = new FlowMapFragment.MyGestureDetector();
+        gestureDetector = new GestureDetector(getContext(), myGestureDetector);
+        districtSearch = new DistrictSearch(getContext());
+        timePickerUtils = new TimePickerUtils();
+        mapUtils = new MapUtils();
+        EventBus.getDefault().register(this);
+        /*
+            获取边界数据回调
+         */
+        districtSearch.setOnDistrictSearchListener(new DistrictSearch.OnDistrictSearchListener() {
             @Override
-            public void onClick(View v) {
-                setClick();
+            public void onDistrictSearched(DistrictResult districtResult) {
+
+                if (districtResult != null && districtResult.getDistrict() != null){
+                    if (districtResult.getAMapException().getErrorCode() == AMapException.CODE_AMAP_SUCCESS){
+
+                        ArrayList<DistrictItem> districtItems = districtResult.getDistrict();
+                        DistrictItem item = null;
+                        if (districtItems != null && districtItems.size() > 0){
+                            //广州市 adcode：440100
+                            for (DistrictItem districtItem : districtItems){
+                                if(districtItem.getAdcode().equals("440100")){
+                                    item = districtItem;
+                                    break;
+                                }
+                            }
+                            if (item == null){
+                                return;
+                            }
+                            Log.d("TAG_Hx","创建子线程");
+                            polygonRunnable = new PolygonRunnable(item,handler);
+                            new Thread(polygonRunnable).start();
+                        }
+                    }
+                }
             }
         });
     }
 
-    private void initMap() {
-        if (aMap == null) {
-            aMap = mapView.getMap();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentFlowMapBinding.inflate(inflater,container,false);
+        tabLayout = binding.fragmentHeatTabLayout;
+        mapView = binding.fragmentHeatMapView;
+        mapView.onCreate(savedInstanceState);
+        tv_setTime = binding.tvSetTime;
+        tv_date = binding.tvDate;
+        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
+
+
+        flowMapViewModel.heat_date.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                tv_date.setText(s);
+            }
+        });
+        flowMapViewModel.heat_timeslot.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                tv_timeslot.setText(s);
+            }
+        });
+
+
+        tv_setTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerView.show();
+            }
+        });
+
+        for (String tabName : tabList){
+            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        }
+        /*
+            注册屏幕事件监听
+         */
+        ((MainActivity)this.getActivity()).registerMyTouchListener(myTouchListener);
+
+        flowMapViewModel.selectTab.observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                tabLayout.selectTab(tabLayout.getTabAt(integer));
+            }
+        });
+
+        aMap = mapUtils.initMap(getContext(),mapView);
+        drawBoundary();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        /** 触摸事件的注销 */
+        ((MainActivity)this.getActivity()).unRegisterMyTouchListener(myTouchListener);
+        if (mapView != null){
+            mapView.onDestroy();
         }
     }
 
-    public void setClick(){
-        List<LatLng> latLngs =new ArrayList<>();
-        latLngs.add(new LatLng(43.828, 87.621));
-        latLngs.add(new LatLng(45.808, 100.55));
-        latLngs.add(new LatLng(43.828, 87.621));
-        latLngs.add(new LatLng(46.808, 86.55));
-        for (int i = 0 ; i < latLngs.size();i+=2){
-            setUpMap(latLngs.get(i),latLngs.get(i+1));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (mapView != null){
+            mapView.onDestroy();
         }
     }
 
-    private void setUpMap(LatLng begin,LatLng end) {
-
-        // 设置当前地图级别为4
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
-        // 设置地图底图文字的z轴指数，默认为0
-        aMap.setMapTextZIndex(2);
-
-        // 绘制一个乌鲁木齐到哈尔滨的大地曲线
-        aMap.addPolyline((new PolylineOptions())
-                .add(begin,end)
-                .geodesic(true).color(Color.BLUE));
-
-    }
-
-
-
-    /**
-     * 方法必须重写
-     */
     @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-
-    /**
-     * 方法必须重写
-     */
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
 
+    /** 接收MainActivity的Touch回调的对象，重写其中的onTouchEvent函数 */
+    MainActivity.MyTouchListener myTouchListener = new MainActivity.MyTouchListener() {
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            //处理手势事件（根据个人需要去返回和逻辑的处理）
+            return gestureDetector.onTouchEvent(event);
+        }
+    };
+
     /**
-     * 方法必须重写
+     * Toast提示
+     * @param msg 提示内容
      */
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mapView.onDestroy();
+    private void showMsg(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+    /**
+     * Log.d打印日志
+     */
+    private void showLog(String log){
+        Log.d("TAG_FlowMapFragment", log);
     }
 
+    /**
+     * 自定义MyGestureDetector类继承SimpleOnGestureListener
+     */
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(e1.getX() - e2.getX() > MIN_DISTANCE){//左滑
 
+                if (tabPosition != (tabLayout.getTabCount() - 1)){
+                    tabPosition ++;
+                }
+                flowMapViewModel.selectTab.setValue(tabPosition);
+            }else if(e2.getX() - e1.getX() > MIN_DISTANCE){//右滑
+
+                if (tabPosition != 0){
+                    tabPosition --;
+                }
+                flowMapViewModel.selectTab.setValue(tabPosition);
+            }
+            showLog("第" + tabPosition + "个Tab");
+            return true;
+        }
+    }
+
+    /*
+        获取边界点的设置
+     */
+    private void drawBoundary(){
+        if (flowMapViewModel.polylineOptions != null){
+            aMap.addPolyline(flowMapViewModel.polylineOptions);
+            return;
+        }
+        String city = "广州";
+        districtSearchQuery = new DistrictSearchQuery();
+        //设置关键字
+        districtSearchQuery.setKeywords(city);
+        //设置是否返回边界值
+        districtSearchQuery.setShowBoundary(true);
+        districtSearch.setQuery(districtSearchQuery);
+        districtSearch.searchDistrictAsyn();
+    }
+
+    /*
+        消息处理
+     */
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+
+                case 0:{
+                    PolylineOptions options = (PolylineOptions) msg.obj;
+                    aMap.addPolyline(options);
+                    flowMapViewModel.polylineOptions = options;
+                }break;
+            }
+        }
+    };
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
+        dialog = timePickerUtils.initTimeSlotDialog(getContext());
+        dialog.show();
+
+        Window window = dialog.getWindow();
+        WindowManager manager = getActivity().getWindowManager();
+        Display display = manager.getDefaultDisplay();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (display.getWidth() * 0.98);
+        window.setAttributes(params);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
+        flowMapViewModel.heat_date.setValue(timePickerUtils.getDate());
+        flowMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
+    }
 }
