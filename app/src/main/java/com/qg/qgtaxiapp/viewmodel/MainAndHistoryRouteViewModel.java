@@ -3,6 +3,7 @@ package com.qg.qgtaxiapp.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
 import com.qg.qgtaxiapp.entity.HistoryInfo;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * @Date: 2021/08/13/14:55
  * @Description:
  */
-public class HistoryRouteViewModel extends ViewModel {
+public class MainAndHistoryRouteViewModel extends ViewModel {
     public PolylineOptions polylineOptions = null;
-    public MutableLiveData<ArrayList<HistoryInfo>> data=new MutableLiveData<>();
+
 }

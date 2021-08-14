@@ -37,6 +37,7 @@ import okhttp3.Response;
  * @Description:
  */
 public class HistoryExceptionFragment extends Fragment {
+
     private FragmentHistoryExceptionBinding binding;
     private RecyclerView recyclerView;
     private GridLayoutManager manager;
