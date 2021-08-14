@@ -26,6 +26,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.district.DistrictItem;
@@ -37,6 +39,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentFlowMapBinding;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
 import com.qg.qgtaxiapp.entity.EventBusEvent;
+import com.qg.qgtaxiapp.entity.FlowAllData;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
@@ -49,6 +52,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -58,18 +62,21 @@ import java.util.ArrayList;
  * @Date: 2021/08/10/17:12
  * @Description:
  */
+
 public class FlowMapFragment extends Fragment {
     private static final int MIN_DISTANCE = 200; //最小滑动距离
     private String tabList[] = {"全流图","主流图"};
     private FragmentFlowMapBinding binding;
     private FlowMapViewModel flowMapViewModel;
     private TabLayout tabLayout;
-    private int tabPosition = 0; //Tab显示位置
+    private static int TAB_ALL = 0,TAB_MAIN = 1;
+    private int tabPosition = TAB_ALL; //Tab显示位置
     private FlowMapFragment.MyGestureDetector myGestureDetector;
     private GestureDetector gestureDetector;
     private UiSettings uiSettings;
     private MapView mapView;
     private AMap aMap = null;//地图控制器
+    private Polyline mPolyline ;//画图工具
     private DistrictSearch districtSearch;
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
@@ -140,14 +147,45 @@ public class FlowMapFragment extends Fragment {
             @Override
             public void onChanged(String s) {
                 tv_date.setText(s);
+                tv_setTime.setText(s);
             }
         });
-        flowMapViewModel.heat_timeslot.observe(getActivity(), new Observer<String>() {
+
+        flowMapViewModel.allData.observe(getActivity(), new Observer<List<FlowAllData.DataBean>>() {
             @Override
-            public void onChanged(String s) {
-                tv_timeslot.setText(s);
+            public void onChanged(List<FlowAllData.DataBean> dataBeans) {
+                List<LatLng> mData = mapUtils.readLatLng(dataBeans);
+                if(flowMapViewModel.selectTab.getValue() == TAB_ALL){
+                    mPolyline = mapUtils.setFlowAllLine(mData,aMap);
+                }else {
+                    mPolyline = mapUtils.setFlowMainLine(mData,aMap);
+                }
+
             }
         });
+//        flowMapViewModel.polyline.observe(getActivity(), new Observer<Polyline>() {
+//            @Override
+//            public void onChanged(Polyline polyline) {
+//                if(flowMapViewModel.selectTab.getValue()==TAB_ALL){
+//                    mPolyline = polyline;
+//                }else {
+//
+//                }
+//            }
+//        });
+
+//        flowMapViewModel.selectTab.observe(getActivity(), new Observer<Integer>() {
+//            @Override
+//            public void onChanged(Integer integer) {
+//                if(integer == TAB_ALL){
+//                    //全流图
+//
+//                } else {
+//                    //主流图
+//
+//                }
+//            }
+//        });
 
 
         tv_setTime.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +231,7 @@ public class FlowMapFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         if (mapView != null){
             mapView.onDestroy();
+            mPolyline.setVisible(false);
         }
     }
 
