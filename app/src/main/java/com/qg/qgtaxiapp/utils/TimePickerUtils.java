@@ -15,10 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
-import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
-import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -96,9 +94,6 @@ public class TimePickerUtils{
                     public void onClick(View v) {
                         timePickerView.returnData();
                         timePickerView.dismiss();
-
-                        /*initTimeslotPicker(context,activity);
-                        optionsPickerView.show();*/
                     }
                 });
                 //点击取消
