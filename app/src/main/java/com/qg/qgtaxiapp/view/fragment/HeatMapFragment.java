@@ -47,6 +47,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.bigkoo.pickerview.view.WheelOptions;
 import com.bigkoo.pickerview.view.WheelTime;
+import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
 import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.R;
@@ -93,13 +94,10 @@ public class HeatMapFragment extends Fragment{
     private PolygonRunnable polygonRunnable;
     private TextView tv_setTime;
     private TimePickerView datePickerView;
-    private OptionsPickerView timeslotPickerView;
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
     private AlertDialog dialog = null;
-    private WheelView wheelView1;
-    private List<String> hour;
-    private List<String> min;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -288,57 +286,11 @@ public class HeatMapFragment extends Fragment{
         }
     };
 
-    private void initTimeslotData(){
-        hour = new ArrayList<>();
-        min = new ArrayList<>();
-
-        for (int i = 0; i < 24; i++){
-            hour.add(i + "");
-        }
-        for (int i = 0; i < 60; i++){
-            min.add(i + "");
-        }
-    }
-
-    private void initTimeSlotDialog(){
-        TextView tv_confirm;
-        ImageView iv_cancel;
-        initTimeslotData();
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.timepicker_timeslot,null,false);
-        dialog = new AlertDialog.Builder(getContext()).setView(view).create();
-
-        tv_confirm = view.findViewById(R.id.timepicker_timeslot_confirm);
-        iv_cancel = view.findViewById(R.id.timepicker_timeslot_cancel);
-
-        tv_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        iv_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        WheelView op1 = view.findViewById(R.id.options1);
-        WheelView op2 = view.findViewById(R.id.options2);
-        WheelView op3 = view.findViewById(R.id.options3);
-        WheelView op4 = view.findViewById(R.id.options4);
-
-        op1.setAdapter(new ArrayWheelAdapter(hour));
-        op2.setAdapter(new ArrayWheelAdapter(min));
-        op3.setAdapter(new ArrayWheelAdapter(hour));
-        op4.setAdapter(new ArrayWheelAdapter(min));
-
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
         String date = event.getDate();
-        initTimeSlotDialog();
+        dialog = timePickerUtils.initTimeSlotDialog(getContext());
         dialog.show();
 
         Window window = dialog.getWindow();
