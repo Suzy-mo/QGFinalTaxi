@@ -4,17 +4,24 @@ import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyle;
 import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,19 +43,28 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
+import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.contrarywind.listener.OnItemSelectedListener;
+import com.contrarywind.view.WheelView;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHistoryRouteBinding;
 import com.qg.qgtaxiapp.databinding.SearchDateLayoutBinding;
+import com.qg.qgtaxiapp.databinding.SelectBinLayoutBinding;
 import com.qg.qgtaxiapp.utils.Constants;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
+import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity;
 import com.qg.qgtaxiapp.viewmodel.MainAndHistoryRouteViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with Android studio
@@ -77,8 +93,14 @@ public class HistoryRouteFragment extends Fragment {
     private DistrictSearchQuery districtSearchQuery;
 
 
-    private static HistoryRouteFragment Instance=new HistoryRouteFragment();
-    public static HistoryRouteFragment getInstance(){return Instance;}
+    private static HistoryRouteFragment Instance = new HistoryRouteFragment();
+    private TimePickerView timePickerView;
+    private String selectDate;
+    private SelectBinLayoutBinding binLayoutBinding;
+
+    public static HistoryRouteFragment getInstance() {
+        return Instance;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,9 +111,9 @@ public class HistoryRouteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding=FragmentHistoryRouteBinding.inflate(inflater,container,false);
+        binding = FragmentHistoryRouteBinding.inflate(inflater, container, false);
         mMySavedInstanceState = savedInstanceState;
-        mapView=binding.routeMapView;
+        mapView = binding.routeMapView;
         mainAndHistoryRouteViewModel = new ViewModelProvider(getActivity()).get(MainAndHistoryRouteViewModel.class);
         initMap(mMySavedInstanceState);
         drawBoundary();
@@ -122,10 +144,10 @@ public class HistoryRouteFragment extends Fragment {
         uiSettings.setScaleControlsEnabled(true);
         uiSettings.setZoomControlsEnabled(true);
         //设置边界
-        LatLng northeast = new LatLng(23.955343,114.054936);
-        LatLng southwest = new LatLng(22.506530,112.968270);
+        LatLng northeast = new LatLng(23.955343, 114.054936);
+        LatLng southwest = new LatLng(22.506530, 112.968270);
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast).include(southwest).build();
-        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,10));
+        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         aMap.setMapStatusLimits(bounds);
     }
 
@@ -136,74 +158,94 @@ public class HistoryRouteFragment extends Fragment {
         binding.routeSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar selectedDate = Calendar.getInstance();
-                Calendar startDate = Calendar.getInstance();
-                startDate.set(2017,2,1);
-                Calendar endDate = Calendar.getInstance();
-                endDate.set(2027,3,31);
-                initDialog();
+                initMyDialog();
             }
         });
-    }
-
-    private void initDialog() {
-        binding1 = SearchDateLayoutBinding.inflate(getLayoutInflater());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(binding1.getRoot());
-        dialog = builder.create();
-        initDate();
-        binding1.dismissIv.setOnClickListener(new View.OnClickListener() {
+        binding.deleteRouteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                binLayoutBinding = SelectBinLayoutBinding.inflate(getLayoutInflater());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setView(binLayoutBinding.getRoot());
+                AlertDialog dialog=builder.create();
+                WindowManager windowManager= getActivity().getWindowManager();
+                DisplayMetrics dm = new DisplayMetrics();
+                Window window=dialog.getWindow();
+                WindowManager.LayoutParams p =window.getAttributes();
+                windowManager.getDefaultDisplay().getMetrics(dm);
+                p.height= (int) (dm.heightPixels*0.2);
+                p.width= (int) (dm.widthPixels*0.2);
+                window.setAttributes(p);
+                dialog.show();
+//                aMap.clear();
+//                drawBoundary();
             }
         });
-        binding1.nextBtn.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void initMyDialog() {
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2017, 1, 1);
+        endDate.set(2017, 2, 31);
+        timePickerView = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
-            public void onClick(View v) {
-                if(searchMonth==null||searchDay==null){
-                    Toast.makeText(getContext(),"请选择2月或者3月",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                int var= Integer.parseInt(searchMonth);
-                if(2<=var&&var<=3){
-                    dialog.dismiss();
-                    String searchStr = searchMonth + searchDay;
-                    Intent intent = new Intent(getActivity(), SkipSearchCarRouteActivity.class);
-                    intent.putExtra("searchStr", searchStr);
-                    startActivityForResult(intent,Constants.REQUEST_ROUTE_CODE);
-                }else {
-                    Toast.makeText(getContext(),"请选择2月或者3月",Toast.LENGTH_SHORT).show();
-                }
+            public void onTimeSelect(Date date, View v) {
+                selectDate = getDate(date);
+                Intent intent = new Intent(getActivity(), SkipSearchCarRouteActivity.class);
+                intent.putExtra("searchStr", selectDate);
+                startActivityForResult(intent, Constants.REQUEST_ROUTE_CODE);
+                Log.d("====T", selectDate);
             }
-        });
-        binding1.datePicker.init(year, monthOfYear, dayOfMonth, new MyOnDateChangeListener());
-        dialog.show();
+        }).setLayoutRes(R.layout.route_dialog_view, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                TextView next = v.findViewById(R.id.timepicker_date_next);
+                ImageView cancel = v.findViewById(R.id.timepicker_date_cancel);
+                next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timePickerView.returnData();
+                        timePickerView.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timePickerView.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).setOutSideCancelable(false)
+                .setRangDate(startDate, endDate)
+                .setOutSideColor(getActivity().getResources().getColor(R.color.timepicker_outside))//外部背景颜色
+                .setBgColor(getActivity().getResources().getColor(R.color.timepicker_background))//背景颜色
+                .setTextColorCenter(getActivity().getResources().getColor(R.color.timepicker_selectText))//选中字体颜色
+                .setTextColorOut(getActivity().getResources().getColor(R.color.timepicker_unselectText))//未选中字体颜色
+                .isCenterLabel(true)//只显示中央标签
+                .setItemVisibleCount(5)//可见标签数
+                .setDividerColor(Color.argb(0, 0, 0, 0))
+                .setType(new boolean[]{false, true, true, false, false, false})//是否显示年月日，时分秒
+                .isAlphaGradient(true)//滚轮透明
+                .build();
+        Dialog timePickerDialog;
+        timePickerDialog = timePickerView.getDialog();
+        Window window = timePickerDialog.getWindow();
+        WindowManager manager = getActivity().getWindowManager();
+        DisplayMetrics dm = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (dm.widthPixels * 0.95);
+        window.setAttributes(params);
+        timePickerDialog.show();
     }
 
-    private void initDate() {
-        calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        monthOfYear = calendar.get(Calendar.MONTH);
-        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-    }
 
-    class MyOnDateChangeListener implements DatePicker.OnDateChangedListener {
-        @Override
-        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            searchMonth = "0" + (monthOfYear + 1);
-            if (dayOfMonth < 10) {
-                searchDay = "0" + dayOfMonth;
-            } else if (dayOfMonth > 10) {
-                searchDay = String.valueOf(dayOfMonth);
-            }
-        }
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mapView != null){
+        if (mapView != null) {
             mapView.onDestroy();
         }
     }
@@ -213,18 +255,20 @@ public class HistoryRouteFragment extends Fragment {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
+
     /*
        消息处理
     */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
-                case 0:{
+            switch (msg.what) {
+                case 0: {
                     PolylineOptions options = (PolylineOptions) msg.obj;
                     aMap.addPolyline(options);
                     mainAndHistoryRouteViewModel.polylineOptions = options;
-                }break;
+                }
+                break;
 
             }
         }
@@ -233,8 +277,8 @@ public class HistoryRouteFragment extends Fragment {
     /**
      * 绘制边界的方法
      */
-    private void drawBoundary(){
-        if (mainAndHistoryRouteViewModel.polylineOptions != null){
+    private void drawBoundary() {
+        if (mainAndHistoryRouteViewModel.polylineOptions != null) {
             aMap.addPolyline(mainAndHistoryRouteViewModel.polylineOptions);
             return;
         }
@@ -247,29 +291,30 @@ public class HistoryRouteFragment extends Fragment {
         districtSearch.setQuery(districtSearchQuery);
         districtSearch.searchDistrictAsyn();
     }
+
     private void initDistrictSearch() {
         districtSearch = new DistrictSearch(getContext());
         districtSearch.setOnDistrictSearchListener(new DistrictSearch.OnDistrictSearchListener() {
             @Override
             public void onDistrictSearched(DistrictResult districtResult) {
 
-                if (districtResult != null && districtResult.getDistrict() != null){
-                    if (districtResult.getAMapException().getErrorCode() == AMapException.CODE_AMAP_SUCCESS){
+                if (districtResult != null && districtResult.getDistrict() != null) {
+                    if (districtResult.getAMapException().getErrorCode() == AMapException.CODE_AMAP_SUCCESS) {
 
                         ArrayList<DistrictItem> districtItems = districtResult.getDistrict();
                         DistrictItem item = null;
-                        if (districtItems != null && districtItems.size() > 0){
+                        if (districtItems != null && districtItems.size() > 0) {
                             //广州市 adcode：440100
-                            for (DistrictItem districtItem : districtItems){
-                                if(districtItem.getAdcode().equals("440100")){
+                            for (DistrictItem districtItem : districtItems) {
+                                if (districtItem.getAdcode().equals("440100")) {
                                     item = districtItem;
                                     break;
                                 }
                             }
-                            if (item == null){
+                            if (item == null) {
                                 return;
                             }
-                            polygonRunnable = new PolygonRunnable(item,handler);
+                            polygonRunnable = new PolygonRunnable(item, handler);
                             new Thread(polygonRunnable).start();
                         }
                     }
@@ -281,15 +326,23 @@ public class HistoryRouteFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==Constants.REQUEST_ROUTE_CODE){
-            if(resultCode==Constants.ROUTE_CODE){
+        if (requestCode == Constants.REQUEST_ROUTE_CODE) {
+            if (resultCode == Constants.ROUTE_CODE) {
                 Bundle key = data.getBundleExtra("key");
                 ArrayList<LatLng> list = (ArrayList<LatLng>) key.getSerializable("data");
-                if(list!=null){
-                    Log.d("===========",list.size()+"");
-                    aMap.addPolyline(new PolylineOptions().addAll(list).width(5).color(Color.argb(255,1,1,1)));
+                if (list != null) {
+                    Log.d("===========", list.size() + "");
+                    aMap.addPolyline(new PolylineOptions().addAll(list).width(5).color(Color.argb(255, 1, 1, 1)));
                 }
             }
         }
+    }
+
+    private String getDate(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String myDate = format.format(date);
+        String myDateArray[] = myDate.split("-");
+        String data = myDateArray[1] + myDateArray[2];
+        return data;
     }
 }

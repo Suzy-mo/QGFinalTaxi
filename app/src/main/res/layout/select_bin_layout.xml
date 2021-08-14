@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/select_bin_layout_background">
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/select_bin_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认删除全部轨迹吗？"
+            android:textColor="#DEFFFFFF"
+            android:textSize="17sp"
+            />
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/select_bin_tv"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_marginRight="40dp"
+                android:id="@+id/cancel_btn"
+                android:textColor="@drawable/select_bin_btn_text_background"
+                android:text="取消"
+                android:background="@drawable/select_bin_btn_background"
+                android:layout_width="60dp"
+                android:layout_height="40dp"/>
+            <Button
+                android:id="@+id/sure_btn"
+                android:text="确定"
+                android:background="@drawable/select_bin_btn_background"
+                android:textColor="@drawable/select_bin_btn_text_background"
+                android:layout_width="60dp"
+                android:layout_height="40dp"/>
+        </LinearLayout>
+</RelativeLayout>

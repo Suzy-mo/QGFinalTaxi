@@ -79,6 +79,17 @@ public class HistoryMapFragment extends Fragment {
                 public void onPageSelected(int position) {
                     binding.historyViewpager2.setCurrentItem(position);
                 }
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                }
             });
         }
     }
