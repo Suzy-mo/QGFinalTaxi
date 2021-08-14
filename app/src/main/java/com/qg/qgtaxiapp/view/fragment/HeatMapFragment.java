@@ -1,10 +1,6 @@
 package com.qg.qgtaxiapp.view.fragment;
 
-import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyle;
-import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,42 +14,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapOptions;
-import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.CustomMapStyleOptions;
+import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
-import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
-import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.bigkoo.pickerview.view.WheelOptions;
-import com.bigkoo.pickerview.view.WheelTime;
-import com.contrarywind.listener.OnItemSelectedListener;
-import com.contrarywind.view.WheelView;
 import com.google.android.material.tabs.TabLayout;
-import com.qg.qgtaxiapp.R;
+import com.google.gson.Gson;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
 import com.qg.qgtaxiapp.entity.EventBusEvent;
+import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
+import com.qg.qgtaxiapp.utils.NetUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
@@ -63,10 +52,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 /**
@@ -86,19 +78,24 @@ public class HeatMapFragment extends Fragment{
     private int tabPosition = 0; //Tab显示位置
     private MyGestureDetector myGestureDetector;
     private GestureDetector gestureDetector;
-    private UiSettings uiSettings;
     private MapView mapView;
     private AMap aMap = null;//地图控制器
     private DistrictSearch districtSearch;
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
-    private TextView tv_setTime;
     private TimePickerView datePickerView;
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
     private AlertDialog dialog = null;
+    private TextView tv_changeTime;
     private TextView tv_date;
     private TextView tv_timeslot;
+    private TextView tv_chooseTime;
+    private ConstraintLayout cl_timeSet;
+    private ConstraintLayout cl_chooseTime;
+    private NetUtils netUtils = NetUtils.getInstance();
+    private HeatmapTileProvider heatmapTileProvider;
+    private TileOverlayOptions tileOverlayOptions;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,12 +147,67 @@ public class HeatMapFragment extends Fragment{
         tabLayout = binding.fragmentHeatTabLayout;
         mapView = binding.fragmentHeatMapView;
         mapView.onCreate(savedInstanceState);
-        tv_setTime = binding.tvSetTime;
+        tv_changeTime = binding.tvChangeTime;
         tv_date = binding.tvDate;
         tv_timeslot = binding.tvTimeslot;
+        tv_chooseTime = binding.tvChooseTime;
+        cl_chooseTime = binding.fragmentHeatClChooseTime;
+        cl_timeSet = binding.fragmentHeatClTime;
+
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
 
+        for (String tabName : tabList){
+            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        }
 
+        heatMapViewModel.selectTab.observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                switch (integer){
+                    case 0:{
+                        if (heatMapViewModel.heatTime == null) {
+                            cl_timeSet.setVisibility(View.GONE);
+                            cl_chooseTime.setVisibility(View.VISIBLE);
+                        }else {
+                            cl_timeSet.setVisibility(View.VISIBLE);
+                            cl_chooseTime.setVisibility(View.GONE);
+                            tv_date.setText(heatMapViewModel.heat_date.getValue());
+                            tv_timeslot.setText(heatMapViewModel.heat_timeslot.getValue());
+                        }
+                    }break;
+
+                    case 1:{
+                        if (heatMapViewModel.passageTime == null) {
+                            cl_timeSet.setVisibility(View.GONE);
+                            cl_chooseTime.setVisibility(View.VISIBLE);
+                        }else {
+                            cl_timeSet.setVisibility(View.VISIBLE);
+                            cl_chooseTime.setVisibility(View.GONE);
+                            tv_date.setText(heatMapViewModel.passage_date.getValue());
+                            tv_timeslot.setText(heatMapViewModel.passage_timeslot.getValue());
+                        }
+                    }break;
+
+                    case 2:{
+                        showLog("广告牌");
+                    }break;
+                }
+            }
+        });
+
+        heatMapViewModel.heatData.observe(getActivity(), new Observer<List<LatLng>>() {
+            @Override
+            public void onChanged(List<LatLng> list) {
+                heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(list);
+                tileOverlayOptions = new TileOverlayOptions();
+                tileOverlayOptions.tileProvider(heatmapTileProvider);
+                aMap.addTileOverlay(tileOverlayOptions);
+            }
+        });
+
+        /*
+            时间监测
+         */
         heatMapViewModel.heat_date.observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -170,16 +222,21 @@ public class HeatMapFragment extends Fragment{
         });
 
 
-        tv_setTime.setOnClickListener(new View.OnClickListener() {
+        tv_changeTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePickerView.show();
             }
         });
 
-        for (String tabName : tabList){
-            tabLayout.addTab(tabLayout.newTab().setText(tabName));
-        }
+        tv_chooseTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerView.show();
+            }
+        });
+
+
         /*
             注册屏幕事件监听
          */
@@ -263,6 +320,7 @@ public class HeatMapFragment extends Fragment{
                     tabPosition --;
                 }
                 heatMapViewModel.selectTab.setValue(tabPosition);
+                heatMapViewModel.tab = tabPosition;
             }
             showLog("第" + tabPosition + "个Tab");
             return true;
@@ -300,11 +358,18 @@ public class HeatMapFragment extends Fragment{
                     aMap.addPolyline(options);
                     heatMapViewModel.polylineOptions = options;
                 }break;
+
+                case 1:{
+                    List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
+                    heatMapViewModel.heatData.setValue(mapUtils.initHeatMapData(data));
+                }break;
             }
         }
     };
 
-
+    /*
+        显示时间段设置Dialog
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
         dialog = timePickerUtils.initTimeSlotDialog(getContext());
@@ -317,10 +382,50 @@ public class HeatMapFragment extends Fragment{
         params.width = (int) (display.getWidth() * 0.98);
         window.setAttributes(params);
     }
-
+    /*
+        完成时间设置
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
-        heatMapViewModel.heat_date.setValue(timePickerUtils.getDate());
-        heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
+        if (cl_chooseTime.getVisibility() == View.VISIBLE) {
+            cl_chooseTime.setVisibility(View.GONE);
+            cl_timeSet.setVisibility(View.VISIBLE);
+        }
+        if (heatMapViewModel.tab == 0) {
+            heatMapViewModel.heat_date.setValue(timePickerUtils.getDate());
+            heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
+            heatMapViewModel.heatTime = timePickerUtils.getTime();
+            getHeatData();
+        }
+        else if (heatMapViewModel.tab == 1){
+            heatMapViewModel.passage_date.setValue(timePickerUtils.getDate());
+            heatMapViewModel.passage_timeslot.setValue(timePickerUtils.getTimeslot());
+            heatMapViewModel.passageTime = timePickerUtils.getTime();
+        }
     }
+    /*
+        获取热力图数据
+     */
+    private void getHeatData(){
+        netUtils.setGetHeatMapData(heatMapViewModel.heatTime, 0, 100, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                showLog("热力图数据获取失败");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+                HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
+                List<HeatMapData.data> data = heatMapData.getData();
+                Message message = handler.obtainMessage();
+                message.what = 1;
+                message.obj = data;
+                handler.sendMessage(message);
+            }
+        });
+    }
+
 }
