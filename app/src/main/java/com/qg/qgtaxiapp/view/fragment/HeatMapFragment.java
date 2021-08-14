@@ -3,16 +3,22 @@ package com.qg.qgtaxiapp.view.fragment;
 import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyle;
 import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,18 +42,31 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
+import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bigkoo.pickerview.view.WheelOptions;
+import com.bigkoo.pickerview.view.WheelTime;
+import com.contrarywind.listener.OnItemSelectedListener;
+import com.contrarywind.view.WheelView;
 import com.google.android.material.tabs.TabLayout;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
+import com.qg.qgtaxiapp.entity.EventBusEvent;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -77,6 +96,9 @@ public class HeatMapFragment extends Fragment{
     private TimePickerView datePickerView;
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
+    private AlertDialog dialog = null;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +108,7 @@ public class HeatMapFragment extends Fragment{
         districtSearch = new DistrictSearch(getContext());
         timePickerUtils = new TimePickerUtils();
         mapUtils = new MapUtils();
+        EventBus.getDefault().register(this);
         /*
             获取边界数据回调
          */
@@ -168,6 +191,7 @@ public class HeatMapFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (mapView != null){
             mapView.onDestroy();
         }
@@ -261,4 +285,19 @@ public class HeatMapFragment extends Fragment{
             }
         }
     };
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
+        String date = event.getDate();
+        dialog = timePickerUtils.initTimeSlotDialog(getContext());
+        dialog.show();
+
+        Window window = dialog.getWindow();
+        WindowManager manager = getActivity().getWindowManager();
+        Display display = manager.getDefaultDisplay();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (display.getWidth() * 0.98);
+        window.setAttributes(params);
+    }
 }
