@@ -97,7 +97,8 @@ public class HeatMapFragment extends Fragment{
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
     private AlertDialog dialog = null;
-
+    private TextView tv_date;
+    private TextView tv_timeslot;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,7 +151,25 @@ public class HeatMapFragment extends Fragment{
         mapView = binding.fragmentHeatMapView;
         mapView.onCreate(savedInstanceState);
         tv_setTime = binding.tvSetTime;
+        tv_date = binding.tvDate;
+        tv_timeslot = binding.tvTimeslot;
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
+
+
+        heatMapViewModel.heat_date.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                tv_date.setText(s);
+            }
+        });
+        heatMapViewModel.heat_timeslot.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                tv_timeslot.setText(s);
+            }
+        });
+
+
         tv_setTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +300,6 @@ public class HeatMapFragment extends Fragment{
                     aMap.addPolyline(options);
                     heatMapViewModel.polylineOptions = options;
                 }break;
-
             }
         }
     };
@@ -289,7 +307,6 @@ public class HeatMapFragment extends Fragment{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onShowTimeSlotSet(EventBusEvent.showTimeSlotSet event){
-        String date = event.getDate();
         dialog = timePickerUtils.initTimeSlotDialog(getContext());
         dialog.show();
 
@@ -299,5 +316,11 @@ public class HeatMapFragment extends Fragment{
         WindowManager.LayoutParams params = window.getAttributes();
         params.width = (int) (display.getWidth() * 0.98);
         window.setAttributes(params);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
+        heatMapViewModel.heat_date.setValue(timePickerUtils.getDate());
+        heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
     }
 }

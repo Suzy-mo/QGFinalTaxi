@@ -57,8 +57,9 @@
             android:textSize="14sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_date"
-            android:layout_marginStart="4dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"/>
 
         <TextView
             android:id="@+id/tv_SetTime"
@@ -70,7 +71,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_timeslot"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             android:paddingVertical="4dp"
             android:paddingHorizontal="8dp"
             android:background="@drawable/bottom_settime_background" />
