@@ -279,4 +279,11 @@ public class TimePickerUtils{
         return buffer.toString();
     }
 
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
 }
