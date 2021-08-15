@@ -31,9 +31,11 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.district.DistrictItem;
@@ -336,14 +338,20 @@ public class HistoryRouteFragment extends Fragment {
                 Bundle key = data.getBundleExtra("key");
                 ArrayList<LatLng> list = (ArrayList<LatLng>) key.getSerializable("data");
                 if (list != null) {
-                    Log.d("===========", list.size() + "");
-                    aMap.addPolyline(new PolylineOptions().addAll(list).width(5).color(Color.argb(255, 1, 1, 1)));
+                    Log.d("===========daot", list.size() + "");
+                    PolylineOptions options=new PolylineOptions();
+                    LatLng start=list.get(0);
+                    LatLng end=list.get(list.size()-1);
+                    aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+                    aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,230,85,111)).width(10));
+//                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,78,114,226)).width(10));
                 }
             }
         }
     }
 
-    private String getDate(Date date) {//可根据需要自行截取数据显示
+    private String getDate(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String myDate = format.format(date);
         String myDateArray[] = myDate.split("-");
