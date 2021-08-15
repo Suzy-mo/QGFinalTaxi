@@ -12,21 +12,28 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.district.DistrictItem;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
 import com.qg.qgtaxiapp.entity.HeatMapData;
+import com.qg.qgtaxiapp.entity.FlowAllData;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @author: Hx
@@ -159,5 +166,90 @@ public class MapUtils {
 
         return aMap;
     }
+
+    /**
+     * @param  data
+     * @return List<LatLng>
+     * @description  转换流向图的坐标
+     * @author Suzy.Mo
+     * @time
+     */
+
+    public  List<LatLng> readLatLng(List<FlowAllData.DataBean> data) {
+        List<LatLng> points = new ArrayList<LatLng>();
+        for (int i = 0; i < data.size(); i ++) {
+            points.add(new LatLng(data.get(i).getLatitude(),data.get(i).getLongitude()));
+        }
+        return points;
+    }
+
+    /**
+     * @param  list aMap
+     * @return Polyline
+     * @description  画全部流向图的曲线
+     * @author Suzy.Mo
+     * @time
+     */
+
+    public Polyline setFlowAllLine(List<LatLng> list,AMap aMap) {
+
+        // 设置当前地图级别为4
+        //aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
+        // 设置地图底图文字的z轴指数，默认为0
+        //aMap.setMapTextZIndex(2);
+
+        // 绘制流向图
+        Polyline mPolyline = aMap.addPolyline((new PolylineOptions())//.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)))
+                .addAll(list)
+                .width(2)
+                .color(Color.parseColor("#03DAC5")));
+        return mPolyline;
+    }
+
+    /**
+     * @param list mAMap
+     * @return void
+     * @description  画主流向的函数
+     * @author Suzy.Mo
+     * @time
+     */
+
+    public Polyline setFlowMainLine(List<LatLng> list, AMap mAMap) {
+        List<Integer> colorList = new ArrayList<Integer>();
+        List<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
+
+        int[] colors = new int[]{Color.argb(255, 0, 255, 0),Color.argb(255, 255, 255, 0),Color.argb(255, 255, 0, 0)};
+
+        //用一个数组来存放纹理
+        List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture));
+
+        List<Integer> texIndexList = new ArrayList<Integer>();
+        texIndexList.add(0);//对应上面的第0个纹理
+        texIndexList.add(1);
+        texIndexList.add(2);
+
+        Random random = new Random();
+        for (int i = 0; i < list.size(); i++) {
+            colorList.add(colors[random.nextInt(3)]);
+            bitmapDescriptors.add(textureList.get(0));
+
+        }
+
+        Polyline mPolyline =  mAMap.addPolyline(new PolylineOptions().setCustomTexture(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture)) //setCustomTextureList(bitmapDescriptors)
+//				.setCustomTextureIndex(texIndexList)
+                .addAll(list)
+                .useGradient(true)
+                .width(18));
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(list.get(0));
+        builder.include(list.get(list.size() - 2));
+
+        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+
+        return mPolyline;
+    }
+
 }
 
