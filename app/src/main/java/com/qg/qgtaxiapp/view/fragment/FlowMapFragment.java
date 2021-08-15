@@ -354,9 +354,5 @@ public class FlowMapFragment extends Fragment {
 //        window.setAttributes(params);
 //    }
 //
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onSetTimeFinish(EventBusEvent.setTimeFinish event){
-//        flowMapViewModel.heat_date.setValue(timePickerUtils.getDate());
-//        flowMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
-//    }
+
 }
