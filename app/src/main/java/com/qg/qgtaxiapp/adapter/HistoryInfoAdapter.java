@@ -2,6 +2,7 @@ package com.qg.qgtaxiapp.adapter;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.entity.HistoryInfo;
 
 import java.util.ArrayList;
@@ -22,6 +23,6 @@ public class HistoryInfoAdapter extends BaseQuickAdapter<HistoryInfo, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, HistoryInfo historyInfo) {
-
+        baseViewHolder.setText(R.id.car_search_owner_id_tv,historyInfo.getCarID());
     }
 }

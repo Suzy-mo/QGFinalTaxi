@@ -1,5 +1,7 @@
 package com.qg.qgtaxiapp.entity;
 
+import java.io.Serializable;
+
 /**
  * Created with Android studio
  *

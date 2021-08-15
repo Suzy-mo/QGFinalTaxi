@@ -6,7 +6,7 @@ import java.util.List;
  * @author: Hx
  * @date: 2021年08月12日 22:16
  */
-class HeatMapData {
+public class HeatMapData {
     private int code;
     private List<data> data;
     private String message;
@@ -58,6 +58,14 @@ class HeatMapData {
 
         public void setLongitude(double longitude) {
             this.longitude = longitude;
+        }
+
+        @Override
+        public String toString() {
+            return "data{" +
+                    "latitude=" + latitude +
+                    ", longitude=" + longitude +
+                    '}';
         }
     }
 }

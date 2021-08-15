@@ -8,10 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="home_tab_selected">#FF03DAC5</color>
-    <color name="home_tab_unselected">#FFFFFFFF</color>
+    <color name="home_tab_unselected">#99FFFFFF</color>
     <color name="bottom_item_background">#292929</color>
     <color name="timepicker_outside">#B3000000</color>
     <color name="timepicker_background">#FF292929</color>
     <color name="timepicker_selectText">#FF03DAC5</color>
     <color name="timepicker_unselectText">#99FFFFFF</color>
+    <color name="select_bin_unselect">#FF292929</color>
+    <color name="select_bin_select">#1403DAC5</color>
 </resources>

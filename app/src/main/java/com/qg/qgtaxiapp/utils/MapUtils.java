@@ -24,6 +24,7 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.district.DistrictItem;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.entity.FlowAllData;
 
 import java.io.IOException;
@@ -59,9 +60,9 @@ public class MapUtils {
 
 
     //生成HeatmapTileProvider
-    public HeatmapTileProvider initBuildHeatmapTileProvider(LatLng[] latlngs) {
+    public HeatmapTileProvider initBuildHeatmapTileProvider(List<LatLng> list) {
         HeatmapTileProvider.Builder builder = new HeatmapTileProvider.Builder();
-        builder.data(Arrays.asList(latlngs));
+        builder.data(list);
         builder.gradient(ALT_HEATMAP_GRADIENT);
         HeatmapTileProvider heatmapTileProvider = builder.build();
         return heatmapTileProvider;
@@ -70,20 +71,16 @@ public class MapUtils {
 
 
     //生成热力点坐标列表
-    public LatLng[] initHeatMapData(double latitude, double longitude){
+    public List<LatLng> initHeatMapData(List<HeatMapData.data> data){
+        List<LatLng> list = new ArrayList<>();
 
-        LatLng[] latlngs = new LatLng[500];
-        double x = latitude;
-        double y = longitude;
-
-        for (int i = 0; i < 500; i++) {
-            double x_ = 0;
-            double y_ = 0;
-            x_ = Math.random() * 0.5 - 0.25;
-            y_ = Math.random() * 0.5 - 0.25;
-            latlngs[i] = new LatLng(x + x_, y + y_);
+        for (HeatMapData.data data1 : data){
+         double latitude = data1.getLatitude();
+         double longitude = data1.getLongitude();
+         LatLng latLng = new LatLng(latitude,longitude);
+         list.add(latLng);
         }
-        return latlngs;
+        return list;
     }
 
     /*
