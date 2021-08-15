@@ -31,6 +31,7 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentFlowMapBinding;
@@ -47,6 +48,7 @@ import com.qg.qgtaxiapp.viewmodel.FlowMapViewModel;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -135,11 +137,16 @@ public class FlowMapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFlowMapBinding.inflate(inflater,container,false);
         tabLayout = binding.fragmentHeatTabLayout;
-        mapView = binding.fragmentHeatMapView;
+        mapView = binding.flowMap;
         mapView.onCreate(savedInstanceState);
         tv_setTime = binding.tvSetTime;
         tv_date = binding.tvDate;
-        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity());
+        datePickerView = timePickerUtils.initDatePicker(getContext(), getActivity(), new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                showLog(date.toString());
+            }
+        });
 
 
         flowMapViewModel.flow_date.observe(getActivity(), new Observer<String>() {
