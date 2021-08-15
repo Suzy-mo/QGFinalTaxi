@@ -58,45 +58,35 @@ public class HistoryMapFragment extends Fragment {
             fragments.add(new HistoryExceptionFragment());
             adapter = new HistoryMapFragmentAdapter(getActivity(), fragments);
             binding.historyViewpager2.setAdapter(adapter);
+            tabLayout = binding.historyTabLayout;
+            for (int i = 0; i < tabList.length; i++) {
+                tabLayout.addTab(tabLayout.newTab());
+                new TabLayoutMediator(binding.historyTabLayout, binding.historyViewpager2, new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        tab.setText(tabList[position]);
+                    }
+                }).attach();
+                binding.historyViewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        binding.historyViewpager2.setCurrentItem(position);
+                    }
+
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                        super.onPageScrollStateChanged(state);
+                    }
+                });
+            }
         }
         return binding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        tabLayout = binding.historyTabLayout;
-        for (int i = 0; i < tabList.length; i++) {
-            tabLayout.addTab(tabLayout.newTab());
-            new TabLayoutMediator(binding.historyTabLayout, binding.historyViewpager2, new TabLayoutMediator.TabConfigurationStrategy() {
-                @Override
-                public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                    tab.setText(tabList[position]);
-                }
-            }).attach();
-            binding.historyViewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                @Override
-                public void onPageSelected(int position) {
-                    binding.historyViewpager2.setCurrentItem(position);
-                }
-
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    super.onPageScrollStateChanged(state);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override

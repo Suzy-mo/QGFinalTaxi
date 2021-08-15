@@ -344,7 +344,7 @@ public class HistoryRouteFragment extends Fragment {
                     LatLng end=list.get(list.size()-1);
                     aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
                     aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,230,85,111)).width(10));
+                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.red_route)).addAll(list).width(10));
 //                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,78,114,226)).width(10));
                 }
             }
