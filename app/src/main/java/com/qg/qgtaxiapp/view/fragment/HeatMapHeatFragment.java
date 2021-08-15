@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,7 +93,6 @@ public class HeatMapHeatFragment extends Fragment {
     private TileOverlayOptions tileOverlayOptions;
     private OnTimeSelectListener onTimeSelectListener;
     private View.OnClickListener onClickListener;
-    private String mDate = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,7 +153,8 @@ public class HeatMapHeatFragment extends Fragment {
         onTimeSelectListener = new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                mDate = timePickerUtils.getDate(date);
+                heatMapViewModel.heatTime = timePickerUtils.getDate(date);
+                timePickerUtils.setmDate(heatMapViewModel.heatTime);
                 showTimeSlotSet();
 
             }
@@ -269,6 +270,11 @@ public class HeatMapHeatFragment extends Fragment {
                 }break;
 
                 case 1:{
+                    if (cl_chooseTime.getVisibility() == View.VISIBLE) {
+                        cl_chooseTime.setVisibility(View.GONE);
+                        cl_timeSet.setVisibility(View.VISIBLE);
+                    }
+
                     List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
                     heatMapViewModel.heatData.setValue(mapUtils.initHeatMapData(data));
                 }break;
@@ -287,14 +293,10 @@ public class HeatMapHeatFragment extends Fragment {
                     Toast.makeText(getContext(),"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
                 } else {
 
-                    if (cl_chooseTime.getVisibility() == View.VISIBLE) {
-                        cl_chooseTime.setVisibility(View.GONE);
-                        cl_timeSet.setVisibility(View.VISIBLE);
-                    }
-                    heatMapViewModel.heat_date.setValue(mDate);
+                    heatMapViewModel.heat_date.setValue(timePickerUtils.getmDate());
                     heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
                     heatMapViewModel.heatTime = timePickerUtils.getTime();
-
+                    showLog(heatMapViewModel.heatTime);
                     getHeatData();
                     dialog.dismiss();
                 }
@@ -327,11 +329,17 @@ public class HeatMapHeatFragment extends Fragment {
                 String json = response.body().string();
                 Gson gson = new Gson();
                 HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
-                List<HeatMapData.data> data = heatMapData.getData();
-                Message message = handler.obtainMessage();
-                message.what = 1;
-                message.obj = data;
-                handler.sendMessage(message);
+                if (heatMapData.getCode() == 1){
+
+                    List<HeatMapData.data> data = heatMapData.getData();
+                    Message message = handler.obtainMessage();
+                    message.what = 1;
+                    message.obj = data;
+                    handler.sendMessage(message);
+                }else {
+                    showLog("无数据");
+                }
+
             }
         });
     }
