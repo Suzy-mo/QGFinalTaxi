@@ -2,6 +2,7 @@ package com.qg.qgtaxiapp.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class HeatMapViewModel extends ViewModel {
 
-
+    public ViewPager2 heatMapVP;
     public PolylineOptions polylineOptions = null;
 
     public MutableLiveData<String> heat_date = new MutableLiveData<>();

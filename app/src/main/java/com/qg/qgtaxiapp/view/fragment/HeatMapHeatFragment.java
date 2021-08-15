@@ -24,9 +24,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.AMapGestureListener;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.services.core.AMapException;
@@ -59,7 +59,6 @@ import okhttp3.Response;
  * @date: 2021年08月14日 23:21
  */
 public class HeatMapHeatFragment extends Fragment {
-    private static final int MIN_DISTANCE = 200; //最小滑动距离
 
     private FragmentHeatmapHeatBinding binding;
     private HeatMapViewModel heatMapViewModel;
@@ -114,7 +113,6 @@ public class HeatMapHeatFragment extends Fragment {
                             if (item == null){
                                 return;
                             }
-                            Log.d("TAG_Hx","创建子线程");
                             polygonRunnable = new PolygonRunnable(item,handler);
                             new Thread(polygonRunnable).start();
                         }
@@ -138,7 +136,7 @@ public class HeatMapHeatFragment extends Fragment {
         tv_chooseTime = binding.tvHeatChooseTime;
         cl_chooseTime = binding.clFragmentHeatChooseTime;
         cl_timeSet = binding.clFragmentHeatTime;
-
+        aMap = mapUtils.initMap(getContext(),mapView);
         /*
             日期选择监听
          */
@@ -160,6 +158,7 @@ public class HeatMapHeatFragment extends Fragment {
                 heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(list);
                 tileOverlayOptions = new TileOverlayOptions();
                 tileOverlayOptions.tileProvider(heatmapTileProvider);
+                aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addTileOverlay(tileOverlayOptions);
             }
         });
@@ -195,22 +194,51 @@ public class HeatMapHeatFragment extends Fragment {
             }
         });
 
-        aMap = mapUtils.initMap(getContext(),mapView);
+        /*
+            设置屏幕滑动检测
+            用于区分滑动地图还是滑动页面
+         */
+        AMapGestureListener aMapGestureListener = new AMapGestureListener() {
+            @Override
+            public void onDoubleTap(float v, float v1) {
+            }
+            @Override
+            public void onSingleTap(float v, float v1) {
+            }
+            @Override
+            public void onFling(float v, float v1) {
+            }
+            @Override
+            public void onLongPress(float v, float v1) {
+            }
+            @Override
+            public void onDown(float v, float v1) {
+            }
+            @Override
+            public void onMapStable() {
+            }
+            @Override
+            public void onScroll(float v, float v1) {
+                heatMapViewModel.heatMapVP.setUserInputEnabled(false);
+            }
+            @Override
+            public void onUp(float v, float v1) {
+                heatMapViewModel.heatMapVP.setUserInputEnabled(true);
+            }
+        };
+        aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
-        showLog("onCreateView");
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        showLog("onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        showLog("onDestroy");
         if (mapView != null){
             mapView.onDestroy();
         }
@@ -258,7 +286,7 @@ public class HeatMapHeatFragment extends Fragment {
     /*
         消息处理
      */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
@@ -320,7 +348,7 @@ public class HeatMapHeatFragment extends Fragment {
      */
     private void getHeatData(){
 
-        netUtils.setGetHeatMapData(heatMapViewModel.heatTime, 0, 2000, new Callback() {
+        netUtils.getHeatMapData(heatMapViewModel.heatTime, 0, 2000, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 showLog("热力图数据获取失败");
