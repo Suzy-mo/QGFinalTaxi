@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_heat">
+    app:startDestination="@+id/navigation_car_info">
+    <fragment
+        android:id="@+id/navigation_car_info"
+        android:name="com.qg.qgtaxiapp.view.fragment.CarInformationMapFragment"
+        android:label="车辆信息"
+        tools:layout="@layout/fragment_car_information"/>
     <fragment
         android:id="@+id/navigation_heat"
         android:name="com.qg.qgtaxiapp.view.fragment.HeatMapFragment"

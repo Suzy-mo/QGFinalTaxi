@@ -31,6 +31,7 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.AMapGestureListener;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.LatLng;
@@ -53,6 +54,7 @@ import com.qg.qgtaxiapp.databinding.SelectBinLayoutBinding;
 import com.qg.qgtaxiapp.utils.Constants;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity;
+import com.qg.qgtaxiapp.viewmodel.HistoryMapViewModel;
 import com.qg.qgtaxiapp.viewmodel.MainAndHistoryRouteViewModel;
 
 import java.text.SimpleDateFormat;
@@ -85,20 +87,17 @@ public class HistoryRouteFragment extends Fragment {
     private AMap aMap = null;
     private Bundle mMySavedInstanceState;
     private DistrictSearchQuery districtSearchQuery;
-
-
-    private static HistoryRouteFragment Instance = new HistoryRouteFragment();
+    private HistoryMapViewModel viewModel;
     private TimePickerView timePickerView;
     private String selectDate;
     private SelectBinLayoutBinding binLayoutBinding;
+    private AMapGestureListener aMapGestureListener;
 
-    public static HistoryRouteFragment getInstance() {
-        return Instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel=new ViewModelProvider(getActivity()).get(HistoryMapViewModel.class);
         initDistrictSearch();
     }
 
@@ -110,8 +109,57 @@ public class HistoryRouteFragment extends Fragment {
         mapView = binding.routeMapView;
         mainAndHistoryRouteViewModel = new ViewModelProvider(getActivity()).get(MainAndHistoryRouteViewModel.class);
         initMap(mMySavedInstanceState);
+        initLayoutListener();
+        aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
         return binding.getRoot();
+    }
+
+    /**
+     * 对用户滑动的监听
+     */
+    private void initLayoutListener() {
+        aMapGestureListener = new AMapGestureListener() {
+            @Override
+            public void onDoubleTap(float v, float v1) {
+
+            }
+
+            @Override
+            public void onSingleTap(float v, float v1) {
+
+            }
+
+            @Override
+            public void onFling(float v, float v1) {
+
+            }
+
+            @Override
+            public void onScroll(float v, float v1) {
+                viewModel.viewPager2.setUserInputEnabled(false);
+            }
+
+            @Override
+            public void onLongPress(float v, float v1) {
+
+            }
+
+            @Override
+            public void onDown(float v, float v1) {
+
+            }
+
+            @Override
+            public void onUp(float v, float v1) {
+                viewModel.viewPager2.setUserInputEnabled(true);
+            }
+
+            @Override
+            public void onMapStable() {
+
+            }
+        };
     }
 
     @Override
@@ -344,7 +392,7 @@ public class HistoryRouteFragment extends Fragment {
                     LatLng end=list.get(list.size()-1);
                     aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
                     aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.red_route)).addAll(list).width(10));
+                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.red_route)).addAll(list).width(15));
 //                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,78,114,226)).width(10));
                 }
             }
