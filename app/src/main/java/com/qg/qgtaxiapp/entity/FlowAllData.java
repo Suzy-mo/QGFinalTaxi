@@ -42,6 +42,7 @@ public class FlowAllData {
         private Double latitude;
         private Double longitude;
 
+
         public Double getLatitude() {
             return latitude;
         }

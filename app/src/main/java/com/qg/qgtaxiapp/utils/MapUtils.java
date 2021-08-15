@@ -251,5 +251,29 @@ public class MapUtils {
         return mPolyline;
     }
 
+    public List<FlowAllData.DataBean> setAllData(){
+        List<FlowAllData.DataBean> mData = new ArrayList<>();
+        FlowAllData.DataBean dataBean = new FlowAllData.DataBean();
+        dataBean.setLatitude(23.131467);dataBean.setLatitude(113.284837);mData.add(dataBean);
+        dataBean.setLatitude(23.138388);dataBean.setLatitude(113.286461);mData.add(dataBean);
+        dataBean.setLatitude(23.140177);dataBean.setLatitude(113.280282);mData.add(dataBean);
+        dataBean.setLatitude(23.142006);dataBean.setLatitude(113.282005);mData.add(dataBean);
+        dataBean.setLatitude(23.141077);dataBean.setLatitude(113.285651);mData.add(dataBean);
+        dataBean.setLatitude(23.129552);dataBean.setLatitude(113.284006);mData.add(dataBean);
+        dataBean.setLatitude(23.136475);dataBean.setLatitude(113.289954);mData.add(dataBean);
+        dataBean.setLatitude(23.130344);dataBean.setLatitude(113.296271);mData.add(dataBean);
+        dataBean.setLatitude( 23.132371);dataBean.setLatitude(113.292864);mData.add(dataBean);
+        dataBean.setLatitude(23.116095);dataBean.setLatitude(113.300873);mData.add(dataBean);
+        dataBean.setLatitude(23.11092);dataBean.setLatitude(113.296599);mData.add(dataBean);
+        dataBean.setLatitude( 23.13906);dataBean.setLatitude(113.296599);mData.add(dataBean);
+        dataBean.setLatitude(23.137483);dataBean.setLatitude(113.298799);mData.add(dataBean);
+        dataBean.setLatitude(23.137361);dataBean.setLatitude(113.295664);mData.add(dataBean);
+        dataBean.setLatitude(23.131446);dataBean.setLatitude(23.137361);mData.add(dataBean);
+        dataBean.setLatitude( 23.130885);dataBean.setLatitude(113.29107);mData.add(dataBean);
+        dataBean.setLatitude(23.136245);dataBean.setLatitude(113.299721);mData.add(dataBean);
+        dataBean.setLatitude(23.132397);dataBean.setLatitude(113.282472);mData.add(dataBean);
+
+        return mData;
+    }
 }
 

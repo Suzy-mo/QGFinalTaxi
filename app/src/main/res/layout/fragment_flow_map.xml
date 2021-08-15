@@ -25,6 +25,22 @@
         android:paddingLeft="16dp">
 
         <TextView
+            android:id="@+id/tv_heat_chooseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_settime_background"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="选择时间"
+            android:textColor="#DEFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.471"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/tv_timeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
