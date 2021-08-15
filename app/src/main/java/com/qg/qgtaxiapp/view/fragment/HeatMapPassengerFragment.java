@@ -79,8 +79,6 @@ public class HeatMapPassengerFragment extends Fragment {
     private ConstraintLayout cl_timeSet;
     private ConstraintLayout cl_chooseTime;
     private NetUtils netUtils = NetUtils.getInstance();
-    private HeatmapTileProvider heatmapTileProvider;
-    private TileOverlayOptions tileOverlayOptions;
     private OnTimeSelectListener onTimeSelectListener;
     private View.OnClickListener onClickListener;
     private String mDate = null;
@@ -138,7 +136,6 @@ public class HeatMapPassengerFragment extends Fragment {
         cl_chooseTime = binding.clFragmentPassengerChooseTime;
         cl_timeSet = binding.clFragmentHeatTime;
 
-
         /*
             日期选择监听
          */
@@ -151,47 +148,6 @@ public class HeatMapPassengerFragment extends Fragment {
             }
         };
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
-
-        heatMapViewModel.heatData.observe(getActivity(), new Observer<List<LatLng>>() {
-            @Override
-            public void onChanged(List<LatLng> list) {
-                heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(list);
-                tileOverlayOptions = new TileOverlayOptions();
-                tileOverlayOptions.tileProvider(heatmapTileProvider);
-                aMap.addTileOverlay(tileOverlayOptions);
-            }
-        });
-
-        /*
-            时间监测
-         */
-        heatMapViewModel.heat_date.observe(getActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                tv_date.setText(s);
-            }
-        });
-        heatMapViewModel.heat_timeslot.observe(getActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                tv_timeslot.setText(s);
-            }
-        });
-
-
-        tv_changeTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePickerView.show();
-            }
-        });
-
-        tv_chooseTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePickerView.show();
-            }
-        });
 
         aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
