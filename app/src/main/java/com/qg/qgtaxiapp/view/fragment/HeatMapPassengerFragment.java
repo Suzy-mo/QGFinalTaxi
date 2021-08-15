@@ -21,13 +21,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.HeatmapTileProvider;
+import com.amap.api.maps.model.AMapGestureListener;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
@@ -36,6 +38,7 @@ import com.amap.api.services.district.DistrictSearchQuery;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.Gson;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapPassengerBinding;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
@@ -43,8 +46,6 @@ import com.qg.qgtaxiapp.utils.NetUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class HeatMapPassengerFragment extends Fragment {
     private NetUtils netUtils = NetUtils.getInstance();
     private OnTimeSelectListener onTimeSelectListener;
     private View.OnClickListener onClickListener;
-    private String mDate = null;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,22 +136,77 @@ public class HeatMapPassengerFragment extends Fragment {
         tv_chooseTime = binding.tvPassengerChooseTime;
         cl_chooseTime = binding.clFragmentPassengerChooseTime;
         cl_timeSet = binding.clFragmentHeatTime;
-
+        aMap = mapUtils.initMap(getContext(),mapView);
         /*
             日期选择监听
          */
         onTimeSelectListener = new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                mDate = timePickerUtils.getDate(date);
+                heatMapViewModel.passengerTime = timePickerUtils.getDate(date);
                 showTimeSlotSet();
-
             }
         };
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
 
-        aMap = mapUtils.initMap(getContext(),mapView);
+        heatMapViewModel.passengerData.observe(getActivity(), new Observer<List<LatLng>>() {
+            @Override
+            public void onChanged(List<LatLng> list) {
+                aMap.clear();
+//                PolygonOptions polygonOptions = new PolygonOptions();
+                ArrayList<MarkerOptions> list1 = new ArrayList<>();
+
+                for (LatLng latLng : list){
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.texi));
+//                    polygonOptions.add(latLng);
+                    list1.add(markerOptions);
+                }
+                /*polygonOptions.strokeColor(Color.argb(50,1,1,1))
+                        .fillColor(Color.argb(1,1,1,1))
+                        .strokeWidth(10);
+                aMap.addPolygon(polygonOptions);*/
+                aMap.addMarkers(list1,false);
+            }
+        });
+
+
+        /*
+            设置屏幕滑动检测
+            用于区分滑动地图还是滑动页面
+         */
+        AMapGestureListener aMapGestureListener = new AMapGestureListener() {
+            @Override
+            public void onDoubleTap(float v, float v1) {
+            }
+            @Override
+            public void onSingleTap(float v, float v1) {
+            }
+            @Override
+            public void onFling(float v, float v1) {
+            }
+            @Override
+            public void onLongPress(float v, float v1) {
+            }
+            @Override
+            public void onDown(float v, float v1) {
+            }
+            @Override
+            public void onMapStable() {
+            }
+            @Override
+            public void onScroll(float v, float v1) {
+                heatMapViewModel.heatMapVP.setUserInputEnabled(false);
+            }
+            @Override
+            public void onUp(float v, float v1) {
+                heatMapViewModel.heatMapVP.setUserInputEnabled(true);
+            }
+        };
+        aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
+        //getPassengerData();
         return binding.getRoot();
     }
 
@@ -215,6 +271,11 @@ public class HeatMapPassengerFragment extends Fragment {
                     aMap.addPolyline(options);
                     heatMapViewModel.polylineOptions = options;
                 }break;
+
+                case 1:{
+                    List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
+                    heatMapViewModel.passengerData.setValue(mapUtils.initHeatMapData(data));
+                }break;
             }
         }
     };
@@ -234,7 +295,7 @@ public class HeatMapPassengerFragment extends Fragment {
                         cl_chooseTime.setVisibility(View.GONE);
                         cl_timeSet.setVisibility(View.VISIBLE);
                     }
-                    heatMapViewModel.passenger_date.setValue(mDate);
+                    heatMapViewModel.passenger_date.setValue(timePickerUtils.getmDate());
                     heatMapViewModel.passenger_timeslot.setValue(timePickerUtils.getTimeslot());
                     heatMapViewModel.passengerTime = timePickerUtils.getTime();
 
@@ -252,5 +313,34 @@ public class HeatMapPassengerFragment extends Fragment {
         params.width = (int) (display.getWidth() * 0.98);
         window.setAttributes(params);
     }
+    /*
+        获取载客热点数据
+     */
+    private void getPassengerData(){
 
+        netUtils.getPassengerData(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                showLog("载客热点数据获取失败");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+                HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
+                if (heatMapData.getCode() == 1){
+
+                    List<HeatMapData.data> data = heatMapData.getData();
+                    Message message = handler.obtainMessage();
+                    message.what = 1;
+                    message.obj = data;
+                    handler.sendMessage(message);
+                }else {
+                    showLog("无数据");
+                }
+            }
+        });
+    }
 }
