@@ -48,9 +48,9 @@
         <!-- &lt;!&ndash;设置高德Key&ndash;&gt; -->
         <!-- <meta-data android:name="com.amap.api.v2.apikey" android:value="74fa96d685d4f1f6c7094487f8c26979"/> -->
         <!-- 设置高德Key         唐靖豪 -->
-         <meta-data android:name="com.amap.api.v2.apikey" android:value="cf7017d371a4c2641780c6b7da1de75f"/>
+        <!-- <meta-data android:name="com.amap.api.v2.apikey" android:value="cf7017d371a4c2641780c6b7da1de75f"/>-->
         <!-- 何旭杰的Key -->
-<!--        <meta-data android:name="com.amap.api.v2.apikey" android:value="e49c895ac77a69e0702d2d63747c7135" />-->
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="e49c895ac77a69e0702d2d63747c7135" />
     </application>
 
 </manifest>

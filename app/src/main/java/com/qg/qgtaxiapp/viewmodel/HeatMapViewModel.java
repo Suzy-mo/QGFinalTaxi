@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps.model.TileOverlayOptions;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 
 import java.util.List;

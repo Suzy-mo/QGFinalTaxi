@@ -7,9 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -28,6 +26,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.services.core.AMapException;
@@ -37,24 +36,15 @@ import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
-import com.qg.qgtaxiapp.databinding.FragmentHeatMapBinding;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapHeatBinding;
-import com.qg.qgtaxiapp.entity.EventBusEvent;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.NetUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
-import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,6 +118,8 @@ public class HeatMapHeatFragment extends Fragment {
                             polygonRunnable = new PolygonRunnable(item,handler);
                             new Thread(polygonRunnable).start();
                         }
+                    }else {
+                        showLog(districtResult.getAMapException().getErrorMessage());
                     }
                 }
             }
@@ -164,6 +156,7 @@ public class HeatMapHeatFragment extends Fragment {
         heatMapViewModel.heatData.observe(getActivity(), new Observer<List<LatLng>>() {
             @Override
             public void onChanged(List<LatLng> list) {
+                aMap.clear();
                 heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(list);
                 tileOverlayOptions = new TileOverlayOptions();
                 tileOverlayOptions.tileProvider(heatmapTileProvider);
@@ -204,13 +197,20 @@ public class HeatMapHeatFragment extends Fragment {
 
         aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
+        showLog("onCreateView");
         return binding.getRoot();
     }
 
+    @Override
+    public void onDestroyView() {
+        showLog("onDestroyView");
+        super.onDestroyView();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        showLog("onDestroy");
         if (mapView != null){
             mapView.onDestroy();
         }
@@ -265,6 +265,8 @@ public class HeatMapHeatFragment extends Fragment {
 
                 case 0:{
                     PolylineOptions options = (PolylineOptions) msg.obj;
+                    options.setDottedLine(false)
+                           .width(5);
                     aMap.addPolyline(options);
                     heatMapViewModel.polylineOptions = options;
                 }break;
@@ -317,7 +319,8 @@ public class HeatMapHeatFragment extends Fragment {
         获取热力图数据
      */
     private void getHeatData(){
-        netUtils.setGetHeatMapData(heatMapViewModel.heatTime, 0, 100, new Callback() {
+
+        netUtils.setGetHeatMapData(heatMapViewModel.heatTime, 0, 2000, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 showLog("热力图数据获取失败");
