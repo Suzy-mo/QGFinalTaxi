@@ -66,12 +66,6 @@ public class FlowMapFragment extends Fragment {
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         initMap();
-        binding.choiceTurnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setClick();
-            }
-        });
     }
 
     private void initMap() {
@@ -104,8 +98,6 @@ public class FlowMapFragment extends Fragment {
                 .geodesic(true).color(Color.BLUE));
 
     }
-
-
 
     /**
      * 方法必须重写

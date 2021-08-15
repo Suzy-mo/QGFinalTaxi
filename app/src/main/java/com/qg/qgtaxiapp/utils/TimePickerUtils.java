@@ -47,21 +47,21 @@ public class TimePickerUtils{
     private AlertDialog dialog = null;
     private List<Integer> hour;
     private List<Integer> min;
-    private int h1;
-    private int h2;
+    public int h1;
+    public int h2;
     private int m1;
     private int m2;
     /*
        获取日期 yyyy-MM-dd
     */
-    private String getDate(Date date) {//可根据需要自行截取数据显示
+    public String getDate(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
     /*
        获取时间段 HH:mm:ss
     */
-    private String getTimeslot(Date date) {//可根据需要自行截取数据显示
+    public String getTimeslot(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         return format.format(date);
     }
@@ -69,7 +69,7 @@ public class TimePickerUtils{
     /*
         初始化日期选择器
      */
-    public TimePickerView initDatePicker(Context context, Activity activity){
+    public TimePickerView initDatePicker(Context context, Activity activity,OnTimeSelectListener onTimeSelectListener){
         /*
         设置时间跨度
          */
@@ -77,16 +77,7 @@ public class TimePickerUtils{
         Calendar endDate = Calendar.getInstance();
         startDate.set(2017,1,1);
         endDate.set(2017,2,31);
-
-        timePickerView = new TimePickerBuilder(context, new OnTimeSelectListener() {
-
-            @Override
-            public void onTimeSelect(Date date, View v) {//选项数据回调
-                mDate = getDate(date);
-                EventBus.getDefault().post(new EventBusEvent.showTimeSlotSet(mDate));
-                Log.d("TAG",mDate);
-            }
-        })
+        timePickerView = new TimePickerBuilder(context,onTimeSelectListener)
         //自定义布局
         .setLayoutRes(R.layout.timepicker_date, new CustomListener() {
             @Override
@@ -129,7 +120,7 @@ public class TimePickerUtils{
     /*
      *  设置dialog的宽度
      */
-        Dialog timePickerDialog;
+        Dialog timePickerDialog ;
         timePickerDialog = timePickerView.getDialog();
         Window window = timePickerDialog.getWindow();
         WindowManager manager = activity.getWindowManager();
@@ -140,6 +131,8 @@ public class TimePickerUtils{
 
         return timePickerView;
     }
+
+
 
     /*
      *  初始化时间段数据
@@ -158,7 +151,7 @@ public class TimePickerUtils{
     /*
      *  初始化时间段选择器
      */
-    public AlertDialog initTimeSlotDialog(Context context){
+    public AlertDialog initTimeSlotDialog(Context context, View.OnClickListener onClickListener){
         TextView tv_confirm;
         ImageView iv_cancel;
         initTimeslotData();
@@ -171,17 +164,8 @@ public class TimePickerUtils{
         tv_confirm = view.findViewById(R.id.timepicker_timeslot_confirm);
         iv_cancel = view.findViewById(R.id.timepicker_timeslot_cancel);
 
-        tv_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (h2 != 0 && h2 < h1) {
-                    Toast.makeText(context,"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
-                } else {
-                    EventBus.getDefault().post(new EventBusEvent.setTimeFinish("finish"));
-                    dialog.dismiss();
-                }
-            }
-        });
+        tv_confirm.setOnClickListener(onClickListener);
+
         iv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,6 +222,7 @@ public class TimePickerUtils{
 
         return dialog;
     }
+
     /*
      *   获取完整的起始时间和终止时间
      */
@@ -269,13 +254,6 @@ public class TimePickerUtils{
             buffer.append(":" + m2 + ":00");
         }
         return buffer.toString();
-    }
-
-    /*
-     *  获取日期
-     */
-    public String getDate(){
-        return mDate;
     }
 
     /*
