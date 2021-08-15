@@ -293,8 +293,6 @@ public class HeatMapHeatFragment extends Fragment {
 
                 case 0:{
                     PolylineOptions options = (PolylineOptions) msg.obj;
-                    options.setDottedLine(false)
-                           .width(5);
                     aMap.addPolyline(options);
                     heatMapViewModel.polylineOptions = options;
                 }break;
