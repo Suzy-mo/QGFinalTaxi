@@ -47,7 +47,9 @@ import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -167,11 +169,10 @@ public class HeatMapPassengerFragment extends Fragment {
                         .fillColor(Color.argb(1,1,1,1))
                         .strokeWidth(10);
                 aMap.addPolygon(polygonOptions);*/
+                aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addMarkers(list1,false);
             }
         });
-
-
         /*
             设置屏幕滑动检测
             用于区分滑动地图还是滑动页面
@@ -206,6 +207,7 @@ public class HeatMapPassengerFragment extends Fragment {
         };
         aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
+        getTest();
         //getPassengerData();
         return binding.getRoot();
     }
@@ -237,7 +239,7 @@ public class HeatMapPassengerFragment extends Fragment {
      * Log.d打印日志
      */
     private void showLog(String log){
-        Log.d("TAG_HeatMapFragment", log);
+        Log.d("TAG_PassengerFragment", log);
     }
 
     /*
@@ -342,5 +344,32 @@ public class HeatMapPassengerFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void getTest(){
+
+        InputStream fis = null;
+        try {
+            fis = getResources().getAssets().open("test.txt");
+
+        int size = fis.available();
+
+        byte[] bytes = new byte[size];
+        fis.read(bytes);
+        fis.close();
+        String s = new String(bytes,"UTF-8");
+        Gson gson = new Gson();
+        HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
+        List<HeatMapData.data> data = heatMapData.getData();
+        Message message = handler.obtainMessage();
+        message.what = 1;
+        message.obj = data;
+        handler.sendMessage(message);
+        showLog(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

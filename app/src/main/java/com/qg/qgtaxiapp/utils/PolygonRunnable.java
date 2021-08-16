@@ -8,6 +8,7 @@ import android.util.Log;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.district.DistrictItem;
+import com.qg.qgtaxiapp.R;
 
 /**
  * 画地图边界
@@ -64,7 +65,7 @@ public class PolygonRunnable implements Runnable {
                                 polylineOptions.add(firstLatLng);
                             }
 
-                            polylineOptions.width(5).color(Color.BLUE).setDottedLine(false);
+                            polylineOptions.width(5).color(Color.BLACK).setDottedLine(false);
                             Message message = handler.obtainMessage();
 
                             message.what = 0;

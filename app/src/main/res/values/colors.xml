@@ -16,4 +16,5 @@
     <color name="timepicker_unselectText">#99FFFFFF</color>
     <color name="select_bin_unselect">#FF292929</color>
     <color name="select_bin_select">#1403DAC5</color>
+    <color name="zone">#E6556F</color>
 </resources>
