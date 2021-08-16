@@ -1,0 +1,46 @@
+{
+    "code": 1,
+    "data": [
+        {
+            "latitude": 23.197,
+            "longitude": 113.4165
+        },
+        {
+            "latitude": 23.3674,
+            "longitude": 113.3805
+        },
+        {
+            "latitude": 23.1492,
+            "longitude": 113.254
+        },
+        {
+            "latitude": 23.1441,
+            "longitude": 113.3405
+        },
+        {
+            "latitude": 23.1506,
+            "longitude": 113.2932
+        },
+        {
+            "latitude": 23.2123,
+            "longitude": 113.2728
+        },
+        {
+            "latitude": 23.1272,
+            "longitude": 113.3477
+        },
+        {
+            "latitude": 23.1724,
+            "longitude": 113.336
+        },
+        {
+            "latitude": 23.1311,
+            "longitude": 113.3283
+        },
+        {
+            "latitude": 23.0886,
+            "longitude": 113.2641
+        }
+    ],
+    "message": "查询数据成功"
+}
