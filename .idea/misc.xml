@@ -32,10 +32,10 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_search_history_item.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/exception_item.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/flow_timepicker_data.xml" value="0.10435663627152988" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_flow_map.xml" value="0.165" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_flow_map.xml" value="0.375" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_heat_map.xml" value="0.18888888888888888" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_heatmap_ad.xml" value="0.21739130434782608" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_heatmap_heat.xml" value="0.21739130434782608" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_heatmap_heat.xml" value="0.45" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_heatmap_passenger.xml" value="0.21739130434782608" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_history_car_owner.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_history_exception.xml" value="0.10435663627152988" />

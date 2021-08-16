@@ -198,6 +198,72 @@ public class TimePickerUtils{
         return timePickerView;
     }
 
+    /*
+        初始化流向图的日期选择器
+     */
+    public TimePickerView initFlowDatePicker(Context context, Activity activity,OnTimeSelectListener onTimeSelectListener){
+        /*
+        设置时间跨度
+         */
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(2017,1,1);
+        endDate.set(2017,1,28);
+        timePickerView = new TimePickerBuilder(context,onTimeSelectListener)
+                //自定义布局
+                .setLayoutRes(R.layout.flow_timepicker_data, new CustomListener() {
+                    @Override
+                    public void customLayout(View v) {
+                        TextView next = v.findViewById(R.id.timepicker_date_next);
+                        ImageView cancel = v.findViewById(R.id.timepicker_date_cancel);
+                        //点击下一步
+                        next.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timePickerView.returnData();
+                                timePickerView.dismiss();
+                            }
+                        });
+                        //点击取消
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timePickerView.dismiss();
+                            }
+                        });
+
+                    }
+                })
+                .isDialog(true)//显示模式
+                //.setTitleText("时间选择 • 日期")
+                .setOutSideCancelable(false)//外部是否可以点击
+                .setRangDate(startDate,endDate)//设置时间跨度
+                .setOutSideColor(activity.getResources().getColor(R.color.timepicker_outside))//外部背景颜色
+                .setBgColor(activity.getResources().getColor(R.color.timepicker_background))//背景颜色
+                .setTextColorCenter(activity.getResources().getColor(R.color.timepicker_selectText))//选中字体颜色
+                .setTextColorOut(activity.getResources().getColor(R.color.timepicker_unselectText))//未选中字体颜色
+                .isCenterLabel(true)//只显示中央标签
+                .setItemVisibleCount(5)//可见标签数
+                .setDividerColor(Color.argb(0,0,0,0))
+                .setType(new boolean[]{false,true,true,false,false,false})//是否显示年月日，时分秒
+                .isAlphaGradient(true)//滚轮透明
+                .build();
+
+        /*
+         *  设置dialog的宽度
+         */
+        Dialog timePickerDialog ;
+        timePickerDialog = timePickerView.getDialog();
+        Window window = timePickerDialog.getWindow();
+        WindowManager manager = activity.getWindowManager();
+        Display display = manager.getDefaultDisplay();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = (int) (display.getWidth() * 0.95);
+        window.setAttributes(params);
+
+        return timePickerView;
+    }
+
 
 
 
