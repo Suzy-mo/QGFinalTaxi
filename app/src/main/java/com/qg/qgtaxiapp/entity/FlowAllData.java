@@ -39,28 +39,41 @@ public class FlowAllData {
     }
 
     public static class DataBean {
-        private Double latitude;
-        private Double longitude;
+        private Double onLongitude;
+        private Double offLongitude;
+        private Double offLatitude;
+        private Double onLatitude;
 
-
-        public Double getLatitude() {
-            return latitude;
+        public Double getOnLongitude() {
+            return onLongitude;
         }
 
-        public void setLatitude(Double latitude) {
-            this.latitude = latitude;
+        public void setOnLongitude(Double onLongitude) {
+            this.onLongitude = onLongitude;
         }
 
-        public Double getLongitude() {
-            return longitude;
+        public Double getOffLongitude() {
+            return offLongitude;
         }
 
-        public void setLongitude(Double longitude) {
-            this.longitude = longitude;
+        public void setOffLongitude(Double offLongitude) {
+            this.offLongitude = offLongitude;
         }
-    }
 
-    public int  size(){
-        return data.size();
+        public Double getOffLatitude() {
+            return offLatitude;
+        }
+
+        public void setOffLatitude(Double offLatitude) {
+            this.offLatitude = offLatitude;
+        }
+
+        public Double getOnLatitude() {
+            return onLatitude;
+        }
+
+        public void setOnLatitude(Double onLatitude) {
+            this.onLatitude = onLatitude;
+        }
     }
 }

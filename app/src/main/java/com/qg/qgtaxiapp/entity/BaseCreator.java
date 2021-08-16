@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @Date：2021/8/14 19:49
  */
 public class BaseCreator {
-    private final static String BASE_URL="http://39.98.41.126:31109/";
+    private final static String BASE_URL="http://39.98.41.126:31100/";
     private static Retrofit retrofit=new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     public static <T> T create(Class<T> retrofitClass){
         return retrofit.create(retrofitClass);

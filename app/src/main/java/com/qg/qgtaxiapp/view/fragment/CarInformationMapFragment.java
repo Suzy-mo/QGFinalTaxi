@@ -9,7 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.qg.qgtaxiapp.adapter.CarInfoAdapter;
 import com.qg.qgtaxiapp.databinding.FragmentCarInformationBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with Android studio
@@ -19,12 +25,40 @@ import com.qg.qgtaxiapp.databinding.FragmentCarInformationBinding;
  * @Description:
  */
 public class CarInformationMapFragment extends Fragment {
+
     private FragmentCarInformationBinding binding;
+    List<String> titles=new ArrayList<>();
+    List<Fragment> fragments=new ArrayList<>();
+    CarInfoAdapter mPagerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding=FragmentCarInformationBinding.inflate(inflater,container,false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //新建
+        titles.add("流量分析");
+        titles.add("司机收入");
+        titles.add("车辆利用率");
+        fragments.add(new CarTrafficFlowFragment());
+        fragments.add(new CarIncomeFragment());
+        fragments.add(new CarAvailabilityFragment());
+
+        mPagerAdapter = new CarInfoAdapter(getParentFragmentManager(),getLifecycle(),fragments);
+        binding.vp2HeatMap.setAdapter(mPagerAdapter);
+
+//和tabLayout绑定
+        new TabLayoutMediator(binding.fragmentHeatTabLayout, binding.vp2HeatMap, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(titles.get(position));
+            }
+        }).attach();
     }
 }

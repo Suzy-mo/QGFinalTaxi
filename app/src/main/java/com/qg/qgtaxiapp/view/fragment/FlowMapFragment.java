@@ -255,30 +255,30 @@ public class FlowMapFragment extends Fragment {
      */
 
     private void getAllLineData(String s) {
-//        new Thread(()->{
-//            IPost iPost = BaseCreator.create(IPost.class);
-//            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
-//                @Override
-//                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
-//                    showLog(response.body().getMsg());
-//                    getActivity().runOnUiThread(()->{
-//                        flowMapViewModel.allData.setValue(response.body().getData().getData());
-//                    });
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
-//                    getActivity().runOnUiThread(()->{
-//                        showLog("获取失败");
-//                    });
-//
-//                }
-//            });
-//        }).start();
+        new Thread(()->{
+            IPost iPost = BaseCreator.create(IPost.class);
+            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
+                @Override
+                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
+                    showLog(response.body().getMsg());
+                    getActivity().runOnUiThread(()->{
+                        flowMapViewModel.allData.setValue(response.body().getData().getData());
+                    });
+                }
 
-        //没有数据暂时设置模拟
-        List<FlowAllData.DataBean> data = mapUtils.setAllData();
-        flowMapViewModel.allData.setValue(data);
+                @Override
+                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
+                    getActivity().runOnUiThread(()->{
+                        showLog("获取失败");
+                    });
+
+                }
+            });
+        }).start();
+
+//        //没有数据暂时设置模拟
+//        List<FlowAllData.DataBean> data = mapUtils.setAllData();
+//        flowMapViewModel.allData.setValue(data);
         showLog("数据获取成功");
 
 

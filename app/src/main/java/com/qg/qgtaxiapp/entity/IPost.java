@@ -3,7 +3,10 @@ package com.qg.qgtaxiapp.entity;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * @Name：QGTaxiApp
@@ -13,12 +16,20 @@ import retrofit2.http.POST;
  */
 public interface IPost {
 
-    @FormUrlEncoded
-    @POST("flow/all")
-    Call<ResponseData<FlowAllData>> getFlowAllData(@Field("day")String day);
+//    @FormUrlEncoded
+//    @HTTP(method = "GET",path = "getFlowGraph/{day}",hasBody = false)
+//    Call<ResponseData<FlowAllData>> getFlowAllData(@Path("day") String day);
+
+    @GET("getFlowGraph")
+    Call<ResponseData<FlowAllData>> getFlowAllData(@Path("date") String day);
+
+//    @FormUrlEncoded
+//    @GET("flow/main")
+//    Call<ResponseData<FlowAllData>> getFlowAllData(@Field("day")String day);
+
 
     @FormUrlEncoded
     @POST("flow/main")
-    Call<ResponseData<FlowMainData>> getFlowMainData(@Field("day")String day);
+    Call<ResponseData<FlowMainData>> getFlowMainData(@Field("data")String day);
 
 }
