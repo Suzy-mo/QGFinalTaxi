@@ -9,17 +9,19 @@ package com.qg.qgtaxiapp.entity;
  */
 public class ExceptionItem {
     private String carID;
-    private String address;
-    private String companyID;
+    private String startAddress;
+    private String endAddress;
+    private String date;
     private String exceptionText;
 
     public ExceptionItem() {
     }
 
-    public ExceptionItem(String carID, String address, String companyID, String exceptionText) {
+    public ExceptionItem(String carID, String startAddress, String endAddress, String date, String exceptionText) {
         this.carID = carID;
-        this.address = address;
-        this.companyID = companyID;
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
+        this.date = date;
         this.exceptionText = exceptionText;
     }
 
@@ -31,20 +33,28 @@ public class ExceptionItem {
         this.carID = carID;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStartAddress() {
+        return startAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
     }
 
-    public String getCompanyID() {
-        return companyID;
+    public String getEndAddress() {
+        return endAddress;
     }
 
-    public void setCompanyID(String companyID) {
-        this.companyID = companyID;
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getExceptionText() {

@@ -32,6 +32,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.AMapGestureListener;
+import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.LatLng;
@@ -61,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with Android studio
@@ -92,6 +94,8 @@ public class HistoryRouteFragment extends Fragment {
     private String selectDate;
     private SelectBinLayoutBinding binLayoutBinding;
     private AMapGestureListener aMapGestureListener;
+    private int code=0;
+    private ArrayList<BitmapDescriptor> mTexTureList = new ArrayList<BitmapDescriptor>();
 
 
     @Override
@@ -111,8 +115,17 @@ public class HistoryRouteFragment extends Fragment {
         initMap(mMySavedInstanceState);
         initLayoutListener();
         aMap.setAMapGestureListener(aMapGestureListener);
+        initBitmapData();
         drawBoundary();
         return binding.getRoot();
+    }
+
+    private void initBitmapData() {
+        mTexTureList.add(BitmapDescriptorFactory.fromResource(R.drawable.blue_route));
+        mTexTureList.add(BitmapDescriptorFactory.fromResource(R.drawable.green_route));
+        mTexTureList.add(BitmapDescriptorFactory.fromResource(R.drawable.red_route));
+        mTexTureList.add(BitmapDescriptorFactory.fromResource(R.drawable.yellow_route));
+        mTexTureList.add(BitmapDescriptorFactory.fromResource(R.drawable.orange_route));
     }
 
     /**
@@ -392,8 +405,11 @@ public class HistoryRouteFragment extends Fragment {
                     LatLng end=list.get(list.size()-1);
                     aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
                     aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.red_route)).addAll(list).width(15));
-//                    aMap.addPolyline(options.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)).addAll(list).color(Color.argb(255,78,114,226)).width(10));
+                    aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
+                    code++;
+                    if(code==5){
+                        code=0;
+                    }
                 }
             }
         }
