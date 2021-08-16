@@ -24,5 +24,6 @@ public class HistoryInfoAdapter extends BaseQuickAdapter<HistoryInfo, BaseViewHo
     @Override
     protected void convert(BaseViewHolder baseViewHolder, HistoryInfo historyInfo) {
         baseViewHolder.setText(R.id.car_search_owner_id_tv,historyInfo.getCarID());
+
     }
 }
