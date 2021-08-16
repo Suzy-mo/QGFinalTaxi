@@ -169,6 +169,7 @@ public class HeatMapPassengerFragment extends Fragment {
                         .fillColor(Color.argb(1,1,1,1))
                         .strokeWidth(10);
                 aMap.addPolygon(polygonOptions);*/
+                aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addMarkers(list1,false);
             }
         });
