@@ -30,4 +30,6 @@ public class HeatMapViewModel extends ViewModel {
     public MutableLiveData<String> passenger_timeslot = new MutableLiveData<>();
     public String passengerTime = null;
     public MutableLiveData<List<LatLng>> passengerData = new MutableLiveData<>();
+
+    public MutableLiveData<List<LatLng>> adData = new MutableLiveData<>();
 }
