@@ -28,6 +28,7 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.AMapGestureListener;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
@@ -151,6 +152,20 @@ public class HeatMapPassengerFragment extends Fragment {
         };
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
 
+        /*
+            Marker点击事件
+         */
+        aMap.addOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.isInfoWindowShown()) {
+                    marker.hideInfoWindow();
+                } else {
+                    marker.showInfoWindow();
+                }
+                return true;
+            }
+        });
         heatMapViewModel.passengerData.observe(getActivity(), new Observer<List<LatLng>>() {
             @Override
             public void onChanged(List<LatLng> list) {
@@ -161,6 +176,8 @@ public class HeatMapPassengerFragment extends Fragment {
                 for (LatLng latLng : list){
                     MarkerOptions markerOptions = new MarkerOptions()
                             .position(latLng)
+                            .title("热点")
+                            .snippet(latLng.toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.texi));
 //                    polygonOptions.add(latLng);
                     list1.add(markerOptions);
