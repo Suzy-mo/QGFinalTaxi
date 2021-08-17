@@ -38,6 +38,7 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.google.gson.Gson;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.adapter.CustomInfoWindowAdapter;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapAdBinding;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
@@ -68,7 +69,7 @@ public class HeatMapADFragment extends Fragment {
     private GeocodeSearch geocodeSearch;
     private Marker mMarker;
     private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
-
+    private CustomInfoWindowAdapter customInfoWindowAdapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,7 @@ public class HeatMapADFragment extends Fragment {
         districtSearch = new DistrictSearch(getContext());
         mapUtils = new MapUtils();
         geocodeSearch = new GeocodeSearch(getContext());
+        customInfoWindowAdapter = new CustomInfoWindowAdapter(getContext());
         /*
             获取边界数据回调
          */
@@ -116,14 +118,19 @@ public class HeatMapADFragment extends Fragment {
         mapView = binding.mapAdView;
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
-
+        aMap.setInfoWindowAdapter(customInfoWindowAdapter);
          /*
             坐标逆编回调
          */
         geocodeSearchListener = new GeocodeSearch.OnGeocodeSearchListener() {
             @Override
             public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-                mMarker.setTitle(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+                mMarker.setSnippet(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+                if (mMarker.isInfoWindowShown()) {
+                    mMarker.hideInfoWindow();
+                } else {
+                    mMarker.showInfoWindow();
+                }
             }
             @Override
             public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
@@ -138,14 +145,15 @@ public class HeatMapADFragment extends Fragment {
         aMap.addOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (mMarker != marker){
-                    mMarker = marker;
+                mMarker = marker;
+                if (marker.getSnippet() == null){
                     mapUtils.getAddress(marker.getPosition(),geocodeSearch);
-                }
-                if (marker.isInfoWindowShown()) {
-                    marker.hideInfoWindow();
-                } else {
-                    marker.showInfoWindow();
+                }else {
+                    if (mMarker.isInfoWindowShown()) {
+                        mMarker.hideInfoWindow();
+                    } else {
+                        mMarker.showInfoWindow();
+                    }
                 }
                 return true;
             }
@@ -163,7 +171,7 @@ public class HeatMapADFragment extends Fragment {
                     MarkerOptions markerOptions = new MarkerOptions()
                             .position(latLng)
                             .title("AD")
-                            .snippet(latLng.toString())
+                            .title(latLng.toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ad));
                     list1.add(markerOptions);
 

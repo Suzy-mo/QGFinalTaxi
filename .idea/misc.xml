@@ -9,6 +9,8 @@
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/car_owner_search_view_background.xml" value="0.3" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/cl_timeset_background.xml" value="0.2890625" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/history_tab_background.xml" value="0.2890625" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/info_shape.xml" value="0.378974358974359" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/line_shape.xml" value="0.378974358974359" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/linechart_markview.xml" value="0.3020833333333333" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/tablayout_background.xml" value="0.2890625" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/timepicker_background.xml" value="0.2875" />
@@ -27,6 +29,7 @@
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_history_map.xml" value="0.2838541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_history_route.xml" value="0.2838541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/history_tab_item.xml" value="0.2838541666666667" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/map_info_window.xml" value="0.36875" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/markview.xml" value="0.3194444444444444" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/route_dialog_view.xml" value="0.36875" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_date.xml" value="0.2713541666666667" />

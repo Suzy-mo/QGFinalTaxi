@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,17 +25,16 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
-import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.google.gson.Gson;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.adapter.CustomInfoWindowAdapter;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapPassengerBinding;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
@@ -48,7 +46,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -68,11 +65,11 @@ public class HeatMapPassengerFragment extends Fragment {
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
     private MapUtils mapUtils;
-    private AlertDialog dialog = null;
-    private NetUtils netUtils = NetUtils.getInstance();
+    private final NetUtils netUtils = NetUtils.getInstance();
     private GeocodeSearch geocodeSearch;
     private Marker mMarker;
     private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
+    private CustomInfoWindowAdapter customInfoWindowAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +78,7 @@ public class HeatMapPassengerFragment extends Fragment {
         districtSearch = new DistrictSearch(getContext());
         mapUtils = new MapUtils();
         geocodeSearch = new GeocodeSearch(getContext());
+        customInfoWindowAdapter = new CustomInfoWindowAdapter(getContext());
         /*
             获取边界数据回调
          */
@@ -121,6 +119,7 @@ public class HeatMapPassengerFragment extends Fragment {
         mapView = binding.mapPassengerView;
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
+        aMap.setInfoWindowAdapter(customInfoWindowAdapter);
 
         /*
             坐标逆编回调
@@ -129,6 +128,11 @@ public class HeatMapPassengerFragment extends Fragment {
             @Override
             public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
                 mMarker.setSnippet(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+                if (mMarker.isInfoWindowShown()) {
+                    mMarker.hideInfoWindow();
+                } else {
+                    mMarker.showInfoWindow();
+                }
             }
             @Override
             public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
@@ -143,14 +147,15 @@ public class HeatMapPassengerFragment extends Fragment {
         aMap.addOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (mMarker != marker){
-                    mMarker = marker;
+                mMarker = marker;
+                if (marker.getSnippet() == null){
                     mapUtils.getAddress(marker.getPosition(),geocodeSearch);
-                }
-                if (marker.isInfoWindowShown()) {
-                    marker.hideInfoWindow();
-                } else {
-                    marker.showInfoWindow();
+                }else {
+                    if (mMarker.isInfoWindowShown()) {
+                        mMarker.hideInfoWindow();
+                    } else {
+                        mMarker.showInfoWindow();
+                    }
                 }
                 return true;
             }
