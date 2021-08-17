@@ -8,16 +8,16 @@ package com.qg.qgtaxiapp.entity;
  */
 public class ResponseData <T>  {
 
-    private boolean flag = true;
+    private int code ;
     private String msg = "";
     private T data = null;
 
-    public boolean isFlag() {
-        return flag;
+    public int isFlag() {
+        return code;
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setFlag(int flag) {
+        this.code = code;
     }
 
     public String getMsg() {

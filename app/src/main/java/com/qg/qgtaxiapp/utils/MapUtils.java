@@ -210,6 +210,7 @@ public class MapUtils {
         return mPolyline;
     }
 
+
     public List<Polyline> setFlowAllLine(List<LatLng> list, AMap aMap) {
         Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>进入");
         List<Polyline> polylines = new ArrayList<>();
@@ -231,9 +232,32 @@ public class MapUtils {
     }
 
 
+    /**
+     * @param  data
+     * @return List<LatLng>
+     * @description  转换流向图的坐标
+     * @author Suzy.Mo
+     * @time
+     */
+
+    public  List<LatLng> getAllLineLatLng(FlowMainDataLine data) {
+        Log.d("Flow_TAG","getAllLineLatLng: flowAllData-->LatLng");
+        List<LatLng> points = new ArrayList<LatLng>();
+        for (int i = 0; i < data.getLocation().size(); i ++) {
+            points.add(new LatLng(data.getLocation().get(i).getLatitude(),data.getLocation().get(i).getLongitude()));
+        }
+        Log.d("Flow_TAG","getAllLineLatLng: flowAllData-->LatLng转换完成");
+        return points;
+    }
     public List<Polyline> setFlowMainLines(List<FlowMainDataLine> lineList, AMap mAMap){
         List<Polyline> polylines = new ArrayList<>();
+
+        //转成坐标形式
         List<List<LatLng>> list = new ArrayList<>();
+        for(int i = 0; i < lineList.size();i++){
+            list.add(getAllLineLatLng(lineList.get(i)));
+        }
+
 
         List<Integer> colorList = new ArrayList<Integer>();
         List<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
@@ -242,8 +266,13 @@ public class MapUtils {
 
         //用一个数组来存放纹理
         List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
-        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture));
-        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_green));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_blue));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_yellow));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_red));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_zi));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_orign));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_shenlan));
 
         List<Integer> texIndexList = new ArrayList<Integer>();
         texIndexList.add(0);//对应上面的第0个纹理

@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.qg.qgtaxiapp.databinding.FragmentCarAvailibilityBinding;
 import com.qg.qgtaxiapp.databinding.FragmentCarIncomeBinding;
+import com.qg.qgtaxiapp.utils.TimePickerUtils;
 
 /**
  * @Name：QGTaxiApp
@@ -19,7 +21,10 @@ import com.qg.qgtaxiapp.databinding.FragmentCarIncomeBinding;
  * @Date：2021/8/16 23:15
  */
 public class CarIncomeFragment extends Fragment {
+
     private FragmentCarIncomeBinding binding;
+    private TimePickerView datePickerView;
+    private TimePickerUtils timePickerUtils;
 
     @Nullable
     @Override

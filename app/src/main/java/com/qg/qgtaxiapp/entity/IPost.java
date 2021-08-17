@@ -21,7 +21,7 @@ public interface IPost {
 
 
     @FormUrlEncoded
-    @POST("getFlowGraph")
+    @POST("mainRoute")
     Call<ResponseData<List<FlowMainDataLine>>> getFlowMainDataLine(@Field("date")String date);
 
 //    @FormUrlEncoded

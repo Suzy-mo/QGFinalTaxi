@@ -188,7 +188,12 @@ public class FlowMapFragment extends Fragment {
         flowMapViewModel.MainDataLine.observe(getActivity(), new Observer<List<FlowMainDataLine>>() {
             @Override
             public void onChanged(List<FlowMainDataLine> flowMainDataLines) {
-                //mainPolyLines = mapUtils.setFlowMainLines(flowMainDataLines,aMap);
+                new Thread(()->{
+                    List<Polyline> polylines = mapUtils.setFlowMainLines(flowMainDataLines,aMap);
+                    getActivity().runOnUiThread(()->{
+                        mainPolyLines =polylines;
+                    });
+                }).start();
             }
         });
 
@@ -298,29 +303,31 @@ public class FlowMapFragment extends Fragment {
     }
 
     private void getMainData(String s) {
-        //测试
-        List<FlowMainDataLine> flowMainDataLines = new ArrayList<>();
-        allPolyLines = mapUtils.setFlowMainLines(flowMainDataLines,aMap);
+//        //测试
+//        List<FlowMainDataLine> flowMainDataLines = new ArrayList<>();
+//        allPolyLines = mapUtils.setFlowMainLines(flowMainDataLines,aMap);
 
-//        new Thread(()->{
-//            IPost iPost = BaseCreator.create(IPost.class);
-//            iPost.getFlowMainDataLine(s).enqueue(new Callback<ResponseData<List<FlowMainDataLine>>>() {
-//                @Override
-//                public void onResponse(Call<ResponseData<List<FlowMainDataLine>>> call, Response<ResponseData<List<FlowMainDataLine>>> response) {
-//                    if(response.body().isFlag()){
-//                        flowMapViewModel.MainDataLine.setValue(response.body().getData());
-//                    }else{
-//                        showLog(response.body().getMsg());
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseData<List<FlowMainDataLine>>> call, Throwable t) {
-//                    showLog("onFailure:不知道什么原因获取失败");
-//                }
-//            });
-//
-//        }).start();
+        new Thread(()->{
+            IPost iPost = BaseCreator.create(IPost.class);
+            iPost.getFlowMainDataLine(s).enqueue(new Callback<ResponseData<List<FlowMainDataLine>>>() {
+                @Override
+                public void onResponse(Call<ResponseData<List<FlowMainDataLine>>> call, Response<ResponseData<List<FlowMainDataLine>>> response) {
+                    getActivity().runOnUiThread(()->{
+                        if(response.isSuccessful()){
+                            showLog(response.body().getMsg());
+                            showLog("拿到的第一个数据是："+response.body().getData().get(0).getLocation().get(0).getLatitude());
+                            flowMapViewModel.MainDataLine.setValue(response.body().getData());
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<ResponseData<List<FlowMainDataLine>>> call, Throwable t) {
+                    showLog("onFailure:不知道什么原因获取失败");
+                }
+            });
+
+        }).start();
 
 
     }
@@ -340,15 +347,13 @@ public class FlowMapFragment extends Fragment {
             iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<List<FlowAllData>>>() {
                 @Override
                 public void onResponse(Call<ResponseData<List<FlowAllData>>> call, Response<ResponseData<List<FlowAllData>>> response) {
-                    if(response.body().isFlag()){
                         getActivity().runOnUiThread(()->{
                             flowMapViewModel.allData.setValue(response.body().getData());
                             showLog("拿到数据的情况：" + response.body().getMsg());
                             showLog("拿到数据的第一个点：" + response.body().getData().get(0).getOffLatitude());
                         });
-                    }else{
                         showLog(response.body().getMsg());
-                    }
+
                 }
 
                 @Override
