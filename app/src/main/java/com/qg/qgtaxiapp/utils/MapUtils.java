@@ -308,11 +308,11 @@ public class MapUtils {
                 .useGradient(true)
                 .width(18));
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(list.get(0));
-        builder.include(list.get(list.size() - 2));
-
-        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//        builder.include(list.get(0));
+//        builder.include(list.get(list.size() - 2));
+//
+//        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
 
         return mPolyline;
     }

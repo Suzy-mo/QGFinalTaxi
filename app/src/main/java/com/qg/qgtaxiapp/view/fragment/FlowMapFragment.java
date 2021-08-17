@@ -85,7 +85,7 @@ public class FlowMapFragment extends Fragment {
     private TimePickerView datePickerView;
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
-    private List<Polyline> allPolyLines = new ArrayList<>(),mainPolyLines = new ArrayList<>();//全流图和主流向图的画图工具
+    private List<Polyline> allPolyLines ;//全流图和主流向图的画图工具
 
 
     @Override
@@ -190,17 +190,13 @@ public class FlowMapFragment extends Fragment {
         flowMapViewModel.MainDataLine.observe(getActivity(), new Observer<FlowMainDataLine>() {
             @Override
             public void onChanged(FlowMainDataLine flowMainDataLine) {
-                    showLog("主流图数据变化监听成功");
-                    List<Polyline> polylines = mapUtils.setFlowMainLines(flowMainDataLine,aMap);
-                    showLog("主流图数据转换成功");
-
-//                        for (int i = 0 ;i <allPolyLines.size();i++){
-//                            allPolyLines.get(i).setVisible(false);
-//                        }
-                        flowMapViewModel.allData.setValue(null);
-                        mainPolyLines =polylines;
-
-
+                aMap.clear();
+                aMap = mapUtils.initMap(getContext(),mapView);
+                drawBoundary();
+                showLog("主流图数据变化监听成功");
+                List<Polyline> polylines = mapUtils.setFlowMainLines(flowMainDataLine, aMap);
+                showLog("主流图数据转换成功");
+                allPolyLines = polylines;
             }
         });
 //        flowMapViewModel.MainDataLine.observe(getActivity(), new Observer<List<FlowMainDataLine>>() {
@@ -245,7 +241,9 @@ public class FlowMapFragment extends Fragment {
                 if(dataBeans == null){
                     showLog("setAllDataObserve：数据为空");
                 }else{
-                    flowMapViewModel.MainDataLine.setValue(null);
+                    aMap.clear();
+                    aMap = mapUtils.initMap(getContext(),mapView);
+                    drawBoundary();
                     List<LatLng> mData = mapUtils.readLatLng(dataBeans);
                     allPolyLines = mapUtils.setFlowAllLine(mData, aMap);
                     showLog("setAllDataObserve：展示全部数据");
