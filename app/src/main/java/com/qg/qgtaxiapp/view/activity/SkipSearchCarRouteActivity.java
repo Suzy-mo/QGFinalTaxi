@@ -132,11 +132,10 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(responseData);
                     String message = jsonObject.getString("message");
-                    if(message.equals("无数据")){
+                    if (message.equals("无数据")) {
                         showMsg("该车没有在这一天没有行驶，请查询别的天数");
                         return;
-                    }
-                    if (message.equals("查询数据成功")) {
+                    } else if (message.equals("查询数据成功")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject data = jsonArray.getJSONObject(i);
@@ -168,6 +167,7 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showMsg(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
