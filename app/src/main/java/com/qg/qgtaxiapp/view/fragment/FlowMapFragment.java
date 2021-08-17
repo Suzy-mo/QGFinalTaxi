@@ -85,7 +85,8 @@ public class FlowMapFragment extends Fragment {
     private TimePickerView datePickerView;
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
-    List<Polyline> polylines;
+    private List<Polyline> polylines;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,15 +182,16 @@ public class FlowMapFragment extends Fragment {
             }
         });
 
-        flowMapViewModel.allData.observe(getActivity(), new Observer<List<FlowAllData.DataBean>>() {
+        flowMapViewModel.allData.observe(getActivity(), new Observer<List<FlowAllData>>() {
             @Override
-            public void onChanged(List<FlowAllData.DataBean> dataBeans) {
+            public void onChanged(List<FlowAllData> dataBeans) {
                 if(dataBeans == null){
                     showLog("数据为空");
                 }else{
                     List<LatLng> mData = mapUtils.readLatLng(dataBeans);
                     if(flowMapViewModel.selectTab.getValue() == TAB_ALL){
                         polylines = mapUtils.setFlowAllLine2(mData,aMap);
+                        polylines.get(0).setVisible(true);
                         //mPolyline = mapUtils.setFlowAllLine(mData,aMap);
                         showLog("展示全部数据");
                     }else {
@@ -258,36 +260,24 @@ public class FlowMapFragment extends Fragment {
         showLog("getAllLineData:"+s);
         new Thread(()->{
             IPost iPost = BaseCreator.create(IPost.class);
-            iPost.getFlowAllData(s).enqueue(new Callback<List<FlowAllData.DataBean>>() {
+            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<List<FlowAllData>>>() {
                 @Override
-                public void onResponse(Call<List<FlowAllData.DataBean>> call, Response<List<FlowAllData.DataBean>> response) {
-                    flowMapViewModel.allData.setValue(response.body());
+                public void onResponse(Call<ResponseData<List<FlowAllData>>> call, Response<ResponseData<List<FlowAllData>>> response) {
+                    getActivity().runOnUiThread(()->{
+                        flowMapViewModel.allData.setValue(response.body().getData());
+                        showLog("拿到数据的情况：" + response.body().getMsg());
+                        showLog("拿到数据的第一个点：" + response.body().getData().get(0).getOffLatitude());
+                    });
                 }
 
                 @Override
-                public void onFailure(Call<List<FlowAllData.DataBean>> call, Throwable t) {
+                public void onFailure(Call<ResponseData<List<FlowAllData>>> call, Throwable t) {
                     getActivity().runOnUiThread(()->{
                         showLog("不知道什么原因获取失败");
-                  });
+                   });
                 }
             });
-//            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
-//                @Override
-//                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
-//                    showLog(response.body().getMsg());
-//                    getActivity().runOnUiThread(()->{
-//                        flowMapViewModel.allData.setValue(response.body().getData().getData());
-//                    });
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
-//                    getActivity().runOnUiThread(()->{
-//                        showLog("不知道什么原因获取失败");
-//                    });
-//
-//                }
-//            });
+
         }).start();
 
 //        //没有数据暂时设置模拟

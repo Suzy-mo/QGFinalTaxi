@@ -19,12 +19,17 @@ import retrofit2.http.Query;
  */
 public interface IPost {
 
+    @FormUrlEncoded
+    @POST("getFlowGraph")
+    Call<ResponseData<List<FlowAllData>>> getFlowAllData(@Field("date")String date);
+
+
 //    @FormUrlEncoded
 //    @HTTP(method = "GET",path = "getFlowGraph/{day}",hasBody = false)
 //    Call<ResponseData<FlowAllData>> getFlowAllData(@Path("day") String day);
 
-    @GET("getFlowGraph")
-    Call<List<FlowAllData.DataBean>> getFlowAllData(@Query("date") String day);
+//    @GET("getFlowGraph")
+//    Call<List<FlowAllData.DataBean>> getFlowAllData(@Query("date") String day);
 
 //    @FormUrlEncoded
 //    @GET("flow/main")

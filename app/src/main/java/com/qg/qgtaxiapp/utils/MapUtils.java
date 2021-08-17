@@ -175,12 +175,14 @@ public class MapUtils {
      * @time
      */
 
-    public  List<LatLng> readLatLng(List<FlowAllData.DataBean> data) {
+    public  List<LatLng> readLatLng(List<FlowAllData> data) {
+        Log.d("Flow_TAG","readLatLng: flowAllData-->LatLng");
         List<LatLng> points = new ArrayList<LatLng>();
         for (int i = 0; i < data.size(); i ++) {
             points.add(new LatLng(data.get(i).getOffLatitude(),data.get(i).getOffLongitude()));
-            points.add(new LatLng(data.get(i).getOffLatitude(),data.get(i).getOffLongitude()));
+            points.add(new LatLng(data.get(i).getOnLatitude(),data.get(i).getOnLongitude()));
         }
+        Log.d("Flow_TAG","readLatLng: flowAllData-->LatLng转换完成");
         return points;
     }
 
@@ -208,6 +210,7 @@ public class MapUtils {
     }
 
     public List<Polyline> setFlowAllLine2(List<LatLng> list,AMap aMap) {
+        Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>进入");
         List<Polyline> polylines = new ArrayList<>();
         // 设置当前地图级别为4
         //aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
@@ -222,7 +225,7 @@ public class MapUtils {
                     .color(Color.parseColor("#03DAC5")));
             polylines.add(mPolyline);
         }
-
+        Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>转换完成");
         return polylines;
     }
 
