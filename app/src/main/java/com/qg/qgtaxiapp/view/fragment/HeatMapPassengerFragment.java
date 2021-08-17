@@ -1,27 +1,19 @@
 package com.qg.qgtaxiapp.view.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -36,23 +28,22 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.google.gson.Gson;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.adapter.CustomInfoWindowAdapter;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapPassengerBinding;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.NetUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
-import com.qg.qgtaxiapp.utils.TimePickerUtils;
 import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -72,28 +63,21 @@ public class HeatMapPassengerFragment extends Fragment {
     private DistrictSearch districtSearch;
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
-    private TimePickerView datePickerView;
-    private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
-    private AlertDialog dialog = null;
-    private TextView tv_changeTime;
-    private TextView tv_date;
-    private TextView tv_timeslot;
-    private TextView tv_chooseTime;
-    private ConstraintLayout cl_timeSet;
-    private ConstraintLayout cl_chooseTime;
-    private NetUtils netUtils = NetUtils.getInstance();
-    private OnTimeSelectListener onTimeSelectListener;
-    private View.OnClickListener onClickListener;
-
+    private final NetUtils netUtils = NetUtils.getInstance();
+    private GeocodeSearch geocodeSearch;
+    private Marker mMarker;
+    private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
+    private CustomInfoWindowAdapter customInfoWindowAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         heatMapViewModel = new ViewModelProvider(getActivity()).get(HeatMapViewModel.class);
         districtSearch = new DistrictSearch(getContext());
-        timePickerUtils = new TimePickerUtils();
         mapUtils = new MapUtils();
+        geocodeSearch = new GeocodeSearch(getContext());
+        customInfoWindowAdapter = new CustomInfoWindowAdapter(getContext());
         /*
             获取边界数据回调
          */
@@ -133,24 +117,38 @@ public class HeatMapPassengerFragment extends Fragment {
         binding = FragmentHeatmapPassengerBinding.inflate(inflater,container,false);
         mapView = binding.mapPassengerView;
         mapView.onCreate(savedInstanceState);
-        tv_changeTime = binding.tvPassengerChangeTime;
-        tv_date = binding.tvPassengerDate;
-        tv_timeslot = binding.tvPassengerTimeslot;
-        tv_chooseTime = binding.tvPassengerChooseTime;
-        cl_chooseTime = binding.clFragmentPassengerChooseTime;
-        cl_timeSet = binding.clFragmentHeatTime;
         aMap = mapUtils.initMap(getContext(),mapView);
+        aMap.setInfoWindowAdapter(customInfoWindowAdapter);
+
         /*
-            日期选择监听
+            InfoWindow点击回调
          */
-        onTimeSelectListener = new OnTimeSelectListener() {
+        aMap.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
             @Override
-            public void onTimeSelect(Date date, View v) {
-                heatMapViewModel.passengerTime = timePickerUtils.getDate(date);
-                showTimeSlotSet();
+            public void onInfoWindowClick(Marker marker) {
+                mMarker.hideInfoWindow();
+            }
+        });
+
+        /*
+            坐标逆编回调
+         */
+        geocodeSearchListener = new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                mMarker.setSnippet(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+                if (mMarker.isInfoWindowShown()) {
+                    mMarker.hideInfoWindow();
+                } else {
+                    mMarker.showInfoWindow();
+                }
+            }
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
             }
         };
-        datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
+        geocodeSearch.setOnGeocodeSearchListener(geocodeSearchListener);
 
         /*
             Marker点击事件
@@ -158,10 +156,15 @@ public class HeatMapPassengerFragment extends Fragment {
         aMap.addOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (marker.isInfoWindowShown()) {
-                    marker.hideInfoWindow();
-                } else {
-                    marker.showInfoWindow();
+                mMarker = marker;
+                if (marker.getSnippet() == null){
+                    mapUtils.getAddress(marker.getPosition(),geocodeSearch);
+                }else {
+                    if (mMarker.isInfoWindowShown()) {
+                        mMarker.hideInfoWindow();
+                    } else {
+                        mMarker.showInfoWindow();
+                    }
                 }
                 return true;
             }
@@ -169,23 +172,19 @@ public class HeatMapPassengerFragment extends Fragment {
         heatMapViewModel.passengerData.observe(getActivity(), new Observer<List<LatLng>>() {
             @Override
             public void onChanged(List<LatLng> list) {
-                aMap.clear();
-//                PolygonOptions polygonOptions = new PolygonOptions();
+
                 ArrayList<MarkerOptions> list1 = new ArrayList<>();
 
                 for (LatLng latLng : list){
                     MarkerOptions markerOptions = new MarkerOptions()
                             .position(latLng)
-                            .title("热点")
-                            .snippet(latLng.toString())
+                            .draggable(false)
+                            .title(latLng.toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.texi));
-//                    polygonOptions.add(latLng);
+
                     list1.add(markerOptions);
                 }
-                /*polygonOptions.strokeColor(Color.argb(50,1,1,1))
-                        .fillColor(Color.argb(1,1,1,1))
-                        .strokeWidth(10);
-                aMap.addPolygon(polygonOptions);*/
+
                 aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addMarkers(list1,false);
             }
@@ -224,8 +223,12 @@ public class HeatMapPassengerFragment extends Fragment {
         };
         aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
-        getTest();
-        //getPassengerData();
+
+        if (heatMapViewModel.passengerData.getValue() == null){
+            getPassengerData();
+        }
+
+       //getTest();
         return binding.getRoot();
     }
 
@@ -244,14 +247,6 @@ public class HeatMapPassengerFragment extends Fragment {
         mapView.onSaveInstanceState(outState);
     }
 
-
-    /**
-     * Toast提示
-     * @param msg 提示内容
-     */
-    private void showMsg(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
     /**
      * Log.d打印日志
      */
@@ -292,46 +287,17 @@ public class HeatMapPassengerFragment extends Fragment {
                 }break;
 
                 case 1:{
-                    List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
-                    heatMapViewModel.passengerData.setValue(mapUtils.initHeatMapData(data));
+                    List<LatLng> list = (List<LatLng>) msg.obj;
+                    heatMapViewModel.passengerData.setValue(list);
+                }break;
+
+                case 2:{
+
                 }break;
             }
         }
     };
 
-    /*
-        显示时间段设置Dialog
-     */
-    private void showTimeSlotSet(){
-        onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (timePickerUtils.h2 != 0 && timePickerUtils.h2 < timePickerUtils.h1) {
-                    Toast.makeText(getContext(),"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
-                } else {
-
-                    if (cl_chooseTime.getVisibility() == View.VISIBLE) {
-                        cl_chooseTime.setVisibility(View.GONE);
-                        cl_timeSet.setVisibility(View.VISIBLE);
-                    }
-                    heatMapViewModel.passenger_date.setValue(timePickerUtils.getmDate());
-                    heatMapViewModel.passenger_timeslot.setValue(timePickerUtils.getTimeslot());
-                    heatMapViewModel.passengerTime = timePickerUtils.getTime();
-
-                    dialog.dismiss();
-                }
-            }
-        };
-        dialog = timePickerUtils.initTimeSlotDialog(getContext(),onClickListener);
-        dialog.show();
-
-        Window window = dialog.getWindow();
-        WindowManager manager = getActivity().getWindowManager();
-        Display display = manager.getDefaultDisplay();
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.width = (int) (display.getWidth() * 0.98);
-        window.setAttributes(params);
-    }
     /*
         获取载客热点数据
      */
@@ -346,19 +312,25 @@ public class HeatMapPassengerFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                Gson gson = new Gson();
-                HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
-                if (heatMapData.getCode() == 1){
 
-                    List<HeatMapData.data> data = heatMapData.getData();
-                    Message message = handler.obtainMessage();
-                    message.what = 1;
-                    message.obj = data;
-                    handler.sendMessage(message);
+                String json = response.body().string();
+
+                if (!json.equals("")){
+                    Gson gson = new Gson();
+                    HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
+                    if (heatMapData != null && heatMapData.getCode() == 1) {
+
+                        List<HeatMapData.data> data = heatMapData.getData();
+                        List<LatLng> latLngs = mapUtils.initHeatMapData(data);
+                        Message message = handler.obtainMessage();
+                        message.what = 1;
+                        message.obj = latLngs;
+                        handler.sendMessage(message);
+                    }
                 }else {
                     showLog("无数据");
                 }
+
             }
         });
     }
@@ -374,19 +346,19 @@ public class HeatMapPassengerFragment extends Fragment {
         byte[] bytes = new byte[size];
         fis.read(bytes);
         fis.close();
+
         String s = new String(bytes,"UTF-8");
         Gson gson = new Gson();
         HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
         List<HeatMapData.data> data = heatMapData.getData();
+        List<LatLng> latLngs = mapUtils.initHeatMapData(data);
         Message message = handler.obtainMessage();
         message.what = 1;
-        message.obj = data;
+        message.obj = latLngs;
         handler.sendMessage(message);
-        showLog(s);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

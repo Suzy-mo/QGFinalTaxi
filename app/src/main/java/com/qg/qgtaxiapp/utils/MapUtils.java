@@ -21,7 +21,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.district.DistrictItem;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
@@ -169,6 +172,17 @@ public class MapUtils {
     }
 
     /**
+     * 坐标逆编
+     * @param latLng
+     * @param geocodeSearch
+     */
+    public void getAddress(LatLng latLng, GeocodeSearch geocodeSearch){
+        LatLonPoint latLonPoint = new LatLonPoint(latLng.latitude,latLng.longitude);
+        RegeocodeQuery regeocodeQuery = new RegeocodeQuery(latLonPoint,200f, GeocodeSearch.AMAP);
+        geocodeSearch.getFromLocationAsyn(regeocodeQuery);
+    }
+
+    /**
      * @param  data
      * @return List<LatLng>
      * @description  转换流向图的坐标
@@ -176,17 +190,16 @@ public class MapUtils {
      * @time
      */
 
-    public  List<LatLng> readLatLng(List<FlowAllData> data) {
-        Log.d("Flow_TAG","readLatLng: flowAllData-->LatLng");
+    public List<LatLng> readLatLng(List<FlowAllData> data) {
         List<LatLng> points = new ArrayList<LatLng>();
-        for (int i = 0; i < data.size(); i ++) {
-            points.add(new LatLng(data.get(i).getOffLatitude(),data.get(i).getOffLongitude()));
-            points.add(new LatLng(data.get(i).getOnLatitude(),data.get(i).getOnLongitude()));
+        for (int i = 0; i < data.size(); i++) {
+            points.add(new LatLng(data.get(i).getOffLatitude(), data.get(i).getOffLongitude()));
+            points.add(new LatLng(data.get(i).getOnLatitude(), data.get(i).getOnLongitude()));
         }
-        Log.d("Flow_TAG","readLatLng: flowAllData-->LatLng转换完成");
+        Log.d("Flow_TAG", "readLatLng: flowAllData-->LatLng转换完成");
         return points;
-    }
 
+    }
     /**
      * @param  list aMap
      * @return Polyline
