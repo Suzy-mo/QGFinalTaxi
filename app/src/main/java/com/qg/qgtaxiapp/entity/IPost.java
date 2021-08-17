@@ -5,11 +5,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 /**
  * @Name：QGTaxiApp
@@ -24,6 +20,10 @@ public interface IPost {
     Call<ResponseData<List<FlowAllData>>> getFlowAllData(@Field("date")String date);
 
 
+    @FormUrlEncoded
+    @POST("getFlowGraph")
+    Call<ResponseData<List<FlowMainDataLine>>> getFlowMainDataLine(@Field("date")String date);
+
 //    @FormUrlEncoded
 //    @HTTP(method = "GET",path = "getFlowGraph/{day}",hasBody = false)
 //    Call<ResponseData<FlowAllData>> getFlowAllData(@Path("day") String day);
@@ -36,8 +36,8 @@ public interface IPost {
 //    Call<ResponseData<FlowAllData>> getFlowAllData(@Field("day")String day);
 
 
-    @FormUrlEncoded
-    @POST("flow/main")
-    Call<ResponseData<FlowMainData>> getFlowMainData(@Field("data")String day);
+//    @FormUrlEncoded
+//    @POST("flow/main")
+//    Call<ResponseData<FlowMainDataLine>> getFlowMainData(@Field("data")String day);
 
 }

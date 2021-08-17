@@ -24,6 +24,7 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.district.DistrictItem;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.entity.FlowAllData;
 
@@ -194,7 +195,7 @@ public class MapUtils {
      * @time
      */
 
-    public Polyline setFlowAllLine(List<LatLng> list,AMap aMap) {
+    public Polyline setFlowAllLineTest(List<LatLng> list,AMap aMap) {
 
         // 设置当前地图级别为4
         //aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
@@ -209,7 +210,7 @@ public class MapUtils {
         return mPolyline;
     }
 
-    public List<Polyline> setFlowAllLine2(List<LatLng> list,AMap aMap) {
+    public List<Polyline> setFlowAllLine(List<LatLng> list, AMap aMap) {
         Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>进入");
         List<Polyline> polylines = new ArrayList<>();
         // 设置当前地图级别为4
@@ -230,15 +231,10 @@ public class MapUtils {
     }
 
 
-    /**
-     * @param list mAMap
-     * @return void
-     * @description  画主流向的函数
-     * @author Suzy.Mo
-     * @time
-     */
+    public List<Polyline> setFlowMainLines(List<FlowMainDataLine> lineList, AMap mAMap){
+        List<Polyline> polylines = new ArrayList<>();
+        List<List<LatLng>> list = new ArrayList<>();
 
-    public Polyline setFlowMainLine(List<LatLng> list, AMap mAMap) {
         List<Integer> colorList = new ArrayList<Integer>();
         List<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
 
@@ -247,6 +243,7 @@ public class MapUtils {
         //用一个数组来存放纹理
         List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
         textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture));
+        textureList.add(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture));
 
         List<Integer> texIndexList = new ArrayList<Integer>();
         texIndexList.add(0);//对应上面的第0个纹理
@@ -254,13 +251,29 @@ public class MapUtils {
         texIndexList.add(2);
 
         Random random = new Random();
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < lineList.size(); i++) {
             colorList.add(colors[random.nextInt(3)]);
             bitmapDescriptors.add(textureList.get(0));
 
         }
 
-        Polyline mPolyline =  mAMap.addPolyline(new PolylineOptions().setCustomTexture(BitmapDescriptorFactory.fromResource(R.mipmap.custtexture)) //setCustomTextureList(bitmapDescriptors)
+        for(int i = 0 ; i < lineList.size() ; i++){
+            polylines.add(setFlowMainEachLine(list.get(i),mAMap,textureList.get(i)));
+        }
+
+        return polylines;
+    }
+    /**
+     * @param list mAMap
+     * @return void
+     * @description  画主流向每一条线的函数
+     * @author Suzy.Mo
+     * @time
+     */
+
+    public Polyline setFlowMainEachLine(List<LatLng> list, AMap mAMap, BitmapDescriptor bitmapDescriptor) {
+
+        Polyline mPolyline =  mAMap.addPolyline(new PolylineOptions().setCustomTexture(bitmapDescriptor) //setCustomTextureList(bitmapDescriptors)
 //				.setCustomTextureIndex(texIndexList)
                 .addAll(list)
                 .useGradient(true)
@@ -275,75 +288,6 @@ public class MapUtils {
         return mPolyline;
     }
 
-//    public List<FlowAllData.DataBean> setAllData(){
-//        List<FlowAllData.DataBean> mData = new ArrayList<>();
-//        FlowAllData.DataBean dataBean = new FlowAllData.DataBean();
-//        dataBean.setLatitude(23.131467);dataBean.setLongitude(113.284837);mData.add(dataBean);
-//        FlowAllData.DataBean dataBean1 = new FlowAllData.DataBean();
-//        dataBean1.setLatitude(23.138388);dataBean1.setLongitude(113.286461);mData.add(dataBean1);
-//        FlowAllData.DataBean dataBean2 = new FlowAllData.DataBean();
-//        dataBean2.setLatitude(23.140177);dataBean2.setLongitude(113.280282);mData.add(dataBean2);
-//        FlowAllData.DataBean dataBean3 = new FlowAllData.DataBean();
-//        dataBean3.setLatitude(23.142006);dataBean3.setLongitude(113.282005);mData.add(dataBean3);
-//        FlowAllData.DataBean dataBean4 = new FlowAllData.DataBean();
-//        dataBean4.setLatitude(23.141077);dataBean4.setLongitude(113.285651);mData.add(dataBean4);
-//        FlowAllData.DataBean dataBean5 = new FlowAllData.DataBean();
-//        dataBean5.setLatitude(23.129552);dataBean5.setLongitude(113.284006);mData.add(dataBean5);
-//        FlowAllData.DataBean dataBean6 = new FlowAllData.DataBean();
-//        dataBean6.setLatitude(23.136475);dataBean6.setLongitude(113.289954);mData.add(dataBean6);
-//        FlowAllData.DataBean dataBean7 = new FlowAllData.DataBean();
-//        dataBean7.setLatitude(23.130344);dataBean7.setLongitude(113.296271);mData.add(dataBean7);
-//        FlowAllData.DataBean dataBean8 = new FlowAllData.DataBean();
-//        dataBean8.setLatitude( 23.132371);dataBean8.setLongitude(113.292864);mData.add(dataBean8);
-//        FlowAllData.DataBean dataBean9 = new FlowAllData.DataBean();
-//        dataBean9.setLatitude(23.116095);dataBean9.setLongitude(113.300873);mData.add(dataBean9);
-//        FlowAllData.DataBean dataBean10 = new FlowAllData.DataBean();
-//        dataBean10.setLatitude(23.11092);dataBean10.setLongitude(113.296599);mData.add(dataBean10);
-//        FlowAllData.DataBean dataBean11 = new FlowAllData.DataBean();
-//        dataBean11.setLatitude( 23.13906);dataBean11.setLongitude(113.296599);mData.add(dataBean11);
-//        FlowAllData.DataBean dataBean12 = new FlowAllData.DataBean();
-//        dataBean12.setLatitude(23.137483);dataBean12.setLongitude(113.298799);mData.add(dataBean12);
-//        FlowAllData.DataBean dataBean13 = new FlowAllData.DataBean();
-//        dataBean13.setLatitude(23.137361);dataBean13.setLongitude(113.295664);mData.add(dataBean13);
-//        FlowAllData.DataBean dataBean14 = new FlowAllData.DataBean();
-//        dataBean14.setLatitude(23.131446);dataBean14.setLongitude(113.282472);mData.add(dataBean14);
-//        FlowAllData.DataBean dataBean15 = new FlowAllData.DataBean();
-//        dataBean15.setLatitude( 23.130885);dataBean15.setLongitude(113.29107);mData.add(dataBean15);
-//        FlowAllData.DataBean dataBean16 = new FlowAllData.DataBean();
-//        dataBean16.setLatitude(23.136245);dataBean16.setLongitude(113.299721);mData.add(dataBean16);
-//        FlowAllData.DataBean dataBean17 = new FlowAllData.DataBean();
-//        dataBean17.setLatitude(23.132397);dataBean17.setLongitude(113.282472);mData.add(dataBean17);
-//
-//        FlowAllData.DataBean dataBean18 = new FlowAllData.DataBean();
-//        dataBean18.setLatitude( 23.129604);dataBean18.setLongitude(113.292724);mData.add(dataBean1);
-//        FlowAllData.DataBean dataBean21 = new FlowAllData.DataBean();
-//        dataBean21.setLatitude(23.128679);dataBean21.setLongitude(113.292576);mData.add(dataBean2);
-//        FlowAllData.DataBean dataBean31 = new FlowAllData.DataBean();
-//        dataBean31.setLatitude(23.125535);dataBean31.setLongitude(113.286996);mData.add(dataBean31);
-//        FlowAllData.DataBean dataBean41 = new FlowAllData.DataBean();
-//        dataBean41.setLatitude(23.120084);dataBean41.setLongitude(113.292576);mData.add(dataBean41);
-//        FlowAllData.DataBean dataBean61 = new FlowAllData.DataBean();
-//
-//        dataBean61.setLatitude(23.129378);dataBean61.setLongitude(113.285085);mData.add(dataBean61);
-//        FlowAllData.DataBean dataBean71 = new FlowAllData.DataBean();
-//        dataBean71.setLatitude(23.131466);dataBean71.setLongitude(113.291927);mData.add(dataBean71);
-//        FlowAllData.DataBean dataBean81 = new FlowAllData.DataBean();
-//
-//        dataBean8.setLatitude(23.137665);dataBean81.setLongitude(113.286911);mData.add(dataBean81);
-//        FlowAllData.DataBean dataBean91 = new FlowAllData.DataBean();
-//        dataBean91.setLatitude(23.137967);dataBean91.setLongitude(113.286911);mData.add(dataBean91);
-//        FlowAllData.DataBean dataBean101 = new FlowAllData.DataBean();
-//
-//        dataBean101.setLatitude(23.140546);dataBean101.setLongitude(113.288655);mData.add(dataBean101);
-//        FlowAllData.DataBean dataBean111 = new FlowAllData.DataBean();
-//        dataBean111.setLatitude( 23.134311);dataBean111.setLongitude(113.291571);mData.add(dataBean11);
-//        FlowAllData.DataBean dataBean121 = new FlowAllData.DataBean();
-//
-//        dataBean121.setLatitude(23.125185);dataBean121.setLongitude(113.278443);mData.add(dataBean121);
-//        FlowAllData.DataBean dataBean131 = new FlowAllData.DataBean();
-//        dataBean131.setLatitude(23.129195);dataBean131.setLongitude(113.276893);mData.add(dataBean131);
-//
-//        return mData;
-//    }
+
 }
 
