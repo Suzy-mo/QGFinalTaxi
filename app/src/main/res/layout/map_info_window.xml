@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--android:background="@drawable/info_shape"-->
+    <!--android:divider="@drawable/line_shape"-->
+    <!-- background  和 divider 设置InfoWindow的背景样式（颜色、图片均可），否者会使用高德默认背景-->
+
+    <TextView
+        android:id="@+id/tv_infoWindow_lat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
+    <TextView
+        android:id="@+id/tv_infoWindow_lng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
+    <TextView
+        android:id="@+id/tv_infoWindow_title"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
+</LinearLayout>

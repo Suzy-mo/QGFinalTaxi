@@ -1,6 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_heat_cl_timeSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="11dp"
+        android:paddingLeft="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/history_tab_background">
+
+        <TextView
+            android:id="@+id/tv_heat_chooseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_settime_background"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="选择时间"
+            android:textColor="#DEFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.471"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_timeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="时间段:"
+            android:textColor="#99FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="2017-12-01"
+            android:textColor="#99FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.459"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.516" />
+
+        <TextView
+            android:id="@+id/tv_SetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_settime_background"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="修改"
+            android:textColor="#DEFFFFFF"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/income_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF1F1F1F"
+        >
+        <LinearLayout
+            android:id="@+id/chart_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/car_income_now_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/car_income_chart_bg">
+
+                <TextView
+                    android:id="@+id/income_now_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="司机收入分析"
+                    android:textColor="#DEFFFFFF"
+                    android:textSize="20dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginRight="20dp"/>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/car_income_now_bar_chart"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_below="@+id/income_now_tv"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/car_income_feature_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/car_income_chart_bg">
+
+                <TextView
+                    android:id="@+id/income_feature_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginRight="20dp"
+                    android:text="司机收入分析"
+                    android:textColor="#DEFFFFFF"
+                    android:textSize="20dp" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/car_income_feature_bar_chart"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_below="@+id/income_feature_tv"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

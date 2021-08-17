@@ -3,11 +3,10 @@ package com.qg.qgtaxiapp.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.amap.api.maps.model.PolygonOptions;
-import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.google.android.material.shape.ShapePath;
 import com.qg.qgtaxiapp.entity.FlowAllData;
+import com.qg.qgtaxiapp.entity.FlowMainDataArea;
+import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 
 import java.util.List;
 
@@ -23,6 +22,8 @@ public class FlowMapViewModel extends ViewModel {
     public PolylineOptions polylineOptions = null;
     public MutableLiveData<String> flow_date = new MutableLiveData<>();
 
-    public MutableLiveData<List<FlowAllData.DataBean>> allData = new MutableLiveData<>();
+    public MutableLiveData<List<FlowAllData>> allData = new MutableLiveData<>();
+    public MutableLiveData<FlowMainDataLine> MainDataLine = new MutableLiveData<>();
+    public MutableLiveData<List<FlowMainDataArea>> MainDataArea = new MutableLiveData<>();
 
 }
