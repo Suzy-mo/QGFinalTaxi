@@ -10,13 +10,16 @@
     <TextView
         android:id="@+id/tv_infoWindow_lat"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
     <TextView
         android:id="@+id/tv_infoWindow_lng"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
     <TextView
         android:id="@+id/tv_infoWindow_title"
         android:layout_width="150dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#03DAC5"/>
 </LinearLayout>

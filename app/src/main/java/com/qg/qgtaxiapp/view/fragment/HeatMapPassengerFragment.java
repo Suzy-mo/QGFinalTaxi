@@ -1,6 +1,5 @@
 package com.qg.qgtaxiapp.view.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -120,6 +119,16 @@ public class HeatMapPassengerFragment extends Fragment {
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
         aMap.setInfoWindowAdapter(customInfoWindowAdapter);
+
+        /*
+            InfoWindow点击回调
+         */
+        aMap.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                mMarker.hideInfoWindow();
+            }
+        });
 
         /*
             坐标逆编回调
