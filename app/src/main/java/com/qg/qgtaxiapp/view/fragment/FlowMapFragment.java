@@ -296,7 +296,6 @@ public class FlowMapFragment extends Fragment {
                 flowMapViewModel.flow_date.setValue(timePickerUtils.getDate(date));
             }
         });
-
     }
 
     /**
