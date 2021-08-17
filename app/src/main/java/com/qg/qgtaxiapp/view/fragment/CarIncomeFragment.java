@@ -90,7 +90,7 @@ public class CarIncomeFragment extends Fragment {
                 nowList.add(new BarEntry(4,mData.getNight().floatValue()));
                 showLog(mData.getEarly_morning().toString()+"\n"+mData.getMorning().floatValue()+"\n"+mData.getAfternoon().floatValue()+"\n"+mData.getNight().floatValue());
                 nowBarChartUtils = new BarChartUtils(nowBar,nowList);
-                nowBarChartUtils.setBar();
+                nowBarChartUtils.settingBar();
             }
         });
     }
@@ -111,7 +111,7 @@ public class CarIncomeFragment extends Fragment {
                     featureList.add(new BarEntry(4,mData.getNight().floatValue()));
                     getActivity().runOnUiThread(()->{
                         featureBarCharUtils = new BarChartUtils(featureBar,featureList);
-                        featureBarCharUtils.setBar();
+                        featureBarCharUtils.settingBar();
                     });
 
                 }
