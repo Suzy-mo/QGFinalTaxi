@@ -255,31 +255,45 @@ public class FlowMapFragment extends Fragment {
      */
 
     private void getAllLineData(String s) {
+        showLog("getAllLineData:"+s);
         new Thread(()->{
             IPost iPost = BaseCreator.create(IPost.class);
-            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
+            iPost.getFlowAllData(s).enqueue(new Callback<List<FlowAllData.DataBean>>() {
                 @Override
-                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
-                    showLog(response.body().getMsg());
-                    getActivity().runOnUiThread(()->{
-                        flowMapViewModel.allData.setValue(response.body().getData().getData());
-                    });
+                public void onResponse(Call<List<FlowAllData.DataBean>> call, Response<List<FlowAllData.DataBean>> response) {
+                    flowMapViewModel.allData.setValue(response.body());
                 }
 
                 @Override
-                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
+                public void onFailure(Call<List<FlowAllData.DataBean>> call, Throwable t) {
                     getActivity().runOnUiThread(()->{
-                        showLog("获取失败");
-                    });
-
+                        showLog("不知道什么原因获取失败");
+                  });
                 }
             });
+//            iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<FlowAllData>>() {
+//                @Override
+//                public void onResponse(Call<ResponseData<FlowAllData>> call, Response<ResponseData<FlowAllData>> response) {
+//                    showLog(response.body().getMsg());
+//                    getActivity().runOnUiThread(()->{
+//                        flowMapViewModel.allData.setValue(response.body().getData().getData());
+//                    });
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResponseData<FlowAllData>> call, Throwable t) {
+//                    getActivity().runOnUiThread(()->{
+//                        showLog("不知道什么原因获取失败");
+//                    });
+//
+//                }
+//            });
         }).start();
 
 //        //没有数据暂时设置模拟
 //        List<FlowAllData.DataBean> data = mapUtils.setAllData();
 //        flowMapViewModel.allData.setValue(data);
-        showLog("数据获取成功");
+//        showLog("数据获取成功");
 
 
     }
