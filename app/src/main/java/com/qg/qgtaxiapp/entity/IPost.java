@@ -1,5 +1,7 @@
 package com.qg.qgtaxiapp.entity;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -14,11 +16,16 @@ import retrofit2.http.POST;
 public interface IPost {
 
     @FormUrlEncoded
-    @POST("flow/all")
-    Call<ResponseData<FlowAllData>> getFlowAllData(@Field("day")String day);
+    @POST("getFlowGraph")
+    Call<ResponseData<List<FlowAllData>>> getFlowAllData(@Field("date")String date);
+
 
     @FormUrlEncoded
-    @POST("flow/main")
-    Call<ResponseData<FlowMainData>> getFlowMainData(@Field("day")String day);
+    @POST("mainRoute")
+    Call<FlowMainDataLine> getFlowMainDataLine(@Field("time")String date);
+
+    @FormUrlEncoded
+    @POST("getSalary2")
+    Call<CarIncomeBean> getCarInfo(@Field("date")String date);
 
 }

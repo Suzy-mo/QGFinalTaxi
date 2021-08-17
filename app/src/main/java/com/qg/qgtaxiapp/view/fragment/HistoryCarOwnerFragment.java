@@ -62,6 +62,7 @@ public class HistoryCarOwnerFragment extends Fragment {
                 startActivityForResult(intent, Constants.REQUEST_CAR_OWNER_CODE);
             }
         });
+
     }
 
 

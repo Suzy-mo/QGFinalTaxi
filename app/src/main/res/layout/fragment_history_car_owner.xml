@@ -16,6 +16,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/car_owner_search_view_background" />
+
         <TextView
             android:id="@+id/car_search_hint"
             android:layout_width="wrap_content"

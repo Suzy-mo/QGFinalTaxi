@@ -67,7 +67,7 @@ public class TimePickerUtils{
     }
 
     /*
-        初始化日期选择器(有下一步)
+        初始化日期选择器
      */
     public TimePickerView initDatePicker(Context context, Activity activity,OnTimeSelectListener onTimeSelectListener){
         /*

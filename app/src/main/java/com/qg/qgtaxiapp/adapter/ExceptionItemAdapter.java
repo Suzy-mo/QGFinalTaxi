@@ -24,9 +24,10 @@ public class ExceptionItemAdapter extends BaseQuickAdapter<ExceptionItem, BaseVi
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, ExceptionItem exceptionItem) {
-        baseViewHolder.setText(R.id.exception_car_id_tv, exceptionItem.getCarID());
-        baseViewHolder.setText(R.id.exception_car_company_id_tv,exceptionItem.getCompanyID());
-        baseViewHolder.setText(R.id.exception_address_tv,exceptionItem.getAddress());
-        baseViewHolder.setText(R.id.exception_information_tv,exceptionItem.getExceptionText());
+        baseViewHolder.setText(R.id.exception_car_id_tv,exceptionItem.getCarID());
+        baseViewHolder.setText(R.id.exception_date_id_tv,exceptionItem.getDate());
+        baseViewHolder.setText(R.id.exception_start_location_tv,exceptionItem.getStartAddress());
+        baseViewHolder.setText(R.id.exception_end_location_tv,exceptionItem.getEndAddress());
+        baseViewHolder.setText(R.id.exception_info_tv,exceptionItem.getExceptionText());
     }
 }

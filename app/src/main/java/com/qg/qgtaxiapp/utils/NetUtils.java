@@ -14,11 +14,11 @@ import okhttp3.Request;
  * @Description:
  */
 public class NetUtils {
-    private String getRouteBaseURL ="http://39.98.41.126:31100/";
-    private String getCarOwnerURL="http://39.98.41.126:31100/";
-    private String getExceptionURL="http://39.98.41.126:31100/";
-    private String getHeatMapURL = "http://39.98.41.126:31106/selectByTimeSlot2/";
-    private String getPassengerURL = "http://39.98.41.126:31100/getHotPoints2";
+    private String getRouteBaseURL ="http://39.98.41.126:31103/";
+    private String getCarOwnerURL="http://39.98.41.126:31109/";
+    private String getExceptionURL="http://39.98.41.126:31103/";
+    private String getHeatMapURL = "http://39.98.41.126:31103/selectByTimeSlot2/";
+    private String getPassengerURL = "http://39.98.41.126:31103/getHotPoints2";
     private static NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
 
@@ -38,11 +38,15 @@ public class NetUtils {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    public void getExceptionData(int pagerID,int limit,Callback callback){
+    public void getExceptionData(int pagerID,int limit,String name,Callback callback){
         String requestStr="findErrorTaxis2/"+pagerID+"/"+limit;
+        if(name.length()!=0){
+            requestStr=requestStr+"/"+name;
+        }
         Request request=new Request.Builder().url(getExceptionURL+requestStr).build();
         okHttpClient.newCall(request).enqueue(callback);
     }
+
 
     public void getCarOwnerData(String carID,Callback callback){
         String requestStr="findCarInfoByPlate/"+carID;

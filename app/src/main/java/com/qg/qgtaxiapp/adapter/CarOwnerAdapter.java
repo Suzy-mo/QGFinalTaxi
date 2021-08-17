@@ -1,6 +1,7 @@
 package com.qg.qgtaxiapp.adapter;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.CarOwnerItemBinding;
@@ -29,4 +30,5 @@ public class CarOwnerAdapter extends BaseQuickAdapter<CarOwnerItem, BaseViewHold
         baseViewHolder.setText(R.id.mile_tv,carOwnerItem.getMile());
         baseViewHolder.setText(R.id.score_id_tv,carOwnerItem.getScore());
     }
+
 }

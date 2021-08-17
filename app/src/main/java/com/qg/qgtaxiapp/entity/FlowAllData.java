@@ -1,7 +1,5 @@
 package com.qg.qgtaxiapp.entity;
 
-import java.util.List;
-
 /**
  * @Name：QGTaxiApp
  * @Description：
@@ -10,57 +8,41 @@ import java.util.List;
  */
 public class FlowAllData {
 
-    private Integer code;
-    private List<DataBean> data;
-    private String message;
 
-    public Integer getCode() {
-        return code;
+    private Double onLongitude;
+    private Double offLongitude;
+    private Double offLatitude;
+    private Double onLatitude;
+
+    public Double getOnLongitude() {
+        return onLongitude;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setOnLongitude(Double onLongitude) {
+        this.onLongitude = onLongitude;
     }
 
-    public List<DataBean> getData() {
-        return data;
+    public Double getOffLongitude() {
+        return offLongitude;
     }
 
-    public void setData(List<DataBean> data) {
-        this.data = data;
+    public void setOffLongitude(Double offLongitude) {
+        this.offLongitude = offLongitude;
     }
 
-    public String getMessage() {
-        return message;
+    public Double getOffLatitude() {
+        return offLatitude;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setOffLatitude(Double offLatitude) {
+        this.offLatitude = offLatitude;
     }
 
-    public static class DataBean {
-        private Double latitude;
-        private Double longitude;
-
-
-        public Double getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(Double latitude) {
-            this.latitude = latitude;
-        }
-
-        public Double getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(Double longitude) {
-            this.longitude = longitude;
-        }
+    public Double getOnLatitude() {
+        return onLatitude;
     }
 
-    public int  size(){
-        return data.size();
+    public void setOnLatitude(Double onLatitude) {
+        this.onLatitude = onLatitude;
     }
 }
