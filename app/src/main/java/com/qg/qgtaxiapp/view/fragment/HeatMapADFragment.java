@@ -33,6 +33,9 @@ import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.district.DistrictResult;
 import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.google.gson.Gson;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHeatmapAdBinding;
@@ -62,6 +65,9 @@ public class HeatMapADFragment extends Fragment {
     private PolygonRunnable polygonRunnable;
     private MapUtils mapUtils;
     private NetUtils netUtils = NetUtils.getInstance();
+    private GeocodeSearch geocodeSearch;
+    private Marker mMarker;
+    private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +75,7 @@ public class HeatMapADFragment extends Fragment {
         heatMapViewModel = new ViewModelProvider(getActivity()).get(HeatMapViewModel.class);
         districtSearch = new DistrictSearch(getContext());
         mapUtils = new MapUtils();
+        geocodeSearch = new GeocodeSearch(getContext());
         /*
             获取边界数据回调
          */
@@ -110,24 +117,42 @@ public class HeatMapADFragment extends Fragment {
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
 
+         /*
+            坐标逆编回调
+         */
+        geocodeSearchListener = new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                mMarker.setTitle(regeocodeResult.getRegeocodeAddress().getFormatAddress());
+            }
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+            }
+        };
+        geocodeSearch.setOnGeocodeSearchListener(geocodeSearchListener);
+
+        /*
+            Marker点击事件
+         */
         aMap.addOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                if (mMarker != marker){
+                    mMarker = marker;
+                    mapUtils.getAddress(marker.getPosition(),geocodeSearch);
+                }
                 if (marker.isInfoWindowShown()) {
                     marker.hideInfoWindow();
                 } else {
                     marker.showInfoWindow();
                 }
-                LatLng latLng = new LatLng(marker.getPosition().latitude + 0.01,marker.getPosition().longitude);
-                Animation animation = new TranslateAnimation(latLng);
-                animation.setDuration(100L);
-                animation.setInterpolator(new LinearInterpolator());
-
-                marker.setAnimation(animation);
-                marker.startAnimation();
                 return true;
             }
         });
+        /*
+            广告牌数据变化监听
+         */
         heatMapViewModel.adData.observe(getActivity(), new Observer<List<LatLng>>() {
             @Override
             public void onChanged(List<LatLng> list) {
@@ -141,8 +166,9 @@ public class HeatMapADFragment extends Fragment {
                             .snippet(latLng.toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ad));
                     list1.add(markerOptions);
-                    aMap.addMarkers(list1,false);
+
                 }
+                aMap.addMarkers(list1,false);
             }
         });
         /*
@@ -197,13 +223,6 @@ public class HeatMapADFragment extends Fragment {
         mapView.onSaveInstanceState(outState);
     }
 
-    /**
-     * Toast提示
-     * @param msg 提示内容
-     */
-    private void showMsg(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
     /**
      * Log.d打印日志
      */
@@ -270,7 +289,6 @@ public class HeatMapADFragment extends Fragment {
             message.what = 1;
             message.obj = data;
             handler.sendMessage(message);
-            showLog(s);
         } catch (IOException e) {
             e.printStackTrace();
         }

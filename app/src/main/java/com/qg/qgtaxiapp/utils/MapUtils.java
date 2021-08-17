@@ -21,7 +21,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.district.DistrictItem;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
 import com.qg.qgtaxiapp.entity.HeatMapData;
@@ -168,6 +171,17 @@ public class MapUtils {
     }
 
     /**
+     * 坐标逆编
+     * @param latLng
+     * @param geocodeSearch
+     */
+    public void getAddress(LatLng latLng, GeocodeSearch geocodeSearch){
+        LatLonPoint latLonPoint = new LatLonPoint(latLng.latitude,latLng.longitude);
+        RegeocodeQuery regeocodeQuery = new RegeocodeQuery(latLonPoint,200f, GeocodeSearch.AMAP);
+        geocodeSearch.getFromLocationAsyn(regeocodeQuery);
+    }
+
+    /**
      * @param  data
      * @return List<LatLng>
      * @description  转换流向图的坐标
@@ -175,7 +189,7 @@ public class MapUtils {
      * @time
      */
 
-    public  List<LatLng> readLatLng(List<FlowAllData.DataBean> data) {
+    public List<LatLng> readLatLng(List<FlowAllData.DataBean> data) {
         List<LatLng> points = new ArrayList<LatLng>();
         for (int i = 0; i < data.size(); i ++) {
             points.add(new LatLng(data.get(i).getLatitude(),data.get(i).getLongitude()));
