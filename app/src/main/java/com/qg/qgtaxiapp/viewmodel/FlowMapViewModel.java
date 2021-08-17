@@ -23,7 +23,7 @@ public class FlowMapViewModel extends ViewModel {
     public MutableLiveData<String> flow_date = new MutableLiveData<>();
 
     public MutableLiveData<List<FlowAllData>> allData = new MutableLiveData<>();
-    public MutableLiveData<List<FlowMainDataLine>> MainDataLine = new MutableLiveData<>();
+    public MutableLiveData<FlowMainDataLine> MainDataLine = new MutableLiveData<>();
     public MutableLiveData<List<FlowMainDataArea>> MainDataArea = new MutableLiveData<>();
 
 }

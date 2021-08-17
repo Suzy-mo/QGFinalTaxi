@@ -240,7 +240,7 @@ public class MapUtils {
      * @time
      */
 
-    public  List<LatLng> getAllLineLatLng(FlowMainDataLine data) {
+    public  List<LatLng> getAllLineLatLng(FlowMainDataLine.DataBean data) {
         Log.d("Flow_TAG","getAllLineLatLng: flowAllData-->LatLng");
         List<LatLng> points = new ArrayList<LatLng>();
         for (int i = 0; i < data.getLocation().size(); i ++) {
@@ -249,13 +249,13 @@ public class MapUtils {
         Log.d("Flow_TAG","getAllLineLatLng: flowAllData-->LatLng转换完成");
         return points;
     }
-    public List<Polyline> setFlowMainLines(List<FlowMainDataLine> lineList, AMap mAMap){
+    public List<Polyline> setFlowMainLines(FlowMainDataLine lineList, AMap mAMap){
         List<Polyline> polylines = new ArrayList<>();
 
         //转成坐标形式
         List<List<LatLng>> list = new ArrayList<>();
-        for(int i = 0; i < lineList.size();i++){
-            list.add(getAllLineLatLng(lineList.get(i)));
+        for(int i = 0; i < lineList.getData().size();i++){
+            list.add(getAllLineLatLng(lineList.getData().get(i)));
         }
 
 
@@ -280,13 +280,13 @@ public class MapUtils {
         texIndexList.add(2);
 
         Random random = new Random();
-        for (int i = 0; i < lineList.size(); i++) {
+        for (int i = 0; i < lineList.getData().size(); i++) {
             colorList.add(colors[random.nextInt(3)]);
             bitmapDescriptors.add(textureList.get(0));
 
         }
 
-        for(int i = 0 ; i < lineList.size() ; i++){
+        for(int i = 0 ; i < lineList.getData().size() ; i++){
             polylines.add(setFlowMainEachLine(list.get(i),mAMap,textureList.get(i)));
         }
 

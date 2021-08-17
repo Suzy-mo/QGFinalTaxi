@@ -10,44 +10,73 @@ import java.util.List;
  */
 public class FlowMainDataLine {
 
+    private Integer code;
+    private List<DataBean> data;
+    private String message;
 
-    private List<LocationBean> location;
-    private Integer num;
-
-    public List<LocationBean> getLocation() {
-        return location;
+    public Integer getCode() {
+        return code;
     }
 
-    public void setLocation(List<LocationBean> location) {
-        this.location = location;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
-    public Integer getNum() {
-        return num;
+    public List<DataBean> getData() {
+        return data;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
-    public static class LocationBean {
-        private Double longitude;
-        private Double latitude;
+    public String getMessage() {
+        return message;
+    }
 
-        public Double getLongitude() {
-            return longitude;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public static class DataBean {
+        private List<LocationBean> location;
+        private Integer num;
+
+        public List<LocationBean> getLocation() {
+            return location;
         }
 
-        public void setLongitude(Double longitude) {
-            this.longitude = longitude;
+        public void setLocation(List<LocationBean> location) {
+            this.location = location;
         }
 
-        public Double getLatitude() {
-            return latitude;
+        public Integer getNum() {
+            return num;
         }
 
-        public void setLatitude(Double latitude) {
-            this.latitude = latitude;
+        public void setNum(Integer num) {
+            this.num = num;
+        }
+
+        public static class LocationBean {
+            private Double longitude;
+            private Double latitude;
+
+            public Double getLongitude() {
+                return longitude;
+            }
+
+            public void setLongitude(Double longitude) {
+                this.longitude = longitude;
+            }
+
+            public Double getLatitude() {
+                return latitude;
+            }
+
+            public void setLatitude(Double latitude) {
+                this.latitude = latitude;
+            }
         }
     }
 }

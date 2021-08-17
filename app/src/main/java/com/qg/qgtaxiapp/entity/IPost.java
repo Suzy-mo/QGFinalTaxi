@@ -22,7 +22,7 @@ public interface IPost {
 
     @FormUrlEncoded
     @POST("mainRoute")
-    Call<ResponseData<List<FlowMainDataLine>>> getFlowMainDataLine(@Field("date")String date);
+    Call<FlowMainDataLine> getFlowMainDataLine(@Field("time")String date);
 
 //    @FormUrlEncoded
 //    @HTTP(method = "GET",path = "getFlowGraph/{day}",hasBody = false)
