@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/top_layout_rl"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@drawable/car_availability_change_background"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日期:"
+            android:textColor="#FF03DAC5"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="2017.08.22"
+            android:textColor="#99FFFFFF"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/change_selection_btn"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/car_availability_btn_background"
+            android:text="修改"
+            android:textColor="#DEFFFFFF" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/data_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_layout_rl"
+        android:background="#FF1F1F1F"
+        android:orientation="vertical"
+        android:paddingTop="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/car_availability_info_background">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="利用率分析"
+                android:textColor="#DEFFFFFF"
+                android:textSize="18sp" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/current_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/current_spinner"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp" />
+
+            <Spinner
+                android:id="@+id/current_spinner"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:layout_marginTop="20dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/car_availability_info_background">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="利用率预测"
+                android:textColor="#DEFFFFFF"
+                android:textSize="18sp" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/future_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/future_spinner"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp" />
+
+            <Spinner
+                android:id="@+id/future_spinner"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="20dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

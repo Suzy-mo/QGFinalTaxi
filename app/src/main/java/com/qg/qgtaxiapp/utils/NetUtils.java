@@ -14,12 +14,13 @@ import okhttp3.Request;
  * @Description:
  */
 public class NetUtils {
-    private final String getRouteBaseURL ="http://39.98.41.126:31103/";
-    private final String getCarOwnerURL="http://39.98.41.126:31109/";
-    private final String getExceptionURL="http://39.98.41.126:31103/";
-    private final String getHeatMapURL = "http://39.98.41.126:31103/selectByTimeSlot2/";
-    private final String getPassengerURL = "http://39.98.41.126:31100/getHotPoints2";
-    private static final NetUtils instance=new NetUtils();
+    private String getRouteBaseURL ="http://39.98.41.126:31100/";
+    private String getCarOwnerURL="http://39.98.41.126:31100/";
+    private String getExceptionURL="http://39.98.41.126:31100/";
+    private String getHeatMapURL = "http://39.98.41.126:31100/selectByTimeSlot2/";
+    private String getPassengerURL = "http://39.98.41.126:31100/getHotPoints2";
+    private String getPieDataURL="http://39.98.41.126:31100/getUtilization2/";
+    private static NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
 
     public static NetUtils getInstance(){
@@ -29,7 +30,7 @@ public class NetUtils {
     private NetUtils(){
         okHttpClient=new OkHttpClient();
         okHttpClient.newBuilder()
-                .connectTimeout(10, TimeUnit.SECONDS).build();
+                .connectTimeout(120, TimeUnit.SECONDS).build();
     }
 
     public void getRouteData(String carID, String date, Callback callback){
@@ -65,4 +66,15 @@ public class NetUtils {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
+    public void getCurrentPieData(String date, Callback callback){
+        String requestStr=getPieDataURL+date;
+        Request request=new Request.Builder().url(requestStr).build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
+
+    public void getCurrentPieData(Callback callback){
+        String requestStr=getPieDataURL+"-----";
+        Request request=new Request.Builder().url(requestStr).build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
 }
