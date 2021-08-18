@@ -73,6 +73,7 @@ public class CarIncomeFragment extends Fragment {
         initListener();
 
         setFeatureChart();
+        getBarChartData("2017-02-01");
         setTimeChooseObserve();
         setNowChartObserve();
 
@@ -198,30 +199,34 @@ public class CarIncomeFragment extends Fragment {
             @Override
             public void onChanged(String s) {
                 tv_date.setText(s);
-                new Thread(()->{
-                    IPost iPost = BaseCreator.createCarInfo(IPost.class);
-                    iPost.getCarInfo(s).enqueue(new Callback<CarIncomeBean>() {
-                        @Override
-                        public void onResponse(Call<CarIncomeBean> call, Response<CarIncomeBean> response) {
-                            getActivity().runOnUiThread(()->{
-                                if(response.isSuccessful()){
-                                    showLog("获取数据成功 将存到viewModel里面");
-                                    viewModel.carIncomeData.setValue(response.body());
-                                    showLog(response.body().getData().get(0).toString());
-                                }else {
-                                    showLog(response.toString());
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(Call<CarIncomeBean> call, Throwable t) {
-                            showLog("onFailure: 数据获取失败");
-                        }
-                    });
-                }).start();
+                getBarChartData(s);
             }
         });
+    }
+
+    private void getBarChartData(String s) {
+        new Thread(()->{
+            IPost iPost = BaseCreator.createCarInfo(IPost.class);
+            iPost.getCarInfo(s).enqueue(new Callback<CarIncomeBean>() {
+                @Override
+                public void onResponse(Call<CarIncomeBean> call, Response<CarIncomeBean> response) {
+                    getActivity().runOnUiThread(()->{
+                        if(response.isSuccessful()){
+                            showLog("获取数据成功 将存到viewModel里面");
+                            viewModel.carIncomeData.setValue(response.body());
+                            showLog(response.body().getData().get(0).toString());
+                        }else {
+                            showLog(response.toString());
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<CarIncomeBean> call, Throwable t) {
+                    showLog("onFailure: 数据获取失败");
+                }
+            });
+        }).start();
     }
 
 }

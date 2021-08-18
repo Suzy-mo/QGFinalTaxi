@@ -27,23 +27,33 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:background="@drawable/delete_icon" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/car_traffic_line_choose_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/line_char_work_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="工作日"
-            android:textSize="12dp"
-            android:textColor="#FF1E6BFF"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:text="工作日"
+            android:textColor="#FF1E6BFF"
+            android:textSize="12dp" />
+        <ImageView
+            android:id="@+id/car_traffic_now_blue"
+            android:layout_width="15dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/line_char_work_title"
+            android:layout_centerVertical="true"
+            android:background="@drawable/car_trafic_line_blue"
+            />
 
         <TextView
             android:id="@+id/line_char_nowork_title"
@@ -53,21 +63,34 @@
             android:textSize="12dp"
             android:textColor="#FF03DAC5"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/line_char_work_title"/>
-
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/car_traffic_now_blue"/>
+        <ImageView
+            android:id="@+id/car_traffic_now_green"
+            android:layout_width="15dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/line_char_nowork_title"
+            android:layout_centerVertical="true"
+            android:background="@drawable/car_trafic_line_green"
+            />
         <ImageView
             android:id="@+id/car_trafic_choose_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginRight="18dp"
+            android:background="@drawable/car_trafic_line_now"
             />
     </RelativeLayout>
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_char"
         android:layout_width="400dp"
         android:layout_height="300dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_below="@+id/line_char_title" />
 
 </LinearLayout>

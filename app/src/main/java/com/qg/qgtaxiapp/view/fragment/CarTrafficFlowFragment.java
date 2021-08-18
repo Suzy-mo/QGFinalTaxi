@@ -1,10 +1,12 @@
 package com.qg.qgtaxiapp.view.fragment;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +31,14 @@ import com.amap.api.services.district.DistrictSearch;
 import com.amap.api.services.district.DistrictSearchQuery;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
+import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentCarTraficFlowBinding;
 import com.qg.qgtaxiapp.databinding.PoWindowLineBinding;
 import com.qg.qgtaxiapp.entity.BaseCreator;
 import com.qg.qgtaxiapp.entity.CarLineChartBean;
 import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
 import com.qg.qgtaxiapp.entity.IPost;
+import com.qg.qgtaxiapp.utils.LineChartsUtils;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.viewmodel.CarTrafficViewModel;
@@ -69,7 +73,7 @@ public class CarTrafficFlowFragment extends Fragment {
 
     private PopupWindow popupWindow;
     private View rootView,contentView;
-    ImageView backIV ;
+    ImageView backIV,chooseIv ;
     LineChart lineChart;
     List<Entry> lineCharData;
 
@@ -146,8 +150,96 @@ public class CarTrafficFlowFragment extends Fragment {
     }
 
     private void showPopupWindows(CarLineChartBean carLineChartBean) {
-            viewModel.choose.setValue(NOW_LINE);
-            binding.windowsPwIv.setVisibility(View.VISIBLE);
+        viewModel.choose.setValue(NOW_LINE);
+        binding.windowsPwIv.setVisibility(View.VISIBLE);
+        pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
+        popupWindow = new PopupWindow(getContext());
+        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
+        popupWindow.setContentView(contentView);//加载子布局
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);//设置大小
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
+        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
+        popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
+        popupWindow.setOutsideTouchable(true);//点击外部可消失
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        //popupWindow.getBackground().setAlpha(50);
+
+        setCharline(carLineChartBean);
+        binding.windowsPwIv.setVisibility(View.VISIBLE);
+        binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                binding.windowsPwIv.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        backIV = contentView.findViewById(R.id.back_tv);
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
+        chooseIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewModel.choose.getValue() == NOW_LINE){
+                    setNowLineChart(viewModel.lineChartData.getValue());
+                }else if(viewModel.choose.getValue() == FEATURE){
+                    setFeatureChart(viewModel.lineChartData.getValue());
+                }else{
+                    showLog("选择出错");
+                }
+            }
+        });
+    }
+
+    private void setCharline(CarLineChartBean carLineChartBean) {
+        lineChart = contentView.findViewById(R.id.line_char);
+        if(viewModel.choose.getValue() == NOW_LINE){
+            setNowLineChart(carLineChartBean);
+
+        }else if(viewModel.choose.getValue() == FEATURE){
+            setFeatureChart(carLineChartBean);
+        }else{
+            showLog("选择出错");
+        }
+
+    }
+
+    private void setFeatureChart(CarLineChartBean carLineChartBean) {
+        for(int i = 0 ; i < 24 ;i ++){
+            lineCharData.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
+        }
+        LineChartsUtils chartsUtils = new LineChartsUtils(lineChart,lineCharData);
+        chartsUtils.setFirstLine();
+        chartsUtils.setLineBG();
+        chartsUtils.setPicture();
+        chartsUtils.setLineXY();
+        chartsUtils.setChange();
+        chartsUtils.setAnimate();
+    }
+
+    private void setNowLineChart(CarLineChartBean carLineChartBean) {
+        for(int i = 0 ; i < 24 ;i ++){
+            lineCharData.add(new Entry(i,carLineChartBean.getData().get(0).getWorkday().get(i).getNumber().floatValue()));
+        }
+        LineChartsUtils chartsUtils = new LineChartsUtils(lineChart,lineCharData);
+        chartsUtils.setFirstLine();
+        chartsUtils.setLineBG();
+        chartsUtils.setPicture();
+        chartsUtils.setLineXY();
+        chartsUtils.setChange();
+        chartsUtils.setAnimate();
     }
 
     private void setMarkerListener() {
@@ -160,60 +252,69 @@ public class CarTrafficFlowFragment extends Fragment {
         });
     }
 
+    /**
+     * 根据点击的坐标获取数据
+     * @param marker
+     */
     private void getLineChartData(Marker marker) {
-        String location = String.valueOf(marker.getPosition().latitude)+"-"+String.valueOf(marker.getPosition().longitude);
-        new Thread(()->{
-            IPost iPost = BaseCreator.createCarInfo(IPost.class);
-            iPost.getCarLineChart(location).enqueue(new Callback<CarLineChartBean>() {
-                @Override
-                public void onResponse(Call<CarLineChartBean> call, Response<CarLineChartBean> response) {
-                    if(response.isSuccessful()){
-                        getActivity().runOnUiThread(()->{
-                            viewModel.lineChartData.setValue(response.body());
-                        });
-                    }else {
-                        getActivity().runOnUiThread(()->{
-                            showLog("获取数据失败");
-                        });
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CarLineChartBean> call, Throwable t) {
-                    getActivity().runOnUiThread(()->{
-                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
-                    });
-                }
-            });
-        }).start();
+        viewModel.lineChartData.setValue(mapUtils.testChartLine());
+//        String location = String.valueOf(marker.getPosition().latitude)+"-"+String.valueOf(marker.getPosition().longitude);
+//        new Thread(()->{
+//            IPost iPost = BaseCreator.createCarInfo(IPost.class);
+//            iPost.getCarLineChart(location).enqueue(new Callback<CarLineChartBean>() {
+//                @Override
+//                public void onResponse(Call<CarLineChartBean> call, Response<CarLineChartBean> response) {
+//                    if(response.isSuccessful()){
+//                        getActivity().runOnUiThread(()->{
+//                            viewModel.lineChartData.setValue(response.body());
+//                        });
+//                    }else {
+//                        getActivity().runOnUiThread(()->{
+//                            showLog("获取数据失败");
+//                        });
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<CarLineChartBean> call, Throwable t) {
+//                    getActivity().runOnUiThread(()->{
+//                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
+//                    });
+//                }
+//            });
+//        }).start();
     }
 
+    /**
+     * 初始化地图的坐标
+     */
     private void initMapMarkers() {
-        new Thread(()->{
-            IPost iPost = BaseCreator.createCarInfo(IPost.class);
-            iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
-                @Override
-                public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {
-                    if(response.isSuccessful()){
-                        List<Marker> markerList = mapUtils.setCarTrafficMarkers(response.body(),aMap);
-                        getActivity().runOnUiThread(()->{
-                            markers = markerList;
-                        });
-                    }else {
-                        getActivity().runOnUiThread(()->{
-                            showLog("获取数据失败");
-                        });
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CarTrafficMarkBean> call, Throwable t) {
-                    getActivity().runOnUiThread(()->{
-                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
-                    });
-                }
-            });
-        }).start();
+        markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
+//        new Thread(()->{
+//            IPost iPost = BaseCreator.createCarInfo(IPost.class);
+//            iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
+//                @Override
+//                public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {
+//                    if(response.isSuccessful()){
+//                        List<Marker> markerList = mapUtils.setCarTrafficMarkers(response.body(),aMap);
+//                        getActivity().runOnUiThread(()->{
+//                            markers = markerList;
+//                        });
+//                    }else {
+//                        getActivity().runOnUiThread(()->{
+//                            showLog("获取数据失败");
+//                        });
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<CarTrafficMarkBean> call, Throwable t) {
+//                    getActivity().runOnUiThread(()->{
+//                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
+//                    });
+//                }
+//            });
+//        }).start();
     }
 
     /**

@@ -30,6 +30,7 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.entity.CarLineChartBean;
 import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.HeatMapData;
@@ -346,6 +347,31 @@ public class MapUtils {
             Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
         }
         return markerList;
+    }
+
+    public CarTrafficMarkBean testTrafficMarkers(){
+        CarTrafficMarkBean data = new CarTrafficMarkBean();
+        CarTrafficMarkBean.DataBean dataBean = new CarTrafficMarkBean.DataBean();
+        dataBean.setLatitude(22.860);
+        dataBean.setLongitude(113.399);
+        CarTrafficMarkBean.DataBean dataBean1 = new CarTrafficMarkBean.DataBean();
+        dataBean1.setLatitude( 23.197);
+        dataBean1.setLongitude(113.4165);
+        CarTrafficMarkBean.DataBean dataBean2 = new CarTrafficMarkBean.DataBean();
+        dataBean2.setLatitude( 23.3674);
+        dataBean2.setLongitude(113.252);
+        List<CarTrafficMarkBean.DataBean> testData = new ArrayList<>();
+        testData.add(dataBean);
+        testData.add(dataBean1);
+        testData.add(dataBean2);
+        data.setData(testData);
+        return data;
+    }
+
+    public CarLineChartBean testChartLine(){
+        CarLineChartBean testData = new CarLineChartBean();
+
+        return testData;
     }
 }
 
