@@ -305,7 +305,6 @@ public class HistoryRouteFragment extends Fragment {
         WindowManager.LayoutParams params = window.getAttributes();
         params.width = (int) (dm.widthPixels * 0.95);
         window.setAttributes(params);
-
     }
 
 

@@ -130,7 +130,7 @@ public class SkipSearchCarOwnerActivity extends AppCompatActivity {
                     if (message.equals("查询成功，返回该车牌号的车主信息")) {
                         JSONObject data = jsonObject.getJSONObject("data");
                         String carID = data.getString("plate_no");
-                        String companyID = data.getString("company_id");
+                        String companyID = "公司ID:"+data.getString("company_id");
                         String mile = data.getString("load_mile");
                         String score = data.getString("evaluate");
                         CarOwnerItem carOwnerItem = new CarOwnerItem(carID, mile, score, companyID);
