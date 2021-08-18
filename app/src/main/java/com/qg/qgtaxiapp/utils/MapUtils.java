@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
@@ -19,6 +20,8 @@ import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
@@ -27,6 +30,8 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.entity.CarLineChartBean;
+import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.entity.FlowAllData;
@@ -330,6 +335,70 @@ public class MapUtils {
         return mPolyline;
     }
 
+    /**
+     * 转换为图标
+     */
+    public List<Marker> setCarTrafficMarkers(CarTrafficMarkBean data,AMap mAMap){
+        List<Marker> markerList = new ArrayList<>();
+        for(int i = 0 ; i <data.getData().size() ; i++){
+            Marker marker1 = mAMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(data.getData().get(i).getLatitude(),data.getData().get(i).getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
+            Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
+        }
+        return markerList;
+    }
 
+    public CarTrafficMarkBean testTrafficMarkers(){
+        CarTrafficMarkBean data = new CarTrafficMarkBean();
+        CarTrafficMarkBean.DataBean dataBean = new CarTrafficMarkBean.DataBean();
+        dataBean.setLatitude(22.860);
+        dataBean.setLongitude(113.399);
+        CarTrafficMarkBean.DataBean dataBean1 = new CarTrafficMarkBean.DataBean();
+        dataBean1.setLatitude( 23.197);
+        dataBean1.setLongitude(113.4165);
+        CarTrafficMarkBean.DataBean dataBean2 = new CarTrafficMarkBean.DataBean();
+        dataBean2.setLatitude( 23.3674);
+        dataBean2.setLongitude(113.252);
+        List<CarTrafficMarkBean.DataBean> testData = new ArrayList<>();
+        testData.add(dataBean);
+        testData.add(dataBean1);
+        testData.add(dataBean2);
+        data.setData(testData);
+        return data;
+    }
+
+    public CarLineChartBean testChartLine(){
+        CarLineChartBean testData = new CarLineChartBean();
+        CarLineChartBean.DataBean dataBean = new CarLineChartBean.DataBean();
+        List<CarLineChartBean.DataBean.FeatureBean> featureBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.FeatureBean bean = new CarLineChartBean.DataBean.FeatureBean();
+            bean.setNumber((double)60*i);
+            featureBeans.add(bean);
+        }
+        dataBean.setFeature(featureBeans);
+
+        List<CarLineChartBean.DataBean.WeekendBean> weekendBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.WeekendBean bean = new CarLineChartBean.DataBean.WeekendBean();
+            bean.setNumber((double)30*i);
+            weekendBeans.add(bean);
+        }
+        dataBean.setWeekend(weekendBeans);
+
+        List<CarLineChartBean.DataBean.WorkdayBean> workdayBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.WorkdayBean bean = new CarLineChartBean.DataBean.WorkdayBean();
+            bean.setNumber((double)100*i);
+            workdayBeans.add(bean);
+        }
+        dataBean.setWorkday(workdayBeans);
+
+        List<CarLineChartBean.DataBean> beans = new ArrayList<>();
+        beans.add(dataBean);
+        testData.setData(beans);
+        return testData;
+    }
 }
 
