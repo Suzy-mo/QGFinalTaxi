@@ -359,7 +359,6 @@ public class HeatMapHeatFragment extends Fragment {
                 Gson gson = new Gson();
                 HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
                 if (heatMapData.getCode() == 1){
-
                     List<HeatMapData.data> data = heatMapData.getData();
                     Message message = handler.obtainMessage();
                     message.what = 1;
