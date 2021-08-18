@@ -314,19 +314,15 @@ public class HeatMapPassengerFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String json = response.body().string();
-
-                if (!json.equals("")){
-                    Gson gson = new Gson();
-                    HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
-                    if (heatMapData != null && heatMapData.getCode() == 1) {
-
-                        List<HeatMapData.data> data = heatMapData.getData();
-                        List<LatLng> latLngs = mapUtils.initHeatMapData(data);
-                        Message message = handler.obtainMessage();
-                        message.what = 1;
-                        message.obj = latLngs;
-                        handler.sendMessage(message);
-                    }
+                Gson gson = new Gson();
+                HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
+                if (heatMapData != null && heatMapData.getCode() == 1) {
+                    List<HeatMapData.data> data = heatMapData.getData();
+                    List<LatLng> latLngs = mapUtils.initHeatMapData(data);
+                    Message message = handler.obtainMessage();
+                    message.what = 1;
+                    message.obj = latLngs;
+                    handler.sendMessage(message);
                 }else {
                     showLog("无数据");
                 }
