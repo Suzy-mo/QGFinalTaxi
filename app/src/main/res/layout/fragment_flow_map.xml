@@ -11,6 +11,7 @@
         app:tabIndicatorColor="#03DAC5"
         app:tabIndicatorFullWidth="false"
         app:tabSelectedTextColor="#03DAC5"
+        app:tabTextColor="#61FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
