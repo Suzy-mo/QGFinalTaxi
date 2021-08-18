@@ -81,10 +81,10 @@
         <ImageView
             android:id="@+id/car_trafic_choose_iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="8dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="18dp"
+            android:layout_marginRight="30dp"
             android:background="#ff292929" />
     </RelativeLayout>
     <com.github.mikephil.charting.charts.LineChart
@@ -92,8 +92,8 @@
         android:layout_width="450dp"
         android:layout_height="300dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_below="@+id/line_char_title"
         android:layout_marginBottom="25dp"
         />

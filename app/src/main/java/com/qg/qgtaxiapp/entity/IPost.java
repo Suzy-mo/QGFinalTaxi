@@ -29,11 +29,11 @@ public interface IPost {
     Call<CarIncomeBean> getCarInfo(@Field("date")String date);
 
 
-    @POST("car")
+    @POST("selectFlowPoint")
     Call<CarTrafficMarkBean> getCarMarkers();
 
     @FormUrlEncoded
-    @POST("lineChart")//注意地址对不对
-    Call<CarLineChartBean> getCarLineChart(@Field("location")String location);
+    @POST("selectFlowLine")
+    Call<CarLineChartBean> getCarLineChart(@Field("longitude")String location,@Field("latitude")String latitude);
 
 }

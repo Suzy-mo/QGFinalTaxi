@@ -371,8 +371,8 @@ public class FlowMapFragment extends Fragment {
                 public void onResponse(Call<ResponseData<List<FlowAllData>>> call, Response<ResponseData<List<FlowAllData>>> response) {
                         getActivity().runOnUiThread(()->{
                             flowMapViewModel.allData.setValue(response.body().getData());
-                            showLog("拿到数据的情况：" + response.body().getMsg());
-                            showLog("拿到数据的第一个点：" + response.body().getData().get(0).getOffLatitude());
+                            //showLog("拿到数据的情况：" + response.body().getMsg());
+                            //showLog("拿到数据的第一个点：" + response.body().getData().get(0).getOffLatitude());
                         });
                         showLog(response.body().getMsg());
 

@@ -23,4 +23,7 @@ public class BaseCreator {
     public static <T> T createCarInfo(Class<T> retrofitClass){
         return retrofitAll.create(retrofitClass);
     }
+    public static <T> T createCarTraffic(Class<T> retrofitClass){
+        return retrofitMain.create(retrofitClass);
+    }
 }

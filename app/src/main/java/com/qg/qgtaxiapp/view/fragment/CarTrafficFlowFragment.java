@@ -33,7 +33,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentCarTraficFlowBinding;
 import com.qg.qgtaxiapp.databinding.PoWindowLineBinding;
+import com.qg.qgtaxiapp.entity.BaseCreator;
 import com.qg.qgtaxiapp.entity.CarLineChartBean;
+import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
+import com.qg.qgtaxiapp.entity.IPost;
 import com.qg.qgtaxiapp.utils.LineChartsUtils;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
@@ -41,6 +44,10 @@ import com.qg.qgtaxiapp.viewmodel.CarTrafficViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @Name：QGTaxiApp
@@ -298,7 +305,7 @@ public class CarTrafficFlowFragment extends Fragment {
         showLog("进入initMapMarkers进行坐标的初始化");
         markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
 //        new Thread(()->{
-//            IPost iPost = BaseCreator.createCarInfo(IPost.class);
+//            IPost iPost = BaseCreator.createCarTraffic(IPost.class);
 //            iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
 //                @Override
 //                public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {
