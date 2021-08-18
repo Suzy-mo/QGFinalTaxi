@@ -28,4 +28,12 @@ public interface IPost {
     @POST("getSalary2")
     Call<CarIncomeBean> getCarInfo(@Field("date")String date);
 
+    @FormUrlEncoded
+    @POST("car")
+    Call<CarTrafficMarkBean> getCarMarkers();
+
+    @FormUrlEncoded
+    @POST("lineChart")
+    Call<CarLineChartBean> getCarLineChart(@Field("location")String location);
+
 }

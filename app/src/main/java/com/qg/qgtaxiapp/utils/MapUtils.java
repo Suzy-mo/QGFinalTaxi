@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
@@ -19,6 +20,8 @@ import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
@@ -27,6 +30,7 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.entity.FlowAllData;
@@ -330,6 +334,18 @@ public class MapUtils {
         return mPolyline;
     }
 
-
+    /**
+     * 转换为图标
+     */
+    public List<Marker> setCarTrafficMarkers(CarTrafficMarkBean data,AMap mAMap){
+        List<Marker> markerList = new ArrayList<>();
+        for(int i = 0 ; i <data.getData().size() ; i++){
+            Marker marker1 = mAMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(data.getData().get(i).getLatitude(),data.getData().get(i).getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
+            Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
+        }
+        return markerList;
+    }
 }
 
