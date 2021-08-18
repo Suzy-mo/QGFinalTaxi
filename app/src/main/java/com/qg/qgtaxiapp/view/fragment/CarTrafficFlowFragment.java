@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.AMapGestureListener;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.AMapException;
@@ -72,9 +73,12 @@ public class CarTrafficFlowFragment extends Fragment {
 
     private PopupWindow popupWindow;
     private View rootView,contentView;
+    private AMapGestureListener listener;
+
     ImageView backIV,chooseIv ;
     LineChart lineChart;
     List<Entry> weekendData = new ArrayList<>(), workdayData = new ArrayList<>(),featureData = new ArrayList<>();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,6 +129,8 @@ public class CarTrafficFlowFragment extends Fragment {
         mapView = binding.carTrafficFlowMap;
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
+        initListener();
+        aMap.setAMapGestureListener(listener);
         viewModel.choose.setValue(NOW_LINE);
         contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
@@ -140,6 +146,49 @@ public class CarTrafficFlowFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void initListener() {
+        listener=new AMapGestureListener() {
+            @Override
+            public void onDoubleTap(float v, float v1) {
+
+            }
+
+            @Override
+            public void onSingleTap(float v, float v1) {
+
+            }
+
+            @Override
+            public void onFling(float v, float v1) {
+
+            }
+
+            @Override
+            public void onScroll(float v, float v1) {
+                viewModel.vp2.setUserInputEnabled(false);
+            }
+
+            @Override
+            public void onLongPress(float v, float v1) {
+
+            }
+
+            @Override
+            public void onDown(float v, float v1) {
+
+            }
+
+            @Override
+            public void onUp(float v, float v1) {
+                viewModel.vp2.setUserInputEnabled(true);
+            }
+
+            @Override
+            public void onMapStable() {
+
+            }
+        };
+    }
 
 
     private void setLineDataObserve() {
