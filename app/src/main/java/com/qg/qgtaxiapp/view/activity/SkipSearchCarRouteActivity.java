@@ -133,7 +133,6 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(responseData);
                     String message = jsonObject.getString("message");
                     if (message.equals("无数据")) {
-                        showMsg("该车没有在这一天没有行驶，请查询别的天数");
                         return;
                     } else if (message.equals("查询数据成功")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
