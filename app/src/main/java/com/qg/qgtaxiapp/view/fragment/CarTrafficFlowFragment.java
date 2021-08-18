@@ -75,7 +75,8 @@ public class CarTrafficFlowFragment extends Fragment {
     private View rootView,contentView;
     ImageView backIV,chooseIv ;
     LineChart lineChart;
-    List<Entry> lineCharData;
+    LineChartsUtils chartsUtils;
+    List<Entry> lineCharData1 = new ArrayList<>(),lineCharData2 = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class CarTrafficFlowFragment extends Fragment {
         districtSearch = new DistrictSearch(getContext());
         viewModel = new ViewModelProvider(getActivity()).get(CarTrafficViewModel.class);
         mapUtils = new MapUtils();
+
         /*
             获取边界数据回调
          */
@@ -125,24 +127,28 @@ public class CarTrafficFlowFragment extends Fragment {
         mapView = binding.carTrafficFlowMap;
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
+        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
+        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
+        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
         drawBoundary();
 
         initMapMarkers();
         setMarkerListener();
 
         setLineDataObserve();
-        setChooseObserve();
+
         return binding.getRoot();
     }
 
-    private void setChooseObserve() {
-    }
+
 
     private void setLineDataObserve() {
+        showLog("setLineDataObserve:设置数据变化的监听");
         viewModel.lineChartData.observe(getActivity(), new Observer<CarLineChartBean>() {
             @Override
             public void onChanged(CarLineChartBean carLineChartBean) {
                 if(carLineChartBean!=null){
+                    showLog("setLineDataObserve:监听成功 数据更新");
                     showPopupWindows(carLineChartBean);
                 }
             }
@@ -154,17 +160,16 @@ public class CarTrafficFlowFragment extends Fragment {
         binding.windowsPwIv.setVisibility(View.VISIBLE);
         pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
         popupWindow = new PopupWindow(getContext());
-        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
         popupWindow.setContentView(contentView);//加载子布局
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);//设置大小
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
         popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
         popupWindow.setOutsideTouchable(true);//点击外部可消失
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         //popupWindow.getBackground().setAlpha(50);
 
+        showLog("弹窗初始化完成");
         setCharline(carLineChartBean);
         binding.windowsPwIv.setVisibility(View.VISIBLE);
         binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
@@ -188,26 +193,26 @@ public class CarTrafficFlowFragment extends Fragment {
             }
         });
 
-        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
         chooseIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(viewModel.choose.getValue() == NOW_LINE){
+                if(viewModel.choose.getValue() == FEATURE){
                     setNowLineChart(viewModel.lineChartData.getValue());
-                }else if(viewModel.choose.getValue() == FEATURE){
+                }else if(viewModel.choose.getValue() == NOW_LINE){
                     setFeatureChart(viewModel.lineChartData.getValue());
                 }else{
                     showLog("选择出错");
                 }
             }
         });
+        showLog("弹窗监听及初始化完成");
     }
 
     private void setCharline(CarLineChartBean carLineChartBean) {
+        showLog("setCharline: 根据传入的总数据进行判断后展示");
         lineChart = contentView.findViewById(R.id.line_char);
         if(viewModel.choose.getValue() == NOW_LINE){
             setNowLineChart(carLineChartBean);
-
         }else if(viewModel.choose.getValue() == FEATURE){
             setFeatureChart(carLineChartBean);
         }else{
@@ -217,35 +222,37 @@ public class CarTrafficFlowFragment extends Fragment {
     }
 
     private void setFeatureChart(CarLineChartBean carLineChartBean) {
+        showLog("setFeatureChart: 设置预测的折线图");
+        viewModel.choose.setValue(FEATURE);
+        chooseIv.setImageResource(R.drawable.car_trafic_line_feature);
         for(int i = 0 ; i < 24 ;i ++){
-            lineCharData.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
+            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
         }
-        LineChartsUtils chartsUtils = new LineChartsUtils(lineChart,lineCharData);
-        chartsUtils.setFirstLine();
-        chartsUtils.setLineBG();
-        chartsUtils.setPicture();
-        chartsUtils.setLineXY();
-        chartsUtils.setChange();
-        chartsUtils.setAnimate();
+        showLog("setFeatureChart: 数据转换完毕 准备画折线图");
+        chartsUtils = new LineChartsUtils(lineChart,lineCharData1);
+        chartsUtils.setFeatureLine();
+
     }
 
     private void setNowLineChart(CarLineChartBean carLineChartBean) {
+        showLog("setNowLineChart: 设置当下的折线图");
+        viewModel.choose.setValue(NOW_LINE);
+        chooseIv.setImageResource(R.drawable.car_trafic_line_now);
         for(int i = 0 ; i < 24 ;i ++){
-            lineCharData.add(new Entry(i,carLineChartBean.getData().get(0).getWorkday().get(i).getNumber().floatValue()));
+            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getWorkday().get(i).getNumber().floatValue()));
+            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
         }
-        LineChartsUtils chartsUtils = new LineChartsUtils(lineChart,lineCharData);
-        chartsUtils.setFirstLine();
-        chartsUtils.setLineBG();
-        chartsUtils.setPicture();
-        chartsUtils.setLineXY();
-        chartsUtils.setChange();
-        chartsUtils.setAnimate();
+        showLog("setNowLineChart: 数据转换完毕 准备画折线图");
+        chartsUtils = new LineChartsUtils(lineChart,lineCharData1,lineCharData2);
+        chartsUtils.setNowLine();
     }
 
     private void setMarkerListener() {
+        showLog("setMarkerListener: 设置坐标的点击事件");
         aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                showLog("setMarkerListener: 点击事件监听成功! 点击了:"+marker.getPosition().toString());
                 getLineChartData(marker);
                 return true;
             }
@@ -257,7 +264,9 @@ public class CarTrafficFlowFragment extends Fragment {
      * @param marker
      */
     private void getLineChartData(Marker marker) {
+        showLog("getLineChartData: 根据点击的坐标去获取数据");
         viewModel.lineChartData.setValue(mapUtils.testChartLine());
+        showLog("getLineChartData: 数据设置成功");
 //        String location = String.valueOf(marker.getPosition().latitude)+"-"+String.valueOf(marker.getPosition().longitude);
 //        new Thread(()->{
 //            IPost iPost = BaseCreator.createCarInfo(IPost.class);
@@ -267,6 +276,7 @@ public class CarTrafficFlowFragment extends Fragment {
 //                    if(response.isSuccessful()){
 //                        getActivity().runOnUiThread(()->{
 //                            viewModel.lineChartData.setValue(response.body());
+//                            showLog("getLineChartData: 数据设置成功");
 //                        });
 //                    }else {
 //                        getActivity().runOnUiThread(()->{
@@ -289,6 +299,7 @@ public class CarTrafficFlowFragment extends Fragment {
      * 初始化地图的坐标
      */
     private void initMapMarkers() {
+        showLog("进入initMapMarkers进行坐标的初始化");
         markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
 //        new Thread(()->{
 //            IPost iPost = BaseCreator.createCarInfo(IPost.class);
@@ -315,6 +326,7 @@ public class CarTrafficFlowFragment extends Fragment {
 //                }
 //            });
 //        }).start();
+        showLog("坐标初始化完成");
     }
 
     /**

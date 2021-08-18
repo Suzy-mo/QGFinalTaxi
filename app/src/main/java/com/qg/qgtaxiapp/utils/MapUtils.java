@@ -370,7 +370,34 @@ public class MapUtils {
 
     public CarLineChartBean testChartLine(){
         CarLineChartBean testData = new CarLineChartBean();
+        CarLineChartBean.DataBean dataBean = new CarLineChartBean.DataBean();
+        List<CarLineChartBean.DataBean.FeatureBean> featureBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.FeatureBean bean = new CarLineChartBean.DataBean.FeatureBean();
+            bean.setNumber((double)60*i);
+            featureBeans.add(bean);
+        }
+        dataBean.setFeature(featureBeans);
 
+        List<CarLineChartBean.DataBean.WeekendBean> weekendBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.WeekendBean bean = new CarLineChartBean.DataBean.WeekendBean();
+            bean.setNumber((double)50*i+200);
+            weekendBeans.add(bean);
+        }
+        dataBean.setWeekend(weekendBeans);
+
+        List<CarLineChartBean.DataBean.WorkdayBean> workdayBeans = new ArrayList<>();
+        for(int i = 0; i < 24 ; i++){
+            CarLineChartBean.DataBean.WorkdayBean bean = new CarLineChartBean.DataBean.WorkdayBean();
+            bean.setNumber((double)100*i);
+            workdayBeans.add(bean);
+        }
+        dataBean.setWorkday(workdayBeans);
+
+        List<CarLineChartBean.DataBean> beans = new ArrayList<>();
+        beans.add(dataBean);
+        testData.setData(beans);
         return testData;
     }
 }
