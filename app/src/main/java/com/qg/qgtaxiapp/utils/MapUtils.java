@@ -382,7 +382,7 @@ public class MapUtils {
         List<CarLineChartBean.DataBean.WeekendBean> weekendBeans = new ArrayList<>();
         for(int i = 0; i < 24 ; i++){
             CarLineChartBean.DataBean.WeekendBean bean = new CarLineChartBean.DataBean.WeekendBean();
-            bean.setNumber((double)50*i+200);
+            bean.setNumber((double)30*i);
             weekendBeans.add(bean);
         }
         dataBean.setWeekend(weekendBeans);

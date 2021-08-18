@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,10 +33,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentCarTraficFlowBinding;
 import com.qg.qgtaxiapp.databinding.PoWindowLineBinding;
-import com.qg.qgtaxiapp.entity.BaseCreator;
 import com.qg.qgtaxiapp.entity.CarLineChartBean;
-import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
-import com.qg.qgtaxiapp.entity.IPost;
 import com.qg.qgtaxiapp.utils.LineChartsUtils;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
@@ -45,10 +41,6 @@ import com.qg.qgtaxiapp.viewmodel.CarTrafficViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * @Name：QGTaxiApp
@@ -75,8 +67,7 @@ public class CarTrafficFlowFragment extends Fragment {
     private View rootView,contentView;
     ImageView backIV,chooseIv ;
     LineChart lineChart;
-    LineChartsUtils chartsUtils;
-    List<Entry> lineCharData1 = new ArrayList<>(),lineCharData2 = new ArrayList<>();
+    List<Entry> weekendData = new ArrayList<>(), workdayData = new ArrayList<>(),featureData = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,9 +118,11 @@ public class CarTrafficFlowFragment extends Fragment {
         mapView = binding.carTrafficFlowMap;
         mapView.onCreate(savedInstanceState);
         aMap = mapUtils.initMap(getContext(),mapView);
+        viewModel.choose.setValue(NOW_LINE);
         contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
         chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
+        lineChart = contentView.findViewById(R.id.line_char);
         drawBoundary();
 
         initMapMarkers();
@@ -210,7 +203,6 @@ public class CarTrafficFlowFragment extends Fragment {
 
     private void setCharline(CarLineChartBean carLineChartBean) {
         showLog("setCharline: 根据传入的总数据进行判断后展示");
-        lineChart = contentView.findViewById(R.id.line_char);
         if(viewModel.choose.getValue() == NOW_LINE){
             setNowLineChart(carLineChartBean);
         }else if(viewModel.choose.getValue() == FEATURE){
@@ -223,28 +215,32 @@ public class CarTrafficFlowFragment extends Fragment {
 
     private void setFeatureChart(CarLineChartBean carLineChartBean) {
         showLog("setFeatureChart: 设置预测的折线图");
+        featureData.clear();
         viewModel.choose.setValue(FEATURE);
         chooseIv.setImageResource(R.drawable.car_trafic_line_feature);
         for(int i = 0 ; i < 24 ;i ++){
-            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
+            featureData.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
         }
         showLog("setFeatureChart: 数据转换完毕 准备画折线图");
-        chartsUtils = new LineChartsUtils(lineChart,lineCharData1);
-        chartsUtils.setFeatureLine();
+        LineChartsUtils chartsUtils = new LineChartsUtils();
+        //lineChart = new LineChart(getContext());
+        chartsUtils.setFeatureLine(lineChart, featureData);
 
     }
 
     private void setNowLineChart(CarLineChartBean carLineChartBean) {
         showLog("setNowLineChart: 设置当下的折线图");
+        weekendData.clear();
+        workdayData.clear();
         viewModel.choose.setValue(NOW_LINE);
         chooseIv.setImageResource(R.drawable.car_trafic_line_now);
         for(int i = 0 ; i < 24 ;i ++){
-            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getWorkday().get(i).getNumber().floatValue()));
-            lineCharData1.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
+            workdayData.add(new Entry(i,carLineChartBean.getData().get(0).getWorkday().get(i).getNumber().floatValue()));
+            weekendData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
         }
         showLog("setNowLineChart: 数据转换完毕 准备画折线图");
-        chartsUtils = new LineChartsUtils(lineChart,lineCharData1,lineCharData2);
-        chartsUtils.setNowLine();
+        LineChartsUtils chartsUtils = new LineChartsUtils();
+        chartsUtils.setNowLine(lineChart, workdayData, weekendData);
     }
 
     private void setMarkerListener() {

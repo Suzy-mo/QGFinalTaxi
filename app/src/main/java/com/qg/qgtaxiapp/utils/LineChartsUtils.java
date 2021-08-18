@@ -23,39 +23,30 @@ import java.util.List;
  * @Date：2021/8/17 23:12
  */
 public class LineChartsUtils {
-    private LineChart line;
-    private List<Entry> mData = new ArrayList<>(),workdayData = new ArrayList<>(),weekendData = new ArrayList<>();
-
-    public LineChartsUtils(LineChart line, List<Entry>mData) {
-        this.line = line;
-        this.mData = mData;
-
-    }
-
-    public LineChartsUtils(LineChart line, List<Entry> workdayData,List<Entry> weekendData) {
-        this.line = line;
-        this.workdayData = workdayData;
-        this.weekendData = weekendData;
+    public LineChartsUtils() {
 
     }
 
 
-    public void setNowLine(){
+
+    public void setNowLine(LineChart line, List<Entry> workdayData,List<Entry> weekendData){
         LineData lineData = new LineData(setLineData(workdayData,"#FF1E6BFF"),setLineData(weekendData,"#FF03DAC5"));
         line.setData(lineData);
-        setLineBG();
-        setLineXY();
-        setChange();
-        setAnimate();
+        setLineBG(line);
+        setLineXY(line);
+        setChange(line);
+        setPicture(line);
+        setAnimate(line);
     }
 
-    public void setFeatureLine(){
+    public void setFeatureLine(LineChart line, List<Entry>mData){
         LineData lineData = new LineData(setLineData(mData,"#FF03DAC5"));
         line.setData(lineData);
-        setLineBG();
-        setLineXY();
-        setChange();
-        setAnimate();
+        setLineBG(line);
+        setLineXY(line);
+        setPicture(line);
+        setChange(line);
+        //setAnimate(line);
     }
 
     public LineDataSet setLineData(List<Entry> mData,String color){
@@ -81,7 +72,7 @@ public class LineChartsUtils {
         return lineDataSet;
     }
 
-    public void setLineBG(){
+    public void setLineBG(LineChart line){
         //折线图背景
         //line.setBackgroundColor(0x30000000);   //背景颜色
         line.getXAxis().setDrawGridLines(false);  //是否绘制X轴上的网格线（背景里面的竖线）
@@ -89,20 +80,22 @@ public class LineChartsUtils {
 
     }
 
-    public void setPicture(){
+    public void setPicture(LineChart line){
         //图例
         Legend legend=line.getLegend();
-        legend.setEnabled(true);    //是否显示图例
+        legend.setEnabled(false);    //是否显示图例
+        line.getDescription().setEnabled(false);
         //legend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);    //图例的位置
     }
 
-    public void setLineXY(){
+    public void setLineXY(LineChart line){
         //X轴
         XAxis xAxis=line.getXAxis();
         xAxis.setDrawGridLines(false);  //是否绘制X轴上的网格线（背景里面的竖线）
         xAxis.setAxisLineColor(Color.parseColor("#61FFFFFF"));   //X轴颜色
         xAxis.setAxisLineWidth(3);           //X轴粗细
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);        //X轴所在位置   默认为上面
+        xAxis.setTextColor(Color.parseColor("#61FFFFFF"));
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
@@ -127,35 +120,26 @@ public class LineChartsUtils {
         AxisLeft.setGridColor(Color.parseColor("#61FFFFFF"));
         AxisLeft.setGridLineWidth(1);
         AxisLeft.setAxisLineWidth(3);           //Y轴粗细
-        AxisLeft.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                for (int a = 1; a < 7 ; a++){     //用个for循环方便
-                    if (a==value/600){
-                        return String.valueOf(value);
-                    }
-                }
-                return "";
-            }
-        });
-        AxisLeft.setAxisMaximum(3800f);   //Y轴最大数值
+
+        AxisLeft.setTextColor(Color.parseColor("#61FFFFFF"));
+        AxisLeft.setAxisMaximum(3600f);   //Y轴最大数值
         AxisLeft.setAxisMinimum(0f);   //Y轴最小数值
         AxisLeft.setGranularity(600f); //Y轴标签间隔
         //Y轴坐标的个数    第二个参数一般填false     true表示强制设置标签数 可能会导致X轴坐标显示不全等问题
-        AxisLeft.setLabelCount(3600,false);
+        AxisLeft.setLabelCount(7,true);
 
         //是否隐藏右边的Y轴（不设置的话有两条Y轴 同理可以隐藏左边的Y轴）
         line.getAxisRight().setEnabled(false);
         line.getAxisLeft().setEnabled(true);
     }
 
-    public void setChange(){
+    public void setChange(LineChart line){
         //数据更新
         line.notifyDataSetChanged();
         line.invalidate();
     }
 
-    public void setAnimate(){
+    public void setAnimate(LineChart line){
         //动画（如果使用了动画可以则省去更新数据的那一步）
         line.animateY(1000); //折线在Y轴的动画  参数是动画执行时间 毫秒为单位
     }

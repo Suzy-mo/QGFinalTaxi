@@ -9,32 +9,34 @@
     <RelativeLayout
         android:id="@+id/car_traffic_top_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="流量图"
-            android:textSize="20dp"
-            android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
-            android:textColor="#DEFFFFFF"/>
+            android:layout_marginLeft="16dp"
+            android:text="流量图"
+            android:textColor="#DEFFFFFF"
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/back_tv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="30dp"
             android:background="@drawable/delete_icon" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/car_traffic_line_choose_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
 
         <TextView
             android:id="@+id/line_char_work_title"
@@ -44,6 +46,7 @@
             android:layout_centerVertical="true"
             android:text="工作日"
             android:textColor="#FF1E6BFF"
+            android:layout_marginLeft="15dp"
             android:textSize="12dp" />
         <ImageView
             android:id="@+id/car_traffic_now_blue"
@@ -86,11 +89,13 @@
     </RelativeLayout>
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_char"
-        android:layout_width="400dp"
+        android:layout_width="450dp"
         android:layout_height="300dp"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@+id/line_char_title" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="25dp"
+        android:layout_below="@+id/line_char_title"
+        android:layout_marginBottom="25dp"
+        />
 
 </LinearLayout>
