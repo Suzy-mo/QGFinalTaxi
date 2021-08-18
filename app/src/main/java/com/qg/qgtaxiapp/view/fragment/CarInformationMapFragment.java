@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.qg.qgtaxiapp.adapter.CarInfoAdapter;
 import com.qg.qgtaxiapp.databinding.FragmentCarInformationBinding;
+import com.qg.qgtaxiapp.viewmodel.CarTrafficViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ import java.util.List;
 public class CarInformationMapFragment extends Fragment {
 
     private FragmentCarInformationBinding binding;
+    private CarTrafficViewModel viewModel;
     List<String> titles=new ArrayList<>();
     List<Fragment> fragments=new ArrayList<>();
     CarInfoAdapter mPagerAdapter;
@@ -50,7 +54,9 @@ public class CarInformationMapFragment extends Fragment {
         fragments.add(new CarIncomeFragment());
         fragments.add(new CarAvailabilityFragment());
 
+        viewModel= new ViewModelProvider(getActivity()).get(CarTrafficViewModel.class);
         mPagerAdapter = new CarInfoAdapter(getParentFragmentManager(),getLifecycle(),fragments);
+        viewModel.vp2=binding.vp2HeatMap;
         binding.vp2HeatMap.setAdapter(mPagerAdapter);
 
 //和tabLayout绑定
@@ -60,5 +66,12 @@ public class CarInformationMapFragment extends Fragment {
                 tab.setText(titles.get(position));
             }
         }).attach();
+        binding.vp2HeatMap.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                binding.vp2HeatMap.setCurrentItem(position);
+            }
+        });
     }
 }

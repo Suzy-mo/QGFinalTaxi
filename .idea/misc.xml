@@ -20,6 +20,9 @@
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_car_income.xml" value="0.36875" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_flow_map.xml" value="0.2838541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_heat_map.xml" value="0.43836886005560705" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_heatmap_ad.xml" value="0.36875" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_heatmap_heat.xml" value="0.3194444444444444" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_heatmap_passenger.xml" value="0.1" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_history_car_owner.xml" value="0.2838541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_history_exception.xml" value="0.2838541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/fragment_history_map.xml" value="0.2838541666666667" />
@@ -31,6 +34,31 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/flow_windows_bg.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/linechart_markview.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/po_windows_bg.xml" value="0.1" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/markview.xml" value="0.3194444444444444" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/route_dialog_view.xml" value="0.36875" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_date.xml" value="0.2713541666666667" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_timeslot.xml" value="0.353125" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availability_info_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availibility_btn_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availibility_change_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_owner_item_layout.xml" value="0.3611111111111111" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/change_exception_btn_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/exception_check_dialog_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/radio_btn_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/activity_seach_car_owner_layout.xml" value="0.17806484295845998" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/activity_search_route_layout.xml" value="0.17806484295845998" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/car_owner_item.xml" value="0.17806484295845998" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/exception_check_dialog_layout.xml" value="0.36614583333333334" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/exception_item.xml" value="0.5" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_car_availability.xml" value="0.33" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_car_availibility.xml" value="0.25" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_car_infomation.xml" value="0.31567028985507245" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_car_information.xml" value="0.36614583333333334" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_heat_map.xml" value="0.17806484295845998" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_car_owner.xml" value="0.25" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_exception.xml" value="0.36614583333333334" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/timepicker_timeslot.xml" value="0.17806484295845998" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/activity_search_route_layout.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_owner_item.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_search_history_item.xml" value="0.10435663627152988" />
@@ -38,6 +66,7 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/flow_timepicker_data.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_car_availibility.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_car_income.xml" value="0.25" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_car_income.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_car_information.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_car_trafic_flow.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_flow_map.xml" value="0.375" />
@@ -51,7 +80,6 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_history_route.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/history_tab_item.xml" value="0.375" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/markview.xml" value="0.10435663627152988" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/po_window_line.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/search_date_layout.xml" value="0.335" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/test.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/timepicker_date.xml" value="0.375" />
