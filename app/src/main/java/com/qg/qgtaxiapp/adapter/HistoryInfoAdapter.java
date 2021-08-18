@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @Description:
  */
 public class HistoryInfoAdapter extends BaseQuickAdapter<HistoryInfo, BaseViewHolder> {
-    private ArrayList<HistoryInfo> list;
+    private final ArrayList<HistoryInfo> list;
     public HistoryInfoAdapter(int layoutResId, ArrayList<HistoryInfo> data) {
         super(layoutResId, data);
         this.list=data;

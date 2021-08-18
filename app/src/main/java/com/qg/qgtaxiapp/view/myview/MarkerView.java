@@ -18,8 +18,8 @@ import java.text.DecimalFormat;
  */
 public class MarkerView extends com.github.mikephil.charting.components.MarkerView {
 
-    private TextView tvDate;
-    private TextView tvValue;
+    private final TextView tvDate;
+    private final TextView tvValue;
     DecimalFormat df = new DecimalFormat(".00");
     public MarkerView(Context context) {
         super(context, R.layout.markview);

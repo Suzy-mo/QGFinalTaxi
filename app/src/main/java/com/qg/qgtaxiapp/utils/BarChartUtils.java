@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class BarChartUtils {
 
-    private BarChart bar;
+    private final BarChart bar;
     List<BarEntry> list = new ArrayList<>();
 
 
@@ -131,10 +131,10 @@ public class BarChartUtils {
 
 
         //柱子
-        barDataSet.setDrawValues(false);//是否显示柱子上的文字
+        barDataSet.setDrawValues(true);//是否显示柱子上的文字
         barDataSet.setColor(Color.parseColor("#FF03DAC5"));  //柱子的颜色
         //barDataSet.setColors(Color.BLACK,Color.BLUE);//设置柱子多种颜色  循环使用
-        barDataSet.setBarBorderColor(Color.parseColor("#FF03DAC5"));//柱子边框颜色
+        barDataSet.setBarBorderColor(Color.argb(1,41,41,41));//柱子边框颜色
         barDataSet.setBarBorderWidth(1);       //柱子边框厚度
         barDataSet.setBarShadowColor(Color.parseColor("#FF03DAC5"));
         barDataSet.setHighlightEnabled(true);//选中柱子是否高亮显示  默认为true

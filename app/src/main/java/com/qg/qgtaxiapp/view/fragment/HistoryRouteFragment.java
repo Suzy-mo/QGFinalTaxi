@@ -95,7 +95,7 @@ public class HistoryRouteFragment extends Fragment {
     private SelectBinLayoutBinding binLayoutBinding;
     private AMapGestureListener aMapGestureListener;
     private int code=0;
-    private ArrayList<BitmapDescriptor> mTexTureList = new ArrayList<BitmapDescriptor>();
+    private final ArrayList<BitmapDescriptor> mTexTureList = new ArrayList<BitmapDescriptor>();
 
 
     @Override
@@ -327,7 +327,7 @@ public class HistoryRouteFragment extends Fragment {
     /*
        消息处理
     */
-    private Handler handler = new Handler(Looper.getMainLooper()) {
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
@@ -418,7 +418,7 @@ public class HistoryRouteFragment extends Fragment {
     private String getDate(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String myDate = format.format(date);
-        String myDateArray[] = myDate.split("-");
+        String[] myDateArray = myDate.split("-");
         String data = myDateArray[1] + myDateArray[2];
         return data;
     }

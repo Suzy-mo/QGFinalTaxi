@@ -41,9 +41,9 @@ import java.util.List;
 public class TimePickerUtils{
 
     private TimePickerView timePickerView = null;
-    private OptionsPickerView optionsPickerView = null;
+    private final OptionsPickerView optionsPickerView = null;
     private String mDate = null;
-    private String mTimeslot = null;
+    private final String mTimeslot = null;
     private AlertDialog dialog = null;
     private List<Integer> hour;
     private List<Integer> min;

@@ -46,11 +46,11 @@ public class SkipSearchCarOwnerActivity extends AppCompatActivity {
     private String carID;
     private GridLayoutManager manager;
     private HistoryInfoAdapter adapter;
-    private ArrayList<HistoryInfo> searchData = new ArrayList<>();//历史记录信息
+    private final ArrayList<HistoryInfo> searchData = new ArrayList<>();//历史记录信息
     private ArrayList<String> history;//历史记录
-    private String Tag = "car_owner_history";
-    private SPModel instance = SPModel.getInstance();
-    private NetUtils netUtils = NetUtils.getInstance();
+    private final String Tag = "car_owner_history";
+    private final SPModel instance = SPModel.getInstance();
+    private final NetUtils netUtils = NetUtils.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

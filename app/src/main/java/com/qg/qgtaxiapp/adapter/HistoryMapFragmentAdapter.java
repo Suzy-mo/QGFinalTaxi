@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @Description:
  */
 public class HistoryMapFragmentAdapter extends FragmentStateAdapter {
-    private ArrayList<Fragment> fragments;
+    private final ArrayList<Fragment> fragments;
 
     public HistoryMapFragmentAdapter(@NonNull FragmentActivity fragmentActivity,ArrayList<Fragment> list) {
         super(fragmentActivity);

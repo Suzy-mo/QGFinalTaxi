@@ -43,6 +43,7 @@ import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -275,7 +276,7 @@ public class HeatMapPassengerFragment extends Fragment {
     /*
         消息处理
      */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
@@ -343,7 +344,7 @@ public class HeatMapPassengerFragment extends Fragment {
         fis.read(bytes);
         fis.close();
 
-        String s = new String(bytes,"UTF-8");
+        String s = new String(bytes, StandardCharsets.UTF_8);
         Gson gson = new Gson();
         HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
         List<HeatMapData.data> data = heatMapData.getData();

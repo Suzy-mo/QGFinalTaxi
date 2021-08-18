@@ -15,7 +15,7 @@ import com.qg.qgtaxiapp.R;
  */
 public class CustomInfoWindowAdapter implements AMap.InfoWindowAdapter{
 
-    private Context context;
+    private final Context context;
 
     public CustomInfoWindowAdapter(Context context) {
         this.context = context;

@@ -58,9 +58,9 @@ public class HistoryExceptionFragment extends Fragment {
     private FragmentHistoryExceptionBinding binding;
     private RecyclerView recyclerView;
     private GridLayoutManager manager;
-    private ArrayList<ExceptionItem> list=new ArrayList<>();
+    private final ArrayList<ExceptionItem> list=new ArrayList<>();
     private ExceptionItemAdapter adapter;
-    private NetUtils netUtils=NetUtils.getInstance();
+    private final NetUtils netUtils=NetUtils.getInstance();
     private ExceptionCheckDialogLayoutBinding dialogLayoutBinding;
     private String select=null;
     private AlertDialog dialog;//选择
