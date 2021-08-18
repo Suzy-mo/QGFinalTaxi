@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class HeatMapFragmentAdapter extends FragmentStateAdapter {
 
-    private List<Fragment> fragments;
+    private final List<Fragment> fragments;
 
     public HeatMapFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<Fragment> list) {
         super(fragmentManager,lifecycle);

@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     /*
         保存MyTouchListener接口的列表
     */
-    private ArrayList<MyTouchListener> myTouchListeners = new ArrayList<>();
+    private final ArrayList<MyTouchListener> myTouchListeners = new ArrayList<>();
 
-    private ArrayList<Fragment> fragments = new ArrayList<>();
+    private final ArrayList<Fragment> fragments = new ArrayList<>();
     private ActivityMainBinding binding;
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;

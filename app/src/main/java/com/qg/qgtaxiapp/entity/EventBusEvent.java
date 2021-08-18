@@ -7,7 +7,7 @@ package com.qg.qgtaxiapp.entity;
 public class EventBusEvent {
 
     public static class showTimeSlotSet{
-        private String date;
+        private final String date;
         public showTimeSlotSet(String date){
             this.date = date;
         }
@@ -17,7 +17,7 @@ public class EventBusEvent {
     }
 
     public static class setTimeFinish{
-        private String msg;
+        private final String msg;
         public setTimeFinish(String msg){
             this.msg = msg;
         }

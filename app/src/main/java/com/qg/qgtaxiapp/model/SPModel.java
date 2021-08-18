@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @Description:
  */
 public class SPModel {
-    private static SPModel INSTANCE = new SPModel();
+    private static final SPModel INSTANCE = new SPModel();
     private SPModel(){}
     public static SPModel getInstance(){
         return INSTANCE;

@@ -43,6 +43,7 @@ import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class HeatMapADFragment extends Fragment {
     private DistrictSearchQuery districtSearchQuery;
     private PolygonRunnable polygonRunnable;
     private MapUtils mapUtils;
-    private NetUtils netUtils = NetUtils.getInstance();
+    private final NetUtils netUtils = NetUtils.getInstance();
     private GeocodeSearch geocodeSearch;
     private Marker mMarker;
     private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
@@ -265,7 +266,7 @@ public class HeatMapADFragment extends Fragment {
     /*
        消息处理
     */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
@@ -295,7 +296,7 @@ public class HeatMapADFragment extends Fragment {
             byte[] bytes = new byte[size];
             fis.read(bytes);
             fis.close();
-            String s = new String(bytes,"UTF-8");
+            String s = new String(bytes, StandardCharsets.UTF_8);
             Gson gson = new Gson();
             HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
             List<HeatMapData.data> data = heatMapData.getData();

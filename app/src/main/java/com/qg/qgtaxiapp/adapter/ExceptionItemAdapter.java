@@ -16,7 +16,7 @@ import java.util.List;
  * @Description:
  */
 public class ExceptionItemAdapter extends BaseQuickAdapter<ExceptionItem, BaseViewHolder> {
-    private ArrayList<ExceptionItem> list;
+    private final ArrayList<ExceptionItem> list;
     public ExceptionItemAdapter(int layoutResId, ArrayList<ExceptionItem> data) {
         super(layoutResId, data);
         this.list=data;

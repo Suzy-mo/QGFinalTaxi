@@ -38,7 +38,7 @@ public class HistoryCarOwnerFragment extends Fragment {
 
     private FragmentHistoryCarOwnerBinding binding;
     private GridLayoutManager manager;
-    private ArrayList<CarOwnerItem> list = new ArrayList<>();
+    private final ArrayList<CarOwnerItem> list = new ArrayList<>();
     private CarOwnerAdapter adapter;
 
     @Nullable

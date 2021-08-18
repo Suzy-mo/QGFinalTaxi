@@ -15,8 +15,8 @@ import com.qg.qgtaxiapp.R;
  * 获取广州全部边界点的经纬度数据
  */
 public class PolygonRunnable implements Runnable {
-    private DistrictItem item;
-    private Handler handler;
+    private final DistrictItem item;
+    private final Handler handler;
     private boolean isCancel = false;
 
     /**
