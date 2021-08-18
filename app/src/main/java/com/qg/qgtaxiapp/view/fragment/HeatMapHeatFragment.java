@@ -77,7 +77,7 @@ public class HeatMapHeatFragment extends Fragment {
     private TextView tv_chooseTime;
     private ConstraintLayout cl_timeSet;
     private ConstraintLayout cl_chooseTime;
-    private NetUtils netUtils = NetUtils.getInstance();
+    private final NetUtils netUtils = NetUtils.getInstance();
     private HeatmapTileProvider heatmapTileProvider;
     private TileOverlayOptions tileOverlayOptions;
     private OnTimeSelectListener onTimeSelectListener;
@@ -286,7 +286,7 @@ public class HeatMapHeatFragment extends Fragment {
     /*
         消息处理
      */
-    private Handler handler = new Handler(Looper.myLooper()){
+    private final Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){

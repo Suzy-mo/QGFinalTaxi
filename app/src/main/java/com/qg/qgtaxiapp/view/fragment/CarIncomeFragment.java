@@ -23,6 +23,7 @@ import com.qg.qgtaxiapp.entity.CarIncomeBean;
 import com.qg.qgtaxiapp.entity.IPost;
 import com.qg.qgtaxiapp.utils.BarChartUtils;
 import com.qg.qgtaxiapp.utils.TimePickerUtils;
+import com.qg.qgtaxiapp.view.myview.MyBarChart;
 import com.qg.qgtaxiapp.viewmodel.CarInfoIncomeViewModel;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class CarIncomeFragment extends Fragment {
 
     private TextView tv_setTime,tv_date,tv_choose,tv_timeTable;
 
-    private BarChart nowBar,featureBar;
+    private MyBarChart nowBar,featureBar;
     List<BarEntry> featureList =new ArrayList<>(),nowList =new ArrayList<>();
 
 
@@ -179,7 +180,7 @@ public class CarIncomeFragment extends Fragment {
         datePickerView = timePickerUtils.initFlowDatePicker(getContext(), getActivity(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                showLog(timePickerUtils.getDate(date).toString());
+                showLog(timePickerUtils.getDate(date));
                 viewModel.date.setValue(timePickerUtils.getDate(date));
             }
         });

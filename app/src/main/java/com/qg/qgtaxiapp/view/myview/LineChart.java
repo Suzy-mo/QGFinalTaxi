@@ -19,23 +19,23 @@ import java.util.Random;
  * @date: 2021年08月09日 20:24
  */
 public class LineChart extends View {
-    private int XPoint = 100;
-    private int YPoint = 500;
-    private int XScale = 8;  //刻度长度
-    private int YScale = 40;
-    private int XLength = 760;
-    private int YLength = 480;
+    private final int XPoint = 100;
+    private final int YPoint = 500;
+    private final int XScale = 8;  //刻度长度
+    private final int YScale = 40;
+    private final int XLength = 760;
+    private final int YLength = 480;
 
-    private int MaxDataSize = XLength / XScale;
+    private final int MaxDataSize = XLength / XScale;
 
-    private List<Integer> data = new ArrayList<Integer>();
-    private String[] YLabel = new String[YLength / YScale];
-    private Handler handler = new Handler(Looper.myLooper()){
+    private final List<Integer> data = new ArrayList<Integer>();
+    private final String[] YLabel = new String[YLength / YScale];
+    private final Handler handler = new Handler(Looper.myLooper()){
         public void handleMessage(Message msg) {
             if(msg.what == 0x1234){
                 LineChart.this.invalidate();
             }
-        };
+        }
     };
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);

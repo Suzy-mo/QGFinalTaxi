@@ -43,6 +43,7 @@ import com.qg.qgtaxiapp.viewmodel.HeatMapViewModel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -275,7 +276,7 @@ public class HeatMapPassengerFragment extends Fragment {
     /*
         消息处理
      */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
@@ -314,19 +315,15 @@ public class HeatMapPassengerFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String json = response.body().string();
-
-                if (!json.equals("")){
-                    Gson gson = new Gson();
-                    HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
-                    if (heatMapData != null && heatMapData.getCode() == 1) {
-
-                        List<HeatMapData.data> data = heatMapData.getData();
-                        List<LatLng> latLngs = mapUtils.initHeatMapData(data);
-                        Message message = handler.obtainMessage();
-                        message.what = 1;
-                        message.obj = latLngs;
-                        handler.sendMessage(message);
-                    }
+                Gson gson = new Gson();
+                HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
+                if (heatMapData != null && heatMapData.getCode() == 1) {
+                    List<HeatMapData.data> data = heatMapData.getData();
+                    List<LatLng> latLngs = mapUtils.initHeatMapData(data);
+                    Message message = handler.obtainMessage();
+                    message.what = 1;
+                    message.obj = latLngs;
+                    handler.sendMessage(message);
                 }else {
                     showLog("无数据");
                 }
@@ -347,7 +344,7 @@ public class HeatMapPassengerFragment extends Fragment {
         fis.read(bytes);
         fis.close();
 
-        String s = new String(bytes,"UTF-8");
+        String s = new String(bytes, StandardCharsets.UTF_8);
         Gson gson = new Gson();
         HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
         List<HeatMapData.data> data = heatMapData.getData();

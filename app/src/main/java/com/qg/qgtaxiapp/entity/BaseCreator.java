@@ -12,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BaseCreator {
     private final static String Flow_All_BASE_URL ="http://39.98.41.126:31100/";
     private final static String Flow_Main_BASE_URL ="http://39.98.41.126:31106/";
-    private static Retrofit retrofitAll=new Retrofit.Builder().baseUrl(Flow_All_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
-    private static Retrofit retrofitMain=new Retrofit.Builder().baseUrl(Flow_Main_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private static final Retrofit retrofitAll=new Retrofit.Builder().baseUrl(Flow_All_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private static final Retrofit retrofitMain=new Retrofit.Builder().baseUrl(Flow_Main_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     public static <T> T createAll(Class<T> retrofitClass){
         return retrofitAll.create(retrofitClass);
     }

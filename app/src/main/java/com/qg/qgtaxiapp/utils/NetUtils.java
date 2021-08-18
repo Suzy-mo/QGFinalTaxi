@@ -14,12 +14,12 @@ import okhttp3.Request;
  * @Description:
  */
 public class NetUtils {
-    private String getRouteBaseURL ="http://39.98.41.126:31103/";
-    private String getCarOwnerURL="http://39.98.41.126:31109/";
-    private String getExceptionURL="http://39.98.41.126:31103/";
-    private String getHeatMapURL = "http://39.98.41.126:31103/selectByTimeSlot2/";
-    private String getPassengerURL = "http://39.98.41.126:31103/getHotPoints2";
-    private static NetUtils instance=new NetUtils();
+    private final String getRouteBaseURL ="http://39.98.41.126:31103/";
+    private final String getCarOwnerURL="http://39.98.41.126:31109/";
+    private final String getExceptionURL="http://39.98.41.126:31103/";
+    private final String getHeatMapURL = "http://39.98.41.126:31103/selectByTimeSlot2/";
+    private final String getPassengerURL = "http://39.98.41.126:31100/getHotPoints2";
+    private static final NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
 
     public static NetUtils getInstance(){

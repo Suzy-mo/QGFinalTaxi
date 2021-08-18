@@ -45,14 +45,14 @@ import okhttp3.Response;
 public class SkipSearchCarRouteActivity extends AppCompatActivity {
     private ActivitySearchRouteLayoutBinding binding;
     private String searchStr;
-    private NetUtils netUtils = NetUtils.getInstance();
+    private final NetUtils netUtils = NetUtils.getInstance();
     private String carID;
-    private ArrayList<LatLng> latLngList = new ArrayList<>();
-    private ArrayList<HistoryInfo> searchData = new ArrayList<>();//历史记录信息
+    private final ArrayList<LatLng> latLngList = new ArrayList<>();
+    private final ArrayList<HistoryInfo> searchData = new ArrayList<>();//历史记录信息
     private GridLayoutManager manager;
     private HistoryInfoAdapter adapter;
-    private SPModel instance = SPModel.getInstance();
-    private String Tag = "car_route_history";
+    private final SPModel instance = SPModel.getInstance();
+    private final String Tag = "car_route_history";
     private ArrayList<String> history;//历史记录
 
     @Override

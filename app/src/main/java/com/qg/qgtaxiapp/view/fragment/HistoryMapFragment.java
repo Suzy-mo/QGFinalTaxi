@@ -39,8 +39,8 @@ import java.util.ArrayList;
 public class HistoryMapFragment extends Fragment {
 
     private FragmentHistoryMapBinding binding;
-    private String tabList[] = {"行驶路径", "车主信息", "异常情况"};
-    private ArrayList<Fragment> fragments = new ArrayList<>();
+    private final String[] tabList = {"行驶路径", "车主信息", "异常情况"};
+    private final ArrayList<Fragment> fragments = new ArrayList<>();
     private HistoryMapFragmentAdapter adapter;
     private TabLayout tabLayout;
     private HistoryMapViewModel viewModel;

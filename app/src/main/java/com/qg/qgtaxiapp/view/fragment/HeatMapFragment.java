@@ -33,7 +33,7 @@ public class HeatMapFragment extends Fragment{
     private FragmentHeatMapBinding binding;
     private HeatMapViewModel heatMapViewModel;
     private final String[] tabList = {"热力图","载客热点","广告牌"};
-    private List<Fragment> fragments = new ArrayList<>();
+    private final List<Fragment> fragments = new ArrayList<>();
     private TabLayout tabLayout;
     private HeatMapFragmentAdapter adapter;
     private ViewPager2 heatMapViewPager;

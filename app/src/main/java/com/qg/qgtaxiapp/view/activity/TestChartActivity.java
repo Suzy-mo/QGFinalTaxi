@@ -23,7 +23,7 @@ public class TestChartActivity extends AppCompatActivity {
 
     private ActivityTestChartBinding binding;
     private LineChart lineChart;
-    private List list = new ArrayList();
+    private final List list = new ArrayList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

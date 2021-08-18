@@ -66,11 +66,12 @@ import retrofit2.Response;
 
 public class FlowMapFragment extends Fragment {
     private static final int MIN_DISTANCE = 200; //最小滑动距离
-    private String tabList[] = {"全流图","主流图"};
+    private final String[] tabList = {"全流图","主流图"};
     private FragmentFlowMapBinding binding;
     private FlowMapViewModel flowMapViewModel;
     private TabLayout tabLayout;
-    private static int TAB_ALL = 0,TAB_MAIN = 1;
+    private static final int TAB_ALL = 0;
+    private static final int TAB_MAIN = 1;
     private int tabPosition = TAB_ALL; //Tab显示位置
     private FlowMapFragment.MyGestureDetector myGestureDetector;
     private GestureDetector gestureDetector;
@@ -292,7 +293,7 @@ public class FlowMapFragment extends Fragment {
         datePickerView = timePickerUtils.initFlowDatePicker(getContext(), getActivity(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                showLog(timePickerUtils.getDate(date).toString());
+                showLog(timePickerUtils.getDate(date));
                 flowMapViewModel.flow_date.setValue(timePickerUtils.getDate(date));
             }
         });
@@ -490,7 +491,7 @@ public class FlowMapFragment extends Fragment {
     /*
         消息处理
      */
-    private Handler handler = new Handler(Looper.getMainLooper()){
+    private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){

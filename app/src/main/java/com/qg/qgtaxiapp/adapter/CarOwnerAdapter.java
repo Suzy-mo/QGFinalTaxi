@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @Description:
  */
 public class CarOwnerAdapter extends BaseQuickAdapter<CarOwnerItem, BaseViewHolder> {
-    private ArrayList<CarOwnerItem> list;
+    private final ArrayList<CarOwnerItem> list;
     public CarOwnerAdapter(int layoutResId, ArrayList<CarOwnerItem> data) {
         super(layoutResId, data);
         this.list=data;
