@@ -306,6 +306,10 @@ public class HeatMapHeatFragment extends Fragment {
                     List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
                     heatMapViewModel.heatData.setValue(mapUtils.initHeatMapData(data));
                 }break;
+
+                case 2:{
+                    showMsg("获取数据失败");
+                }break;
             }
         }
     };
@@ -350,6 +354,9 @@ public class HeatMapHeatFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 showLog("热力图数据获取失败");
+                Message message = handler.obtainMessage();
+                message.what = 2;
+                handler.sendMessage(message);
                 e.printStackTrace();
             }
 

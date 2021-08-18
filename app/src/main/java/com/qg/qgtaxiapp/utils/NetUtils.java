@@ -30,7 +30,7 @@ public class NetUtils {
     private NetUtils(){
         okHttpClient=new OkHttpClient();
         okHttpClient.newBuilder()
-                .connectTimeout(120, TimeUnit.SECONDS).build();
+                .connectTimeout(10, TimeUnit.SECONDS).build();
     }
 
     public void getRouteData(String carID, String date, Callback callback){
