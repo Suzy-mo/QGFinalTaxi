@@ -41,6 +41,7 @@ import com.qg.qgtaxiapp.entity.IPost;
 import com.qg.qgtaxiapp.utils.LineChartsUtils;
 import com.qg.qgtaxiapp.utils.MapUtils;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
+import com.qg.qgtaxiapp.view.myview.MarkerView;
 import com.qg.qgtaxiapp.viewmodel.CarTrafficViewModel;
 
 import java.util.ArrayList;
@@ -276,11 +277,11 @@ public class CarTrafficFlowFragment extends Fragment {
         featureData.clear();
         viewModel.choose.setValue(FEATURE);
         chooseIv.setImageResource(R.drawable.car_trafic_line_feature);
-        for(int i = 0 ; i < 24 ;i ++){
+        for(int i = 1 ; i < 24 ;i ++){
             featureData.add(new Entry(i,carLineChartBean.getData().get(0).getFeature().get(i).getNumber().floatValue()));
         }
         showLog("setFeatureChart: 数据转换完毕 准备画折线图");
-        LineChartsUtils chartsUtils = new LineChartsUtils();
+        LineChartsUtils chartsUtils = new LineChartsUtils(getContext());
         lineChart = contentView.findViewById(R.id.line_char);
         //lineChart = new LineChart(getContext());
         chartsUtils.setFeatureLine(lineChart, featureData);
@@ -296,11 +297,11 @@ public class CarTrafficFlowFragment extends Fragment {
         viewModel.choose.setValue(NOW_LINE);
         chooseIv.setImageResource(R.drawable.car_trafic_line_now);
         if(carLineChartBean!=null){
-            for(int i = 0 ; i < 24 ;i ++){
+            for(int i = 1 ; i < 24 ;i ++){
                 workdayData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekday().get(i).getNumber().floatValue()));
                 weekendData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
             }showLog("setNowLineChart: 数据转换完毕 准备画折线图");
-            LineChartsUtils chartsUtils = new LineChartsUtils();
+            LineChartsUtils chartsUtils = new LineChartsUtils(getContext());
             lineChart = contentView.findViewById(R.id.line_char);
             chartsUtils.setNowLine(lineChart, workdayData, weekendData);
         }else {
