@@ -45,6 +45,7 @@
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_date.xml" value="0.2713541666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_date_single.xml" value="0.36875" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/layout/timepicker_timeslot.xml" value="0.353125" />
+        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/menu/bottom_nav_menu.xml" value="0.337037037037037" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availability_info_background.xml" value="0.38229166666666664" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availibility_btn_background.xml" value="0.38229166666666664" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/drawable/car_availibility_change_background.xml" value="0.38229166666666664" />
@@ -70,7 +71,6 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/flow_windows_bg.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/linechart_markview.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/po_windows_bg.xml" value="0.1" />
-        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/menu/bottom_nav_menu.xml" value="0.337037037037037" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/activity_search_route_layout.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_owner_item.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_search_history_item.xml" value="0.10435663627152988" />
@@ -91,7 +91,7 @@
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/fragment_history_route.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/history_tab_item.xml" value="0.375" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/markview.xml" value="0.10435663627152988" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/po_window_line.xml" value="0.1" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/layout/po_window_line.xml" value="0.18695652173913044" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/search_date_layout.xml" value="0.335" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/test.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/timepicker_date.xml" value="0.375" />

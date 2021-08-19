@@ -46,7 +46,7 @@ public class LineChartsUtils {
         setLineXY(line);
         setPicture(line);
         setChange(line);
-        //setAnimate(line);
+        setAnimate(line);
     }
 
     public LineDataSet setLineData(List<Entry> mData,String color){
@@ -122,11 +122,11 @@ public class LineChartsUtils {
         AxisLeft.setAxisLineWidth(3);           //Y轴粗细
 
         AxisLeft.setTextColor(Color.parseColor("#61FFFFFF"));
-        AxisLeft.setAxisMaximum(3600f);   //Y轴最大数值
+        AxisLeft.setAxisMaximum(4000f);   //Y轴最大数值
         AxisLeft.setAxisMinimum(0f);   //Y轴最小数值
         AxisLeft.setGranularity(600f); //Y轴标签间隔
         //Y轴坐标的个数    第二个参数一般填false     true表示强制设置标签数 可能会导致X轴坐标显示不全等问题
-        AxisLeft.setLabelCount(7,true);
+        AxisLeft.setLabelCount(7,false);
 
         //是否隐藏右边的Y轴（不设置的话有两条Y轴 同理可以隐藏左边的Y轴）
         line.getAxisRight().setEnabled(false);
