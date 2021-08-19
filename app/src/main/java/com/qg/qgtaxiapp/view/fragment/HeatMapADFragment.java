@@ -278,9 +278,13 @@ public class HeatMapADFragment extends Fragment {
                 }break;
 
                 case 1:{
-                    List<HeatMapData.data> data = (List<HeatMapData.data>) msg.obj;
-                    heatMapViewModel.adData.setValue(mapUtils.initHeatMapData(data));
+                    List<LatLng> list = (List<LatLng>) msg.obj;
+                    heatMapViewModel.adData.setValue(list);
                 }break;
+
+                case 2:{
+
+                }
             }
         }
     };
@@ -300,9 +304,10 @@ public class HeatMapADFragment extends Fragment {
             Gson gson = new Gson();
             HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
             List<HeatMapData.data> data = heatMapData.getData();
+            List<LatLng> latLngs = mapUtils.initHeatMapData(data);
             Message message = handler.obtainMessage();
             message.what = 1;
-            message.obj = data;
+            message.obj = latLngs;
             handler.sendMessage(message);
         } catch (IOException e) {
             e.printStackTrace();

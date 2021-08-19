@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -249,6 +250,13 @@ public class HeatMapPassengerFragment extends Fragment {
     }
 
     /**
+     * Toast提示
+     * @param msg 提示内容
+     */
+    private void showMsg(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+    /**
      * Log.d打印日志
      */
     private void showLog(String log){
@@ -293,7 +301,7 @@ public class HeatMapPassengerFragment extends Fragment {
                 }break;
 
                 case 2:{
-
+                    showMsg("获取数据失败");
                 }break;
             }
         }
@@ -308,6 +316,9 @@ public class HeatMapPassengerFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 showLog("载客热点数据获取失败");
+                Message message = handler.obtainMessage();
+                message.what = 2;
+                handler.sendMessage(message);
                 e.printStackTrace();
             }
 
@@ -325,6 +336,7 @@ public class HeatMapPassengerFragment extends Fragment {
                     message.obj = latLngs;
                     handler.sendMessage(message);
                 }else {
+
                     showLog("无数据");
                 }
 

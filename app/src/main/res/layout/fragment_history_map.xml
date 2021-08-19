@@ -11,6 +11,7 @@
         android:background="@drawable/history_tab_background"
         app:tabIndicatorColor="#03DAC5"
         app:tabIndicatorFullWidth="false"
+        app:tabTextColor="#61FFFFFF"
         app:tabSelectedTextColor="#03DAC5" />
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/history_viewpager2"

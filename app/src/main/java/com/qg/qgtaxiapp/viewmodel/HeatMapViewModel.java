@@ -25,10 +25,6 @@ public class HeatMapViewModel extends ViewModel {
     public String heatTime = null;
     public MutableLiveData<List<LatLng>> heatData = new MutableLiveData<>();
 
-
-    public MutableLiveData<String> passenger_date = new MutableLiveData<>();
-    public MutableLiveData<String> passenger_timeslot = new MutableLiveData<>();
-    public String passengerTime = null;
     public MutableLiveData<List<LatLng>> passengerData = new MutableLiveData<>();
 
     public MutableLiveData<List<LatLng>> adData = new MutableLiveData<>();

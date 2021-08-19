@@ -76,7 +76,7 @@ public class TimePickerUtils{
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         startDate.set(2017,1,1);
-        endDate.set(2017,2,31);
+        endDate.set(2017,2,1);
         timePickerView = new TimePickerBuilder(context,onTimeSelectListener)
         //自定义布局
         .setLayoutRes(R.layout.timepicker_date, new CustomListener() {
