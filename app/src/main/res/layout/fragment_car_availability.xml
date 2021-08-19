@@ -1,72 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#FF1F1F1F">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_layout_rl"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@drawable/car_availability_change_background"
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:paddingRight="20dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingVertical="11dp"
+        android:paddingLeft="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日期:"
-            android:textColor="#FF03DAC5"
-            android:textSize="17sp" />
+            android:textColor="#99FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"/>
 
         <TextView
             android:id="@+id/date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="2017.02.01"
             android:textColor="#99FFFFFF"
-            android:textSize="17sp" />
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.459"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.516"/>
 
-        <Button
+        <TextView
             android:id="@+id/change_selection_btn"
-            android:layout_width="60dp"
-            android:layout_height="45dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/car_availability_btn_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_settime_background"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
             android:text="修改"
-            android:textColor="#DEFFFFFF" />
-    </RelativeLayout>
+            android:textColor="#DEFFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/data_rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@id/top_layout_rl"
-        android:background="#FF1F1F1F"
         android:orientation="vertical"
-        android:paddingTop="15dp">
+        app:layout_constraintTop_toBottomOf="@id/top_layout_rl"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
             android:layout_weight="1"
             android:background="@drawable/car_availability_info_background">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
                 android:text="利用率分析"
                 android:textColor="#DEFFFFFF"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/current_pie_chart"
@@ -81,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:popupBackground="@drawable/car_availability_spinner_background" />
         </RelativeLayout>
@@ -89,21 +107,21 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:padding="10dp"
             android:layout_weight="1"
             android:background="@drawable/car_availability_info_background">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
                 android:text="利用率预测"
                 android:textColor="#DEFFFFFF"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/future_pie_chart"
@@ -118,8 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:popupBackground="@drawable/car_availability_spinner_background" />
         </RelativeLayout>
     </LinearLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
