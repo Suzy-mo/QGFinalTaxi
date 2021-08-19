@@ -154,6 +154,17 @@ public class CarAvailabilityFragment extends Fragment {
                 currentDate = new StringBuilder(date1);
                 builder.insert(2, "-");
                 initCurrentData(builder.toString());
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.currentPieChart.invalidate();
+                        if (currentDate != null) {
+                            currentDate.insert(2, ".");
+                            binding.dateTv.setText("2017." + currentDate.toString());
+                            binding.currentSpinner.setSelection(0,true);
+                        }
+                    }
+                });
             }
         }).setLayoutRes(R.layout.route_dialog_view, new CustomListener() {
             @Override
@@ -394,15 +405,10 @@ public class CarAvailabilityFragment extends Fragment {
         //设置字体颜色
         Legend legend=binding.currentPieChart.getLegend();
         legend.setTextColor(Color.WHITE);
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 binding.currentPieChart.invalidate();
-                if (currentDate != null) {
-                    currentDate.insert(2, ".");
-                    binding.dateTv.setText("2017." + currentDate.toString());
-                }
             }
         });
     }
