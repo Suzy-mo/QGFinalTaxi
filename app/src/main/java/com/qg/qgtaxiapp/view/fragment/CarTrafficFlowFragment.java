@@ -209,7 +209,8 @@ public class CarTrafficFlowFragment extends Fragment {
         pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
         popupWindow = new PopupWindow(getContext());
         popupWindow.setContentView(contentView);//加载子布局
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);//设置大小
+        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        popupWindow.setWidth((int) (width * 0.95));//设置大小
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
         popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
