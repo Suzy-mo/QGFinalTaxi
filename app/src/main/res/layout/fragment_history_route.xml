@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
-            android:layout_toLeftOf="@id/delete_route_btn"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/delete_route_btn"
             android:background="@drawable/car_owner_search_view_background">
 
             <ImageView
@@ -37,14 +37,14 @@
                 android:layout_marginLeft="20dp"
                 android:background="@mipmap/search_btn" />
 
-            <EditText
-                android:enabled="false"
+            <TextView
                 android:id="@+id/search_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/search_route_btn"
                 android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="输入车牌号"
                 android:textColorHint="#61FFFFFF"
                 android:textSize="15dp" />

@@ -3,13 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Applications/sdk/platforms/android-30/data/res/layout/simple_spinner_dropdown_item.xml" value="0.36875" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/bg_linechart.xml" value="0.17916666666666667" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/bottom_nav_background.xml" value="0.3848958333333333" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/bottom_settime_background.xml" value="0.3848958333333333" />
-        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/car_availability_info_background.xml" value="0.3848958333333333" />
-        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/car_availability_spinner_background.xml" value="0.3848958333333333" />
-        <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/car_income_chart_bg.xml" value="0.3787037037037037" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/car_owner_search_view_background.xml" value="0.3" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/cl_timeset_background.xml" value="0.2890625" />
         <entry key="..\:/Desktop/QG/2021Summer/QGTEXI/Texi/app/src/main/res/drawable/history_tab_background.xml" value="0.2890625" />
@@ -57,14 +53,11 @@
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_heat_map.xml" value="0.17806484295845998" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_car_owner.xml" value="0.25" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_exception.xml" value="0.36614583333333334" />
+        <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_map.xml" value="0.17806484295845998" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_route.xml" value="0.25" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/po_window_line.xml" value="0.17806484295845998" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/timepicker_timeslot.xml" value="0.17806484295845998" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36614583333333334" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/car_income_chart_bg.xml" value="0.1" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/flow_windows_bg.xml" value="0.1" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/linechart_markview.xml" value="0.1" />
-        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/po_windows_bg.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/activity_search_route_layout.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_owner_item.xml" value="0.10435663627152988" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/layout/car_search_history_item.xml" value="0.10435663627152988" />
