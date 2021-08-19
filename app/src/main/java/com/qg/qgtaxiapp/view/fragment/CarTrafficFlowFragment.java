@@ -325,7 +325,7 @@ public class CarTrafficFlowFragment extends Fragment {
      */
     private void getLineChartData(Marker marker) {
         showLog("getLineChartData: 根据点击的坐标去获取数据");
-        viewModel.lineChartData.setValue(mapUtils.testChartLine());
+        //viewModel.lineChartData.setValue(mapUtils.testChartLine());
         showLog("getLineChartData: 数据设置成功");
         String latitude = String.valueOf(marker.getPosition().latitude);
         String longitude = String.valueOf(marker.getPosition().longitude);
