@@ -17,4 +17,6 @@
     <color name="select_bin_unselect">#FF292929</color>
     <color name="select_bin_select">#1403DAC5</color>
     <color name="zone">#E6556F</color>
+    <color name="timepicker_timeslot_center">#FF03DAC5</color>
+    <color name="timepicker_timeslot_out">#61FFFFFF</color>
 </resources>

@@ -284,7 +284,7 @@ public class TimePickerUtils{
     /*
      *  初始化时间段选择器
      */
-    public AlertDialog initTimeSlotDialog(Context context, View.OnClickListener onClickListener){
+    public AlertDialog initTimeSlotDialog(Context context,Activity activity, View.OnClickListener onClickListener){
         TextView tv_confirm;
         ImageView iv_cancel;
         initTimeslotData();
@@ -319,6 +319,21 @@ public class TimePickerUtils{
         min1.setDividerColor(Color.argb(0,0,0,0));
         hour2.setDividerColor(Color.argb(0,0,0,0));
         min2.setDividerColor(Color.argb(0,0,0,0));
+
+        hour1.setTextColorCenter(activity.getResources().getColor(R.color.timepicker_timeslot_center));
+        min1.setTextColorCenter(activity.getResources().getColor(R.color.timepicker_timeslot_center));
+        hour2.setTextColorCenter(activity.getResources().getColor(R.color.timepicker_timeslot_center));
+        min2.setTextColorCenter(activity.getResources().getColor(R.color.timepicker_timeslot_center));
+
+        hour1.setTextColorOut(activity.getResources().getColor(R.color.timepicker_timeslot_out));
+        min1.setTextColorOut(activity.getResources().getColor(R.color.timepicker_timeslot_out));
+        hour2.setTextColorOut(activity.getResources().getColor(R.color.timepicker_timeslot_out));
+        min2.setTextColorOut(activity.getResources().getColor(R.color.timepicker_timeslot_out));
+
+        hour1.setAlphaGradient(true);
+        min1.setAlphaGradient(true);
+        hour2.setAlphaGradient(true);
+        min2.setAlphaGradient(true);
 
         hour1.setAdapter(new ArrayWheelAdapter(hour));
         min1.setAdapter(new ArrayWheelAdapter(min));

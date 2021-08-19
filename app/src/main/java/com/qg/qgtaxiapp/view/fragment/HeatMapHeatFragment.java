@@ -154,6 +154,7 @@ public class HeatMapHeatFragment extends Fragment {
         heatMapViewModel.heatData.observe(getActivity(), new Observer<List<LatLng>>() {
             @Override
             public void onChanged(List<LatLng> list) {
+                binding.pbHeat.setVisibility(View.GONE);
                 aMap.clear();
                 heatmapTileProvider = mapUtils.initBuildHeatmapTileProvider(list);
                 tileOverlayOptions = new TileOverlayOptions();
@@ -308,6 +309,7 @@ public class HeatMapHeatFragment extends Fragment {
                 }break;
 
                 case 2:{
+                    binding.pbHeat.setVisibility(View.GONE);
                     showMsg("获取数据失败");
                 }break;
             }
@@ -330,11 +332,12 @@ public class HeatMapHeatFragment extends Fragment {
                     heatMapViewModel.heatTime = timePickerUtils.getTime();
                     showLog(heatMapViewModel.heatTime);
                     getHeatData();
+                    binding.pbHeat.setVisibility(View.VISIBLE);
                     dialog.dismiss();
                 }
             }
         };
-        dialog = timePickerUtils.initTimeSlotDialog(getContext(),onClickListener);
+        dialog = timePickerUtils.initTimeSlotDialog(getContext(), getActivity(), onClickListener);
         dialog.show();
 
         Window window = dialog.getWindow();
@@ -364,14 +367,17 @@ public class HeatMapHeatFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
                 Gson gson = new Gson();
+                Message message = handler.obtainMessage();
                 HeatMapData heatMapData = gson.fromJson(json,HeatMapData.class);
                 if (heatMapData != null && heatMapData.getCode() == 1){
                     List<HeatMapData.data> data = heatMapData.getData();
-                    Message message = handler.obtainMessage();
+
                     message.what = 1;
                     message.obj = data;
                     handler.sendMessage(message);
                 }else {
+                    message.what = 2;
+                    handler.sendMessage(message);
                     showLog("无数据");
                 }
 
