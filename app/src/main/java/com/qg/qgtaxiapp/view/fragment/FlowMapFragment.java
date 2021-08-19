@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
@@ -36,6 +37,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.qg.qgtaxiapp.databinding.FragmentFlowMapBinding;
 import com.qg.qgtaxiapp.entity.BaseCreator;
 import com.qg.qgtaxiapp.entity.FlowAllData;
+import com.qg.qgtaxiapp.entity.FlowMainDataArea;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.IPost;
 import com.qg.qgtaxiapp.entity.ResponseData;
@@ -87,6 +89,7 @@ public class FlowMapFragment extends Fragment {
     private TimePickerUtils timePickerUtils;
     private MapUtils mapUtils;
     private List<Polyline> allPolyLines ;//全流图和主流向图的画图工具
+    private List<Circle> circles;
 
 
     @Override
@@ -195,12 +198,46 @@ public class FlowMapFragment extends Fragment {
                 aMap.clear();
                 aMap = mapUtils.initMap(getContext(),mapView);
                 drawBoundary();
+                getMainArea(aMap);
                 showLog("主流图数据变化监听成功");
                 List<Polyline> polylines = mapUtils.setFlowMainLines(flowMainDataLine, aMap);
                 showLog("主流图数据转换成功");
                 allPolyLines = polylines;
             }
         });
+
+    }
+
+    private  void getMainArea(AMap aMap) {
+        showLog("getMainArea 进入需求区域的设置");
+        new Thread(()->{
+            IPost iPost = BaseCreator.createMain(IPost.class);
+            iPost.getFlowMainDataArea().enqueue(new Callback<FlowMainDataArea>() {
+                @Override
+                public void onResponse(Call<FlowMainDataArea> call, Response<FlowMainDataArea> response) {
+                    showLog(response.toString());
+                    if (response.isSuccessful()){
+                        showLog("getMainData: onResponse: 拿到数据");
+                        List<Circle> list = mapUtils.setMainAreaCircle(response.body(),aMap);
+                        getActivity().runOnUiThread(()->{
+                            showLog("回到主线程");
+                            circles = list;
+                        });
+                    }else {
+                        getActivity().runOnUiThread(()->{
+                            showMsg("暂时没有相关数据");
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FlowMainDataArea> call, Throwable t) {
+                    getActivity().runOnUiThread(()->{
+                        showLog("获取数据失败");
+                    });
+                }
+            });
+        }).start();
 
     }
 

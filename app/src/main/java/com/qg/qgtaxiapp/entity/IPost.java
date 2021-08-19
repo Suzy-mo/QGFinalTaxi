@@ -36,4 +36,6 @@ public interface IPost {
     @POST("selectFlowLine")
     Call<CarLineChartBean> getCarLineChart(@Field("longitude")String longitude,@Field("latitude")String latitude);
 
+    @POST("getCenterRadiusForMobile")
+    Call<FlowMainDataArea> getFlowMainDataArea();
 }

@@ -327,10 +327,10 @@ public class CarTrafficFlowFragment extends Fragment {
         showLog("getLineChartData: 根据点击的坐标去获取数据");
         viewModel.lineChartData.setValue(mapUtils.testChartLine());
         showLog("getLineChartData: 数据设置成功");
-//        String latitude = String.valueOf(marker.getPosition().latitude);
-//        String longitude = String.valueOf(marker.getPosition().longitude);
-        String latitude = "23.14174901";
-        String longitude = "113.2738607";
+        String latitude = String.valueOf(marker.getPosition().latitude);
+        String longitude = String.valueOf(marker.getPosition().longitude);
+//        String latitude = "23.14174901";
+//        String longitude = "113.2738607";
         new Thread(()->{
             IPost iPost = BaseCreator.createCarTraffic(IPost.class);
             iPost.getCarLineChart(longitude,latitude).enqueue(new Callback<CarLineChartBean>() {
@@ -364,32 +364,32 @@ public class CarTrafficFlowFragment extends Fragment {
      */
     private void initMapMarkers() {
         showLog("进入initMapMarkers进行坐标的初始化");
-        markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
-//        new Thread(()->{
-//            IPost iPost = BaseCreator.createCarTraffic(IPost.class);
-//            iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
-//                @Override
-//                public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {
-//                    if(response.isSuccessful()){
-//                        List<Marker> markerList = mapUtils.setCarTrafficMarkers(response.body(),aMap);
-//                        getActivity().runOnUiThread(()->{
-//                            markers = markerList;
-//                        });
-//                    }else {
-//                        getActivity().runOnUiThread(()->{
-//                            showLog("获取数据失败");
-//                        });
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<CarTrafficMarkBean> call, Throwable t) {
-//                    getActivity().runOnUiThread(()->{
-//                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
-//                    });
-//                }
-//            });
-//        }).start();
+        //markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
+        new Thread(()->{
+            IPost iPost = BaseCreator.createCarTraffic(IPost.class);
+            iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
+                @Override
+                public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {
+                    if(response.isSuccessful()){
+                        List<Marker> markerList = mapUtils.setCarTrafficMarkers(response.body(),aMap);
+                        getActivity().runOnUiThread(()->{
+                            markers = markerList;
+                        });
+                    }else {
+                        getActivity().runOnUiThread(()->{
+                            showLog("获取数据失败");
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CarTrafficMarkBean> call, Throwable t) {
+                    getActivity().runOnUiThread(()->{
+                        showLog("获取数据失败 请检查服务器的问题或请求格式的问题");
+                    });
+                }
+            });
+        }).start();
         showLog("坐标初始化完成");
     }
 

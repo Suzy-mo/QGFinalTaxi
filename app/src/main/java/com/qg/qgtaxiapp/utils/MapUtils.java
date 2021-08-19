@@ -2,19 +2,18 @@ package com.qg.qgtaxiapp.utils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.AMapPara;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.Circle;
+import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.CustomMapStyleOptions;
 import com.amap.api.maps.model.Gradient;
 import com.amap.api.maps.model.HeatmapTileProvider;
@@ -25,13 +24,12 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.district.DistrictItem;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.qg.qgtaxiapp.R;
-import com.qg.qgtaxiapp.application.MyApplication;
 import com.qg.qgtaxiapp.entity.CarLineChartBean;
 import com.qg.qgtaxiapp.entity.CarTrafficMarkBean;
+import com.qg.qgtaxiapp.entity.FlowMainDataArea;
 import com.qg.qgtaxiapp.entity.FlowMainDataLine;
 import com.qg.qgtaxiapp.entity.HeatMapData;
 import com.qg.qgtaxiapp.entity.FlowAllData;
@@ -39,9 +37,7 @@ import com.qg.qgtaxiapp.entity.FlowAllData;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -324,7 +320,7 @@ public class MapUtils {
 //				.setCustomTextureIndex(texIndexList)
                 .addAll(list)
                 .useGradient(true)
-                .width(18));
+                .width(10));
 
 //        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 //        builder.include(list.get(0));
@@ -343,12 +339,72 @@ public class MapUtils {
         for(int i = 0 ; i <data.getData().size() ; i++){
             Marker marker1 = mAMap.addMarker(new MarkerOptions()
                     .position(new LatLng(data.getData().get(i).getLatitude(),data.getData().get(i).getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
+                   // .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
+            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_round1)));
+
             Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
         }
         return markerList;
     }
 
+    /**
+     * 设置需求区域的圆形集合
+     * @param dataArea
+     * @return
+     */
+    public List<Circle> setMainAreaCircle(FlowMainDataArea dataArea,AMap aMap){
+        List<Circle> circles = new ArrayList<>();
+        String fillColor1 [] = new String[]{
+                "#E6556F","#E3843C","#EEC055","#1EC78A","#4E72E2","#E24ED7","#71E24E","#7F4EE2","#4ECEE2","#BB4EE2"
+        };
+
+        String centerColor1 [] = new String[]{
+                "#E62044","#E46B0E","#ECAD1C","#01C880","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#AC11E3"
+        };
+        String fillColor2 [] = new String[]{
+                "#EA96A5","#E1A06F","#EFCE7F","#A1D3C1","#4E72E2","#50E24ED7","#5071E24E","#807F4EE2","#804ECEE2","#80BB4EE2"
+        };
+
+        String centerColor2 [] = new String[]{
+                "#E62044","#E46B0E","#ECAD1C","#28CF93","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#AC11E3"
+        };
+        String fillColor [] = new String[]{
+                "#50E6556F","#60E3843C","#60EEC055","#601EC78A","#604E72E2","#60E24ED7","#6071E24E","#607F4EE2","#604ECEE2","#40BB4EE2"
+        };
+
+        String centerColor [] = new String[]{
+                "#E62044","#E46B0E","#ECAD1C","#01C880","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#80AC11E3"
+        };
+        for(int i = 0 ; i < 10 ;i++){
+            double latitude = dataArea.getData().get(i).getLatitude();
+            double longitude = dataArea.getData().get(i).getLongitude();
+            double radius = dataArea.getData().get(i).getRadius();
+            circles.add(drawFlowMainArea(aMap,new LatLng(latitude,longitude),fillColor[i],fillColor[i],radius/8));
+            circles.add(drawFlowMainArea(aMap,new LatLng(latitude,longitude),centerColor[i],centerColor[i],radius/70));
+        }
+        return circles;
+    }
+
+    /**
+     * 生成单个点的坐标
+     * @param aMap
+     * @param latLng
+     * @param fillColor
+     * @param strokeColor
+     * @param radius
+     * @return
+     */
+    public Circle drawFlowMainArea(AMap aMap,LatLng latLng,String fillColor,String strokeColor,double radius){
+        Circle circle = aMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(radius)
+                .fillColor(Color.parseColor(fillColor))
+                .strokeColor(Color.parseColor(strokeColor))
+                .strokeWidth(2)
+                .setStrokeDottedLineType(AMapPara.DOTTEDLINE_TYPE_CIRCLE)
+        );
+        return circle;
+    }
     public CarTrafficMarkBean testTrafficMarkers(){
         CarTrafficMarkBean data = new CarTrafficMarkBean();
         CarTrafficMarkBean.DataBean dataBean = new CarTrafficMarkBean.DataBean();
