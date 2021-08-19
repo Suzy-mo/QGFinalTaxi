@@ -55,7 +55,7 @@ public class HistoryCarOwnerFragment extends Fragment {
         manager = new GridLayoutManager(getContext(), 1, RecyclerView.VERTICAL, false);
         binding.carSearchRl.setLayoutManager(manager);
         binding.carSearchRl.setAdapter(adapter);
-        binding.carSearchView.setOnClickListener(new View.OnClickListener() {
+        binding.routeLayoutSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(), SkipSearchCarOwnerActivity.class);

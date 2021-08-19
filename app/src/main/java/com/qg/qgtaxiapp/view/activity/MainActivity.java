@@ -1,8 +1,10 @@
 package com.qg.qgtaxiapp.view.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -15,13 +17,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.amap.api.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.ActivityMainBinding;
+import com.qg.qgtaxiapp.utils.Constants;
+import com.qg.qgtaxiapp.view.fragment.HistoryMapFragment;
+import com.qg.qgtaxiapp.view.fragment.HistoryRouteFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -39,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
         保存MyTouchListener接口的列表
     */
     private final ArrayList<MyTouchListener> myTouchListeners = new ArrayList<>();
-
-    private final ArrayList<Fragment> fragments = new ArrayList<>();
     private ActivityMainBinding binding;
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
+    private int code = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         binding.navView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        checkingAndroidVersion();
     }
 
     /**
@@ -93,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 请求权限结果
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -106,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Toast提示
+     *
      * @param msg 提示内容
      */
     private void showMsg(String msg) {
@@ -113,9 +123,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public interface MyTouchListener {
-        /** onTOuchEvent的实现 */
+        /**
+         * onTOuchEvent的实现
+         */
         boolean onTouchEvent(MotionEvent event);
     }
+
     /**
      * 提供给Fragment通过getActivity()方法来注册自己的触摸事件的方法
      */
@@ -127,15 +140,63 @@ public class MainActivity extends AppCompatActivity {
      * 提供给Fragment通过getActivity()方法来取消注册自己的触摸事件的方法
      */
     public void unRegisterMyTouchListener(MyTouchListener listener) {
-        myTouchListeners.remove( listener );
+        myTouchListeners.remove(listener);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        for (MyTouchListener listener : myTouchListeners){
+        for (MyTouchListener listener : myTouchListeners) {
             listener.onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==Constants.REQUEST_ROUTE_CODE){
+            if (resultCode == Constants.ROUTE_CODE) {
+                Log.d("===========","是不是黑屏");
+                Bundle key = data.getBundleExtra("key");
+                ArrayList<LatLng> list = (ArrayList<LatLng>) key.getSerializable("data");
+                HistoryMapFragment fragment = (HistoryMapFragment) getFragment(HistoryMapFragment.class);
+                fragment.setRouteData(list, code);
+                code++;
+                if (code == 5) {
+                    code = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取碎片的方法
+     *
+     * @param clazz
+     * @return
+     */
+    public Fragment getFragment(Class<?> clazz) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            NavHostFragment navHostFragment = (NavHostFragment) fragments.get(0);
+            List<Fragment> childfragments = navHostFragment.getChildFragmentManager().getFragments();
+            if (childfragments != null && childfragments.size() > 0) {
+                for (int j = 0; j < childfragments.size(); j++) {
+                    Fragment fragment = childfragments.get(j);
+                    if (fragment.getClass().isAssignableFrom(clazz)) {
+                        Log.i("======", "getFragment1: " + fragment);
+                        return fragment;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public void startToRequest(String selectDate){
+        Intent intent = new Intent(this, SkipSearchCarRouteActivity.class);
+        intent.putExtra("searchStr", selectDate);
+        startActivityForResult(intent, Constants.REQUEST_ROUTE_CODE);
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.amap.api.maps.model.LatLng;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.qg.qgtaxiapp.R;
@@ -57,6 +59,7 @@ public class HistoryMapFragment extends Fragment {
         binding = FragmentHistoryMapBinding.inflate(inflater, container, false);
         viewModel.viewPager2=binding.historyViewpager2;
         if(savedInstanceState==null){
+            Log.d("===============","黑屏了吗");
             fragments.add(new HistoryRouteFragment());
             fragments.add(new HistoryCarOwnerFragment());
             fragments.add(new HistoryExceptionFragment());
@@ -91,5 +94,10 @@ public class HistoryMapFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("key",1);
+    }
+
+    public void setRouteData(ArrayList<LatLng> list,int code){
+        HistoryRouteFragment fragment= (HistoryRouteFragment) fragments.get(0);
+        fragment.drawLine(list,code);
     }
 }

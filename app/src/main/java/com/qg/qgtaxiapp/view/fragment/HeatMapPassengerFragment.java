@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -185,7 +186,7 @@ public class HeatMapPassengerFragment extends Fragment {
 
                     list1.add(markerOptions);
                 }
-
+                binding.pbPassenger.setVisibility(View.GONE);
                 aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addMarkers(list1,false);
             }
@@ -226,6 +227,7 @@ public class HeatMapPassengerFragment extends Fragment {
         drawBoundary();
 
         if (heatMapViewModel.passengerData.getValue() == null){
+            binding.pbPassenger.setVisibility(View.VISIBLE);
             getPassengerData();
         }
 
@@ -248,6 +250,13 @@ public class HeatMapPassengerFragment extends Fragment {
         mapView.onSaveInstanceState(outState);
     }
 
+    /**
+     * Toast提示
+     * @param msg 提示内容
+     */
+    private void showMsg(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
     /**
      * Log.d打印日志
      */
@@ -293,7 +302,8 @@ public class HeatMapPassengerFragment extends Fragment {
                 }break;
 
                 case 2:{
-
+                    binding.pbPassenger.setVisibility(View.GONE);
+                    showMsg("获取数据失败");
                 }break;
             }
         }
@@ -308,6 +318,9 @@ public class HeatMapPassengerFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 showLog("载客热点数据获取失败");
+                Message message = handler.obtainMessage();
+                message.what = 2;
+                handler.sendMessage(message);
                 e.printStackTrace();
             }
 
@@ -316,15 +329,17 @@ public class HeatMapPassengerFragment extends Fragment {
 
                 String json = response.body().string();
                 Gson gson = new Gson();
+                Message message = handler.obtainMessage();
                 HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
                 if (heatMapData != null && heatMapData.getCode() == 1) {
                     List<HeatMapData.data> data = heatMapData.getData();
                     List<LatLng> latLngs = mapUtils.initHeatMapData(data);
-                    Message message = handler.obtainMessage();
                     message.what = 1;
                     message.obj = latLngs;
                     handler.sendMessage(message);
                 }else {
+                    message.what = 2;
+                    handler.sendMessage(message);
                     showLog("无数据");
                 }
 
