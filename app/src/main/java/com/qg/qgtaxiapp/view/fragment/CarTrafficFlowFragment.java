@@ -296,7 +296,7 @@ public class CarTrafficFlowFragment extends Fragment {
         viewModel.choose.setValue(NOW_LINE);
         chooseIv.setImageResource(R.drawable.car_trafic_line_now);
         if(carLineChartBean!=null){
-            for(int i = 0 ; i < 24 ;i ++){
+            for(int i = 1 ; i < 24 ;i ++){
                 workdayData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekday().get(i).getNumber().floatValue()));
                 weekendData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
             }showLog("setNowLineChart: 数据转换完毕 准备画折线图");

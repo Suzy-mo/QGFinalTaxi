@@ -143,7 +143,7 @@ public class LineChartsUtils {
 
     public void setAnimate(LineChart line){
         //动画（如果使用了动画可以则省去更新数据的那一步）
-        line.animateY(1000); //折线在Y轴的动画  参数是动画执行时间 毫秒为单位
+        line.animateY(500); //折线在Y轴的动画  参数是动画执行时间 毫秒为单位
     }
 
 }
