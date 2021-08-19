@@ -212,34 +212,52 @@ public class FlowMapFragment extends Fragment {
 
     private  void getMainArea(AMap aMap) {
         showLog("getMainArea 进入需求区域的设置");
-        new Thread(()->{
-            IPost iPost = BaseCreator.createMain(IPost.class);
+        IPost iPost = BaseCreator.createMain(IPost.class);
             iPost.getFlowMainDataArea().enqueue(new Callback<FlowMainDataArea>() {
                 @Override
                 public void onResponse(Call<FlowMainDataArea> call, Response<FlowMainDataArea> response) {
                     showLog(response.toString());
                     if (response.isSuccessful()){
                         showLog("getMainData: onResponse: 拿到数据");
-                        List<Circle> list = mapUtils.setMainAreaCircle(response.body(),aMap);
-                        getActivity().runOnUiThread(()->{
-                            showLog("回到主线程");
-                            circles = list;
-                        });
+                        circles = mapUtils.setMainAreaCircle(response.body(),aMap);
                     }else {
-                        getActivity().runOnUiThread(()->{
-                            showMsg("暂时没有相关数据");
-                        });
+                        showMsg("暂时没有相关数据");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<FlowMainDataArea> call, Throwable t) {
-                    getActivity().runOnUiThread(()->{
-                        showLog("获取数据失败");
-                    });
+                    showLog("获取数据失败");
                 }
             });
-        }).start();
+//        new Thread(()->{
+//            IPost iPost = BaseCreator.createMain(IPost.class);
+//            iPost.getFlowMainDataArea().enqueue(new Callback<FlowMainDataArea>() {
+//                @Override
+//                public void onResponse(Call<FlowMainDataArea> call, Response<FlowMainDataArea> response) {
+//                    showLog(response.toString());
+//                    if (response.isSuccessful()){
+//                        showLog("getMainData: onResponse: 拿到数据");
+//                        List<Circle> list = mapUtils.setMainAreaCircle(response.body(),aMap);
+//                        getActivity().runOnUiThread(()->{
+//                            showLog("回到主线程");
+//                            circles = list;
+//                        });
+//                    }else {
+//                        getActivity().runOnUiThread(()->{
+//                            showMsg("暂时没有相关数据");
+//                        });
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<FlowMainDataArea> call, Throwable t) {
+//                    getActivity().runOnUiThread(()->{
+//                        showLog("获取数据失败");
+//                    });
+//                }
+//            });
+//        }).start();
 
     }
 
