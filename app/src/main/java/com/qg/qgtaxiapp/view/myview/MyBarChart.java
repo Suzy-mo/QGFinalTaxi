@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.qg.qgtaxiapp.utils.MyBarChartRenderer;
 
 /**
  * @author: Hx

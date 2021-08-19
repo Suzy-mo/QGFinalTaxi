@@ -1,4 +1,4 @@
-package com.qg.qgtaxiapp.utils;
+package com.qg.qgtaxiapp.view.myview;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -177,7 +177,7 @@ public class MyBarChartRenderer extends BarLineScatterCandleBubbleRenderer {
             RectF rectF = new RectF(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2], buffer.buffer[j + 3]);
             Path path = new Path();
             //float数组中4个角分别是左上、右上、右下、左下
-            path.addRoundRect(rectF, new float[]{40, 20, 40, 20, 0, 0, 0, 0}, Path.Direction.CCW);
+            path.addRoundRect(rectF, new float[]{25, 20, 25, 20, 0, 0, 0, 0}, Path.Direction.CCW);
             c.drawPath(path, mRenderPaint);
 
             /**--Hx fix 2021.8.18  end**/
