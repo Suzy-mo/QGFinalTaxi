@@ -54,6 +54,7 @@ import com.qg.qgtaxiapp.databinding.SearchDateLayoutBinding;
 import com.qg.qgtaxiapp.databinding.SelectBinLayoutBinding;
 import com.qg.qgtaxiapp.utils.Constants;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
+import com.qg.qgtaxiapp.view.activity.MainActivity;
 import com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity;
 import com.qg.qgtaxiapp.viewmodel.HistoryMapViewModel;
 import com.qg.qgtaxiapp.viewmodel.MainAndHistoryRouteViewModel;
@@ -94,14 +95,14 @@ public class HistoryRouteFragment extends Fragment {
     private String selectDate;
     private SelectBinLayoutBinding binLayoutBinding;
     private AMapGestureListener aMapGestureListener;
-    private int code=0;
+    private int code = 0;
     private final ArrayList<BitmapDescriptor> mTexTureList = new ArrayList<BitmapDescriptor>();
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel=new ViewModelProvider(getActivity()).get(HistoryMapViewModel.class);
+        viewModel = new ViewModelProvider(getActivity()).get(HistoryMapViewModel.class);
         initDistrictSearch();
     }
 
@@ -222,7 +223,7 @@ public class HistoryRouteFragment extends Fragment {
                 binLayoutBinding = SelectBinLayoutBinding.inflate(getLayoutInflater());
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setView(binLayoutBinding.getRoot());
-                AlertDialog dialog=builder.create();
+                AlertDialog dialog = builder.create();
                 binLayoutBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -238,13 +239,13 @@ public class HistoryRouteFragment extends Fragment {
                     }
                 });
                 dialog.show();
-                WindowManager windowManager= getActivity().getWindowManager();
+                WindowManager windowManager = getActivity().getWindowManager();
                 DisplayMetrics dm = new DisplayMetrics();
-                Window window=dialog.getWindow();
-                WindowManager.LayoutParams p =window.getAttributes();
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams p = window.getAttributes();
                 windowManager.getDefaultDisplay().getMetrics(dm);
-                p.height= (int) (dm.heightPixels*0.22);
-                p.width= (int) (dm.widthPixels*0.7);
+                p.height = (int) (dm.heightPixels * 0.22);
+                p.width = (int) (dm.widthPixels * 0.7);
                 window.setAttributes(p);
             }
         });
@@ -259,10 +260,11 @@ public class HistoryRouteFragment extends Fragment {
             @Override
             public void onTimeSelect(Date date, View v) {
                 selectDate = getDate(date);
-                Intent intent = new Intent(getActivity(), SkipSearchCarRouteActivity.class);
-                intent.putExtra("searchStr", selectDate);
-                startActivityForResult(intent, Constants.REQUEST_ROUTE_CODE);
-                Log.d("====T", selectDate);
+                MainActivity activity = (MainActivity) getActivity();
+                activity.startToRequest(selectDate);
+//                Intent intent = new Intent(activity, SkipSearchCarRouteActivity.class);
+//                intent.putExtra("searchStr", selectDate);
+//                startActivityForResult(intent, Constants.REQUEST_ROUTE_CODE);
             }
         }).setLayoutRes(R.layout.route_dialog_view, new CustomListener() {
             @Override
@@ -306,7 +308,6 @@ public class HistoryRouteFragment extends Fragment {
         params.width = (int) (dm.widthPixels * 0.95);
         window.setAttributes(params);
     }
-
 
 
     @Override
@@ -390,29 +391,29 @@ public class HistoryRouteFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_ROUTE_CODE) {
-            if (resultCode == Constants.ROUTE_CODE) {
-                Bundle key = data.getBundleExtra("key");
-                ArrayList<LatLng> list = (ArrayList<LatLng>) key.getSerializable("data");
-                if (list != null) {
-                    Log.d("===========daot", list.size() + "");
-                    PolylineOptions options=new PolylineOptions();
-                    LatLng start=list.get(0);
-                    LatLng end=list.get(list.size()-1);
-                    aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-                    aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-                    aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
-                    code++;
-                    if(code==5){
-                        code=0;
-                    }
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == Constants.REQUEST_ROUTE_CODE) {
+//            if (resultCode == Constants.ROUTE_CODE) {
+//                Bundle key = data.getBundleExtra("key");
+//                ArrayList<LatLng> list = (ArrayList<LatLng>) key.getSerializable("data");
+//                if (list != null) {
+//                    Log.d("===========daot", list.size() + "");
+//                    PolylineOptions options=new PolylineOptions();
+//                    LatLng start=list.get(0);
+//                    LatLng end=list.get(list.size()-1);
+//                    aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+//                    aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+//                    aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
+//                    code++;
+//                    if(code==5){
+//                        code=0;
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private String getDate(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -420,5 +421,17 @@ public class HistoryRouteFragment extends Fragment {
         String[] myDateArray = myDate.split("-");
         String data = myDateArray[1] + myDateArray[2];
         return data;
+    }
+
+    public void drawLine(ArrayList<LatLng> list, int code) {
+        if(list==null){
+            return;
+        }
+        PolylineOptions options = new PolylineOptions();
+        LatLng start = list.get(0);
+        LatLng end = list.get(list.size() - 1);
+        aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+        aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
     }
 }

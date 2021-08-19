@@ -153,7 +153,7 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                                 history.add(carID);
                                 instance.setDataList(Tag, history);
                                 Toast.makeText(SkipSearchCarRouteActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
-                                finish();
+                                SkipSearchCarRouteActivity.this.finish();
                             }
                         });
                     } else {
