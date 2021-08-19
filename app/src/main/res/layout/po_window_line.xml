@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="vertical"
     android:background="@drawable/po_windows_bg">
 
@@ -20,12 +21,12 @@
             android:layout_marginLeft="16dp"
             android:text="流量图"
             android:textColor="#DEFFFFFF"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/back_tv"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
@@ -35,7 +36,7 @@
         android:id="@+id/car_traffic_line_choose_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/line_char_work_title"
@@ -81,8 +82,8 @@
 
         <ImageView
             android:id="@+id/car_trafic_choose_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
@@ -90,11 +91,10 @@
     </RelativeLayout>
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_char"
-        android:layout_width="250dp"
-        android:layout_height="150dp"
+        android:layout_width="320dp"
+        android:layout_height="200dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginHorizontal="40dp"
         android:layout_below="@+id/line_char_title"
         android:layout_marginBottom="25dp"
         />

@@ -99,7 +99,7 @@ public class LineChartsUtils {
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                for(int i = 1 ; i < 25 ; i ++){
+                for(int i = 1 ; i < 24 ; i ++){
                     if (value == i){
                         return String.valueOf(i);
                     }
@@ -107,10 +107,12 @@ public class LineChartsUtils {
                 return "";//注意这里需要改成 ""
             }
         });
+
         xAxis.setAxisMaximum(25);   //X轴最大数值
         xAxis.setAxisMinimum(0);   //X轴最小数值
+        xAxis.setGranularity(2f); //设置X轴坐标间隔
         //X轴坐标的个数    第二个参数一般填false     true表示强制设置标签数 可能会导致X轴坐标显示不全等问题
-        xAxis.setLabelCount(25,false);
+        xAxis.setLabelCount(24,false);
 
 
         //Y轴
