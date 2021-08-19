@@ -25,14 +25,21 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network"
         android:theme="@style/Theme.QGTaxiApp">
-        <activity android:name="com.qg.qgtaxiapp.view.activity.TestChartActivity"/>
-        <activity android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity"/>
-        <activity android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarOwnerActivity"/>
-        <activity android:name=".view.activity.MainActivity"
+        <activity
+            android:name="com.qg.qgtaxiapp.view.activity.TestChartActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
+        <activity
+            android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
+        <activity
+            android:name="com.qg.qgtaxiapp.view.activity.SkipSearchCarOwnerActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
+        <activity
+            android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,13 +47,15 @@
             </intent-filter>
         </activity>
         <!--定位service-->
-        <service android:name="com.amap.api.location.APSService"/>
-         <!--设置高德Key-->
-<!--        <meta-data android:name="com.amap.api.v2.apikey" android:value="74fa96d685d4f1f6c7094487f8c26979"/>-->
+        <service android:name="com.amap.api.location.APSService" />
+        <!--设置高德Key-->
+        <!--        <meta-data android:name="com.amap.api.v2.apikey" android:value="74fa96d685d4f1f6c7094487f8c26979"/>-->
         <!-- 设置高德Key         唐靖豪 -->
-          <meta-data android:name="com.amap.api.v2.apikey" android:value="cf7017d371a4c2641780c6b7da1de75f"/>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="cf7017d371a4c2641780c6b7da1de75f" />
         <!-- 何旭杰的Key -->
-<!--        <meta-data android:name="com.amap.api.v2.apikey" android:value="e49c895ac77a69e0702d2d63747c7135" />-->
+        <!--        <meta-data android:name="com.amap.api.v2.apikey" android:value="e49c895ac77a69e0702d2d63747c7135" />-->
     </application>
 
 </manifest>
