@@ -27,6 +27,7 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -79,7 +80,7 @@ public class CarAvailabilityFragment extends Fragment {
 
     private SpannableString currentText;
     private SpannableString futureText;
-    private  StringBuilder currentDate;
+    private StringBuilder currentDate;
 
     public CarAvailabilityFragment() {
     }
@@ -101,12 +102,11 @@ public class CarAvailabilityFragment extends Fragment {
         mCurrentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.currentSpinner.setAdapter(mCurrentAdapter);
         binding.currentSpinner.setDropDownVerticalOffset(70);
-        binding.currentSpinner.setDropDownHorizontalOffset(40);
         binding.currentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mCurrentAdapter.setType(position);
-                if(currentDataList.size()!=0){
+                if (currentDataList.size() != 0) {
                     setCurrentData(position);
                 }
             }
@@ -120,12 +120,11 @@ public class CarAvailabilityFragment extends Fragment {
         mFutureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.futureSpinner.setAdapter(mFutureAdapter);
         binding.futureSpinner.setDropDownVerticalOffset(70);
-        binding.futureSpinner.setDropDownHorizontalOffset(40);
         binding.futureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mFutureAdapter.setType(position);
-                if(futureDataList.size()!=0){
+                if (futureDataList.size() != 0) {
                     setFutureData(position);
                 }
             }
@@ -152,7 +151,7 @@ public class CarAvailabilityFragment extends Fragment {
             public void onTimeSelect(Date date, View v) {
                 String date1 = getDate(date);
                 StringBuilder builder = new StringBuilder(date1);
-                currentDate=new StringBuilder(date1);
+                currentDate = new StringBuilder(date1);
                 builder.insert(2, "-");
                 initCurrentData(builder.toString());
             }
@@ -328,10 +327,10 @@ public class CarAvailabilityFragment extends Fragment {
             double a = doubles.get(i);
             BigDecimal b = new BigDecimal(a);
             double f1 = b.setScale(5, BigDecimal.ROUND_HALF_UP).doubleValue();
-            Log.d("=============",f1+"");
+            Log.d("=============", f1 + "");
             currentDataList.add(f1);
         }
-        Log.d("===============",currentDataList.size()+"");
+        Log.d("===============", currentDataList.size() + "");
         setCurrentData(0);
     }
 
@@ -354,83 +353,100 @@ public class CarAvailabilityFragment extends Fragment {
     }
 
     private void setCurrentData(int position) {
-        if(currentValues.size()!=0){
+        if (currentValues.size() != 0) {
             currentValues.clear();
         }
         Double a = currentDataList.get(position);
+        //数据
         float data1 = (float) (a * 100);
         float data2 = (float) ((1.0 - a) * 100);
-
-        currentValues.add(new PieEntry(data1));
-        currentValues.add(new PieEntry(data2));
+        //初始化数据
+        currentValues.add(new PieEntry(data1,"已利用"));
+        currentValues.add(new PieEntry(data2, "未利用"));
         currentPieDataSet = new PieDataSet(currentValues, "");
         currentPieDataSet.setSliceSpace(0f);
         currentPieDataSet.setDrawValues(false);
         currentPieDataSet.setColors(colors);
+
         currentPieData = new PieData(currentPieDataSet);
+        //去除描述
         Description description = new Description();
         description.setText("");
         binding.currentPieChart.setDescription(description);
         binding.currentPieChart.setData(currentPieData);
-        binding.currentPieChart.setDrawHoleEnabled(true);
-
-        String text="已利用\n" + data1+"%";
+        binding.currentPieChart.setEntryLabelTextSize(0f);
+        //圆心中间字体颜色
+        String text = "已利用\n" + data1 + "%";
         currentText = new SpannableString(text);
         ForegroundColorSpan span = new ForegroundColorSpan(Color.parseColor("#DEFFFFFF"));
         ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#FF03DAC5"));
         RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(1.5f);
         currentText.setSpan(span, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        currentText.setSpan(span1,3,(text.length()),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        currentText.setSpan(span1, 3, (text.length()), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         currentText.setSpan(relativeSizeSpan, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+        //设置圆心
         binding.currentPieChart.setCenterText(currentText);
         binding.currentPieChart.setHoleColor(Color.parseColor("#FF292929"));
         binding.currentPieChart.setTransparentCircleRadius(0f);
+        //禁止旋转和点击
+        binding.currentPieChart.setRotationEnabled(false);
+        binding.currentPieChart.setHighlightPerTapEnabled(false);
+        //设置字体颜色
+        Legend legend=binding.currentPieChart.getLegend();
+        legend.setTextColor(Color.WHITE);
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 binding.currentPieChart.invalidate();
-                if(currentDate!=null){
-                    currentDate.insert(2,".");
-                    binding.dateTv.setText("2017."+currentDate.toString());
+                if (currentDate != null) {
+                    currentDate.insert(2, ".");
+                    binding.dateTv.setText("2017." + currentDate.toString());
                 }
             }
         });
     }
 
     private void setFutureData(int position) {
-        if(futureValues.size()!=0){
+        if (futureValues.size() != 0) {
             futureValues.clear();
         }
         Double a = futureDataList.get(position);
         float data1 = (float) (a * 100);
         float data2 = (float) ((1.0 - a) * 100);
 
-        futureValues.add(new PieEntry(data1));
-        futureValues.add(new PieEntry(data2));
+        futureValues.add(new PieEntry(data1, "已利用"));
+        futureValues.add(new PieEntry(data2, "未利用"));
         futurePieDataSet = new PieDataSet(futureValues, "");
         futurePieDataSet.setSliceSpace(0f);
         futurePieDataSet.setDrawValues(false);
         futurePieDataSet.setColors(colors);
         futurePieData = new PieData(futurePieDataSet);
+
         Description description = new Description();
         description.setText("");
         binding.futurePieChart.setDescription(description);
         binding.futurePieChart.setData(futurePieData);
-        binding.futurePieChart.setDrawHoleEnabled(true);
+        binding.futurePieChart.setEntryLabelTextSize(0f);
 
-        String text="已利用\n" + data1+"%";
-        futureText= new SpannableString(text);
+        binding.futurePieChart.setRotationEnabled(false);
+        binding.futurePieChart.setHighlightPerTapEnabled(false);
+
+        String text = "已利用\n" + data1 + "%";
+        futureText = new SpannableString(text);
         ForegroundColorSpan span = new ForegroundColorSpan(Color.parseColor("#DEFFFFFF"));
         ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#FF03DAC5"));
         RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(1.5f);
         futureText.setSpan(span, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        futureText.setSpan(span1,3,(text.length()),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        futureText.setSpan(span1, 3, (text.length()), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         futureText.setSpan(relativeSizeSpan, 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         binding.futurePieChart.setCenterText(futureText);
         binding.futurePieChart.setHoleColor(Color.parseColor("#FF292929"));
         binding.futurePieChart.setTransparentCircleRadius(0f);
+
+        Legend legend=binding.futurePieChart.getLegend();
+        legend.setTextColor(Color.WHITE);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
