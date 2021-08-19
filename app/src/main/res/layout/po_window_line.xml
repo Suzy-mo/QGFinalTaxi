@@ -47,6 +47,7 @@
             android:text="工作日"
             android:textColor="#FF1E6BFF"
             android:layout_marginLeft="15dp"
+            android:gravity="center"
             android:textSize="12dp" />
         <ImageView
             android:id="@+id/car_traffic_now_blue"
@@ -67,7 +68,8 @@
             android:textColor="#FF03DAC5"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/car_traffic_now_blue"/>
+            android:layout_toRightOf="@+id/car_traffic_now_blue"
+            android:gravity="center"/>
         <ImageView
             android:id="@+id/car_traffic_now_green"
             android:layout_width="15dp"

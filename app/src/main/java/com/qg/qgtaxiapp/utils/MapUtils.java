@@ -369,7 +369,7 @@ public class MapUtils {
                 "#E62044","#E46B0E","#ECAD1C","#28CF93","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#AC11E3"
         };
         String fillColor [] = new String[]{
-                "#50E6556F","#60E3843C","#60EEC055","#601EC78A","#604E72E2","#60E24ED7","#6071E24E","#607F4EE2","#604ECEE2","#40BB4EE2"
+                "#40E6556F","#40E3843C","#40EEC055","#401EC78A","#404E72E2","#40E24ED7","#4071E24E","#407F4EE2","#404ECEE2","#40BB4EE2"
         };
 
         String centerColor [] = new String[]{

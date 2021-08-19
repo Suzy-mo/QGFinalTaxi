@@ -152,19 +152,21 @@ public class FlowMapFragment extends Fragment {
         }
 
         initFirstView();
-        initTimeChoose();
-        initListener();
-
-        setTabChangeObserve();
-        setTimeChooseObserve();
-        setAllDataObserve();
-        setMainDataObserve();
-
-
 
         aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initTimeChoose();
+        initListener();
+        setTabChangeObserve();
+        setTimeChooseObserve();
+        setAllDataObserve();
+        setMainDataObserve();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void setTimeChooseObserve() {
