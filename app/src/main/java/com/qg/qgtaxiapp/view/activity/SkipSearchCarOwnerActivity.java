@@ -145,7 +145,7 @@ public class SkipSearchCarOwnerActivity extends AppCompatActivity {
                                 history.add(carID);
                                 instance.setDataList(Tag, history);
                                 Toast.makeText(SkipSearchCarOwnerActivity.this, "查询成功!", Toast.LENGTH_SHORT).show();
-                                finish();
+                                SkipSearchCarOwnerActivity.this.finish();
                             }
                         });
 

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="2017.08.22"
+            android:text="2017.02.01"
             android:textColor="#99FFFFFF"
             android:textSize="17sp" />
 
@@ -78,11 +78,11 @@
 
             <Spinner
                 android:id="@+id/current_spinner"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:gravity="center" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -114,7 +114,7 @@
 
             <Spinner
                 android:id="@+id/future_spinner"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp" />
