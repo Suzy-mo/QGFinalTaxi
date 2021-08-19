@@ -1,5 +1,6 @@
 package com.qg.qgtaxiapp.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -12,6 +13,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.qg.qgtaxiapp.application.MyApplication;
+import com.qg.qgtaxiapp.view.myview.MarkerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +26,16 @@ import java.util.List;
  * @Date：2021/8/17 23:12
  */
 public class LineChartsUtils {
-    public LineChartsUtils() {
 
+    private Context context;
+    public LineChartsUtils(Context context) {
+        this.context = context;
     }
 
 
 
     public void setNowLine(LineChart line, List<Entry> workdayData,List<Entry> weekendData){
+        line.clear();
         LineData lineData = new LineData(setLineData(workdayData,"#FF1E6BFF"),setLineData(weekendData,"#FF03DAC5"));
         line.setData(lineData);
         setLineBG(line);
@@ -37,15 +43,18 @@ public class LineChartsUtils {
         setChange(line);
         setPicture(line);
         setAnimate(line);
+        setMarketView(line);
     }
 
     public void setFeatureLine(LineChart line, List<Entry>mData){
+        line.clear();
         LineData lineData = new LineData(setLineData(mData,"#FF03DAC5"));
         line.setData(lineData);
         setLineBG(line);
         setLineXY(line);
         setPicture(line);
         setChange(line);
+        setMarketView(line);
         //setAnimate(line);
     }
 
@@ -108,7 +117,7 @@ public class LineChartsUtils {
             }
         });
 
-        xAxis.setAxisMaximum(25);   //X轴最大数值
+        xAxis.setAxisMaximum(24);   //X轴最大数值
         xAxis.setAxisMinimum(0);   //X轴最小数值
         xAxis.setGranularity(2f); //设置X轴坐标间隔
         //X轴坐标的个数    第二个参数一般填false     true表示强制设置标签数 可能会导致X轴坐标显示不全等问题
@@ -145,5 +154,14 @@ public class LineChartsUtils {
         //动画（如果使用了动画可以则省去更新数据的那一步）
         line.animateY(500); //折线在Y轴的动画  参数是动画执行时间 毫秒为单位
     }
-
+    /*
+        Hx加入
+        设置折线图Market
+     */
+    public void setMarketView(LineChart lineChart){
+        MarkerView markerView = new MarkerView(context);
+        markerView.setChartView(lineChart);
+        lineChart.setMarker(markerView);
+        lineChart.invalidate();
+    }
 }
