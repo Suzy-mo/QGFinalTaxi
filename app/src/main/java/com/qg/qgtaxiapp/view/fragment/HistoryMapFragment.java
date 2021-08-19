@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -57,6 +58,7 @@ public class HistoryMapFragment extends Fragment {
         binding = FragmentHistoryMapBinding.inflate(inflater, container, false);
         viewModel.viewPager2=binding.historyViewpager2;
         if(savedInstanceState==null){
+            Log.d("===============","黑屏了吗");
             fragments.add(new HistoryRouteFragment());
             fragments.add(new HistoryCarOwnerFragment());
             fragments.add(new HistoryExceptionFragment());

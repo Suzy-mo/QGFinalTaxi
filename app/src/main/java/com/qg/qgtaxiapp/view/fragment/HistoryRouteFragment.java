@@ -210,7 +210,7 @@ public class HistoryRouteFragment extends Fragment {
      * 事件监听
      */
     private void initListener() {
-        binding.routeSearchView.setOnClickListener(new View.OnClickListener() {
+        binding.routeLayoutSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initMyDialog();

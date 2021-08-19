@@ -79,6 +79,7 @@ public class CarAvailabilityFragment extends Fragment {
 
     private SpannableString currentText;
     private SpannableString futureText;
+    private  StringBuilder currentDate;
 
     public CarAvailabilityFragment() {
     }
@@ -151,6 +152,7 @@ public class CarAvailabilityFragment extends Fragment {
             public void onTimeSelect(Date date, View v) {
                 String date1 = getDate(date);
                 StringBuilder builder = new StringBuilder(date1);
+                currentDate=new StringBuilder(date1);
                 builder.insert(2, "-");
                 initCurrentData(builder.toString());
             }
@@ -388,6 +390,10 @@ public class CarAvailabilityFragment extends Fragment {
             @Override
             public void run() {
                 binding.currentPieChart.invalidate();
+                if(currentDate!=null){
+                    currentDate.insert(2,".");
+                    binding.dateTv.setText("2017."+currentDate.toString());
+                }
             }
         });
     }
