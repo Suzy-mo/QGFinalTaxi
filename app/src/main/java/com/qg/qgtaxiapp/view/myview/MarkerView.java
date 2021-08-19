@@ -2,6 +2,7 @@ package com.qg.qgtaxiapp.view.myview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -20,7 +21,7 @@ public class MarkerView extends com.github.mikephil.charting.components.MarkerVi
 
     private final TextView tvDate;
     private final TextView tvValue;
-    DecimalFormat df = new DecimalFormat(".00");
+    private DecimalFormat df = new DecimalFormat(" ");
     public MarkerView(Context context) {
         super(context, R.layout.markview);
 
@@ -31,13 +32,14 @@ public class MarkerView extends com.github.mikephil.charting.components.MarkerVi
     @SuppressLint("SetTextI18n")
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        tvDate.setText(e.getX() + "");
-        tvValue.setText("利用率：" + df.format(e.getY()) + "%");
+        tvDate.setText("时间：" + df.format(e.getX()) + "时");
+        tvValue.setText("流量：" + df.format(e.getY()) + "辆");
         super.refreshContent(e, highlight);
+
     }
 
     @Override
     public MPPointF getOffset() {
-        return new MPPointF(-(getWidth()/2),-getHeight());
+        return new MPPointF(-(getWidth()/2), (float) (-getHeight() * 1.5));
     }
 }
