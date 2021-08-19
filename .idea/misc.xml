@@ -67,6 +67,11 @@
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/fragment_history_exception.xml" value="0.36614583333333334" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/layout/timepicker_timeslot.xml" value="0.17806484295845998" />
         <entry key="..\:/QGFinalProjects/NewQGFinalTaxi/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/bottom_item_background.xml" value="0.1" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/bottom_nav_background.xml" value="0.1" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/bottom_settime_background.xml" value="0.1" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/car_availability_btn_background.xml" value="0.1" />
+        <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/car_availability_change_background.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/car_income_chart_bg.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/flow_windows_bg.xml" value="0.1" />
         <entry key="..\:/QGTaxiApp/app/src/main/res/drawable/linechart_markview.xml" value="0.1" />
