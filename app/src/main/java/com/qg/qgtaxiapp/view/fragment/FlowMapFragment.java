@@ -73,7 +73,7 @@ public class FlowMapFragment extends Fragment {
     private static final int TAB_ALL = 0;
     private static final int TAB_MAIN = 1;
     private int tabPosition = TAB_ALL; //Tab显示位置
-    private FlowMapFragment.MyGestureDetector myGestureDetector;
+    //private FlowMapFragment.MyGestureDetector myGestureDetector;
     private GestureDetector gestureDetector;
     private UiSettings uiSettings;
     private MapView mapView;
@@ -93,8 +93,8 @@ public class FlowMapFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flowMapViewModel = new ViewModelProvider(getActivity()).get(FlowMapViewModel.class);
-        myGestureDetector = new FlowMapFragment.MyGestureDetector();
-        gestureDetector = new GestureDetector(getContext(), myGestureDetector);
+        //myGestureDetector = new FlowMapFragment.MyGestureDetector();
+        //gestureDetector = new GestureDetector(getContext(), myGestureDetector);
         districtSearch = new DistrictSearch(getContext());
         timePickerUtils = new TimePickerUtils();
         mapUtils = new MapUtils();
@@ -144,6 +144,9 @@ public class FlowMapFragment extends Fragment {
         tv_date = binding.tvDate;
         tv_choose = binding.tvHeatChooseTime;
         tv_timeTable = binding.tvTimeLabel;
+        for (String tabName : tabList){
+            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        }
 
         initFirstView();
         initTimeChoose();
@@ -154,9 +157,7 @@ public class FlowMapFragment extends Fragment {
         setAllDataObserve();
         setMainDataObserve();
 
-        for (String tabName : tabList){
-            tabLayout.addTab(tabLayout.newTab().setText(tabName));
-        }
+
 
         aMap = mapUtils.initMap(getContext(),mapView);
         drawBoundary();
@@ -200,18 +201,6 @@ public class FlowMapFragment extends Fragment {
                 allPolyLines = polylines;
             }
         });
-//        flowMapViewModel.MainDataLine.observe(getActivity(), new Observer<List<FlowMainDataLine>>() {
-//            @Override
-//            public void onChanged(List<FlowMainDataLine> flowMainDataLines) {
-//                new Thread(()->{
-//                    List<Polyline> polylines = mapUtils.setFlowMainLines(flowMainDataLines,aMap);
-//                    getActivity().runOnUiThread(()->{
-//                        mainPolyLines =polylines;
-//                    });
-//                }).start();
-//            }
-//        });
-
 
     }
 
@@ -220,16 +209,6 @@ public class FlowMapFragment extends Fragment {
             @Override
             public void onChanged(Integer integer) {
                 renewUI(flowMapViewModel.flow_date.getValue(),integer);
-//                if (integer == TAB_ALL) {
-//
-//                    for (int i = 0; i < AllPolyLines.size(); i++) {
-//                        AllPolyLines.get(i).setVisible(true);
-//                    }
-//                } else {
-//                    for (int i = 0; i < AllPolyLines.size(); i++) {
-//                        AllPolyLines.get(i).setVisible(false);
-//                    }
-//                }
             }
         });
 
@@ -242,9 +221,7 @@ public class FlowMapFragment extends Fragment {
                 if(dataBeans == null){
                     showLog("setAllDataObserve：数据为空");
                 }else{
-                    aMap.clear();
-                    aMap = mapUtils.initMap(getContext(),mapView);
-                    drawBoundary();
+                    renewMap();
                     List<LatLng> mData = mapUtils.readLatLng(dataBeans);
                     allPolyLines = mapUtils.setFlowAllLine(mData, aMap);
                     showLog("setAllDataObserve：展示全部数据");
@@ -273,15 +250,33 @@ public class FlowMapFragment extends Fragment {
             }
         });
 
-        /*
-            注册屏幕事件监听
-         */
-        ((MainActivity)this.getActivity()).registerMyTouchListener(myTouchListener);
-
-        flowMapViewModel.selectTab.observe(getActivity(), new Observer<Integer>() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onChanged(Integer integer) {
-                tabLayout.selectTab(tabLayout.getTabAt(integer));
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 0){
+                    renewMap();
+                    flowMapViewModel.selectTab.setValue(0);
+                }else if(tab.getPosition() == 1){
+                    renewMap();
+                    flowMapViewModel.selectTab.setValue(1);
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 0){
+                    renewMap();
+                    flowMapViewModel.selectTab.setValue(0);
+                }else if(tab.getPosition() == 1){
+                    renewMap();
+                    flowMapViewModel.selectTab.setValue(1);
+                }
             }
         });
     }
@@ -334,6 +329,8 @@ public class FlowMapFragment extends Fragment {
                                 showLog("getMainData: onResponse: 拿到数据");
                                 flowMapViewModel.MainDataLine.setValue(response.body());
                                 showLog("拿到的第一个数据是："+response.body().getData().get(0).getLocation().get(0).getLatitude()+"\n主流图拿到数成功");
+                            }else {
+                                showMsg("暂时没有相关数据");
                             }
                         });
                     }
@@ -370,12 +367,15 @@ public class FlowMapFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ResponseData<List<FlowAllData>>> call, Response<ResponseData<List<FlowAllData>>> response) {
                         getActivity().runOnUiThread(()->{
+                            if(response.body()!=null){
                             flowMapViewModel.allData.setValue(response.body().getData());
                             //showLog("拿到数据的情况：" + response.body().getMsg());
                             //showLog("拿到数据的第一个点：" + response.body().getData().get(0).getOffLatitude());
+                            }else {
+                                showMsg("暂时没有相关数据");
+                            }
                         });
                         showLog(response.body().getMsg());
-
                 }
 
                 @Override
@@ -388,19 +388,11 @@ public class FlowMapFragment extends Fragment {
 
         }).start();
 
-//        //没有数据暂时设置模拟
-//        List<FlowAllData.DataBean> data = mapUtils.setAllData();
-//        flowMapViewModel.allData.setValue(data);
-//        showLog("数据获取成功");
-
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        /** 触摸事件的注销 */
-        ((MainActivity)this.getActivity()).unRegisterMyTouchListener(myTouchListener);
         if (mapView != null){
             mapView.onDestroy();
         }
@@ -412,7 +404,6 @@ public class FlowMapFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         if (mapView != null){
             mapView.onDestroy();
-            //mPolyline.setVisible(false);
         }
     }
 
@@ -421,15 +412,6 @@ public class FlowMapFragment extends Fragment {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
-    /** 接收MainActivity的Touch回调的对象，重写其中的onTouchEvent函数 */
-    MainActivity.MyTouchListener myTouchListener = new MainActivity.MyTouchListener() {
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            //处理手势事件（根据个人需要去返回和逻辑的处理）
-            return gestureDetector.onTouchEvent(event);
-        }
-    };
 
     /**
      * Toast提示
@@ -443,31 +425,6 @@ public class FlowMapFragment extends Fragment {
      */
     private void showLog(String log){
         Log.d("TAG_FlowMapFragment", log);
-    }
-
-    /**
-     * 自定义MyGestureDetector类继承SimpleOnGestureListener
-     */
-    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener{
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if(e1.getX() - e2.getX() > MIN_DISTANCE){//左滑
-
-                if (tabPosition != (tabLayout.getTabCount() - 1)){
-                    tabPosition ++;
-                }
-                flowMapViewModel.selectTab.setValue(tabPosition);
-            }else if(e2.getX() - e1.getX() > MIN_DISTANCE){//右滑
-
-                if (tabPosition != 0){
-                    tabPosition --;
-                }
-                flowMapViewModel.selectTab.setValue(tabPosition);
-            }
-            flowMapViewModel.selectTab.setValue(tabPosition);
-            showLog("第" + tabPosition + "个Tab");
-            return true;
-        }
     }
 
     /*
@@ -504,5 +461,11 @@ public class FlowMapFragment extends Fragment {
             }
         }
     };
+
+    private void renewMap(){
+        aMap.clear();
+        aMap = mapUtils.initMap(getContext(),mapView);
+        drawBoundary();
+    }
 
 }

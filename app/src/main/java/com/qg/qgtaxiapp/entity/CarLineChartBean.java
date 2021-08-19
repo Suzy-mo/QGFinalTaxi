@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class CarLineChartBean {
 
-
     private Integer code;
     private List<DataBean> data;
     private String message;
@@ -40,16 +39,16 @@ public class CarLineChartBean {
     }
 
     public static class DataBean {
-        private List<WorkdayBean> workday;
-        private List<WeekendBean> weekend;
         private List<FeatureBean> feature;
+        private List<WeekendBean> weekend;
+        private List<WeekdayBean> weekday;
 
-        public List<WorkdayBean> getWorkday() {
-            return workday;
+        public List<FeatureBean> getFeature() {
+            return feature;
         }
 
-        public void setWorkday(List<WorkdayBean> workday) {
-            this.workday = workday;
+        public void setFeature(List<FeatureBean> feature) {
+            this.feature = feature;
         }
 
         public List<WeekendBean> getWeekend() {
@@ -60,15 +59,15 @@ public class CarLineChartBean {
             this.weekend = weekend;
         }
 
-        public List<FeatureBean> getFeature() {
-            return feature;
+        public List<WeekdayBean> getWeekday() {
+            return weekday;
         }
 
-        public void setFeature(List<FeatureBean> feature) {
-            this.feature = feature;
+        public void setWeekday(List<WeekdayBean> weekday) {
+            this.weekday = weekday;
         }
 
-        public static class WorkdayBean {
+        public static class FeatureBean {
             private Double number;
 
             public Double getNumber() {
@@ -92,7 +91,7 @@ public class CarLineChartBean {
             }
         }
 
-        public static class FeatureBean {
+        public static class WeekdayBean {
             private Double number;
 
             public Double getNumber() {

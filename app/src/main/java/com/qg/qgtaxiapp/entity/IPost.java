@@ -34,6 +34,6 @@ public interface IPost {
 
     @FormUrlEncoded
     @POST("selectFlowLine")
-    Call<CarLineChartBean> getCarLineChart(@Field("longitude")String location,@Field("latitude")String latitude);
+    Call<CarLineChartBean> getCarLineChart(@Field("longitude")String longitude,@Field("latitude")String latitude);
 
 }

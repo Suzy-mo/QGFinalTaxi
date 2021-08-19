@@ -387,13 +387,13 @@ public class MapUtils {
         }
         dataBean.setWeekend(weekendBeans);
 
-        List<CarLineChartBean.DataBean.WorkdayBean> workdayBeans = new ArrayList<>();
+        List<CarLineChartBean.DataBean.WeekdayBean> workdayBeans = new ArrayList<>();
         for(int i = 0; i < 24 ; i++){
-            CarLineChartBean.DataBean.WorkdayBean bean = new CarLineChartBean.DataBean.WorkdayBean();
+            CarLineChartBean.DataBean.WeekdayBean bean = new CarLineChartBean.DataBean.WeekdayBean();
             bean.setNumber((double)100*i);
             workdayBeans.add(bean);
         }
-        dataBean.setWorkday(workdayBeans);
+        dataBean.setWeekday(workdayBeans);
 
         List<CarLineChartBean.DataBean> beans = new ArrayList<>();
         beans.add(dataBean);
