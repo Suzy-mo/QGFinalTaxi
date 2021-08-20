@@ -196,7 +196,7 @@ public class HistoryExceptionFragment extends Fragment {
         WindowManager.LayoutParams p =window.getAttributes();
         windowManager.getDefaultDisplay().getMetrics(dm);
         p.height= (int) (dm.heightPixels*0.45);
-        p.width= (int) (dm.widthPixels*0.8);
+        p.width= (int) (dm.widthPixels*0.83);
         window.setAttributes(p);
     }
     private void showMsg(String msg) {
