@@ -65,7 +65,7 @@ public class PolygonRunnable implements Runnable {
                                 polylineOptions.add(firstLatLng);
                             }
 
-                            polylineOptions.width(5).color(Color.BLACK).setDottedLine(false);
+                            polylineOptions.width(5).color(Color.parseColor("#03DAC5")).setDottedLine(false);
                             Message message = handler.obtainMessage();
 
                             message.what = 0;

@@ -53,7 +53,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="22dp"/>
 
         <TextView
             android:id="@+id/tv_heat_date"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_heat_timeLabel"
-            android:layout_marginStart="4dp"/>
+            android:layout_marginStart="6dp"/>
         <TextView
             android:id="@+id/tv_heat_timeslot"
             android:layout_width="wrap_content"

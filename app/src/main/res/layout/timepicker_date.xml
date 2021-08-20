@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="2017    年"
             android:clickable="false"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="#ff03dac5"
             android:layout_marginEnd="16sp"/>
 
@@ -55,7 +55,7 @@
             android:id="@+id/year"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <com.contrarywind.view.WheelView
 
