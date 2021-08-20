@@ -405,7 +405,7 @@ public class FlowMapFragment extends Fragment {
             iPost.getFlowAllData(s).enqueue(new Callback<ResponseData<List<FlowAllData>>>() {
                 @Override
                 public void onResponse(Call<ResponseData<List<FlowAllData>>> call, Response<ResponseData<List<FlowAllData>>> response) {
-                        getActivity().runOnUiThread(()->{
+                         getActivity().runOnUiThread(()->{
                             if(response.body()!=null){
                             flowMapViewModel.allData.setValue(response.body().getData());
                             //showLog("拿到数据的情况：" + response.body().getMsg());
