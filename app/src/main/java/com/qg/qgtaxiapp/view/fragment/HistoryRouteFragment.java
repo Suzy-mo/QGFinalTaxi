@@ -425,14 +425,19 @@ public class HistoryRouteFragment extends Fragment {
     }
 
     public void drawLine(ArrayList<LatLng> list, int code) {
-        if(list==null){
-            return;
-        }
-        PolylineOptions options = new PolylineOptions();
-        LatLng start = list.get(0);
-        LatLng end = list.get(list.size() - 1);
-        aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-        aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(list==null){
+                    return;
+                }
+                PolylineOptions options = new PolylineOptions();
+                LatLng start = list.get(0);
+                LatLng end = list.get(list.size() - 1);
+                aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+                aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+                aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
+            }
+        });
     }
 }
