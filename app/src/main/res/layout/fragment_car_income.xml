@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="日期:"
-            android:textColor="#99FFFFFF"
+            android:textColor="#FF03DAC5"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +101,17 @@
                 android:background="@drawable/car_income_chart_bg">
 
                 <TextView
+                    android:id="@+id/car_now_yuan_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/income_now_tv"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="元"
+                    android:textColor="#61FFFFFF"
+                    android:textSize="14sp"/>
+                <TextView
                     android:id="@+id/income_now_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,13 +123,26 @@
                     android:textColor="#DEFFFFFF"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/income_now_data_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="2017.2.1"
+                    android:gravity="center"
+                    android:layout_marginEnd="16dp"
+                    android:layout_above="@+id/car_now_yuan_tv"
+                    android:textColor="#DEFFFFFF"
+                    android:textSize="14sp" />
+
                 <com.qg.qgtaxiapp.view.myview.MyBarChart
                     android:id="@+id/car_income_now_bar_chart"
                     android:layout_width="300dp"
                     android:layout_height="300dp"
                     android:layout_below="@+id/income_now_tv"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="12dp" />
 
             </RelativeLayout>
 
@@ -126,7 +150,7 @@
                 android:id="@+id/car_income_feature_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="16dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/car_income_chart_bg">
 
@@ -142,13 +166,26 @@
                     android:textColor="#DEFFFFFF"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/car_feature_yuan_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/income_feature_tv"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="元"
+                    android:textColor="#61FFFFFF"
+                    android:textSize="14sp" />
+
                 <com.qg.qgtaxiapp.view.myview.MyBarChart
                     android:id="@+id/car_income_feature_bar_chart"
                     android:layout_width="300dp"
                     android:layout_height="300dp"
                     android:layout_below="@+id/income_feature_tv"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="12dp"/>
 
             </RelativeLayout>
         </LinearLayout>

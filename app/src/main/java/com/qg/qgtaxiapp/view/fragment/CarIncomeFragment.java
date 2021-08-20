@@ -73,6 +73,7 @@ public class CarIncomeFragment extends Fragment {
         initListener();
 
         setFeatureChart();
+        binding.incomeNowDataTv.setVisibility(View.VISIBLE);
         getBarChartData("2017-02-01");
         setTimeChooseObserve();
         setNowChartObserve();
@@ -183,6 +184,7 @@ public class CarIncomeFragment extends Fragment {
             public void onTimeSelect(Date date, View v) {
                 showLog(timePickerUtils.getDate(date));
                 viewModel.date.setValue(timePickerUtils.getDate(date));
+                binding.incomeNowDataTv.setVisibility(View.INVISIBLE);
             }
         });
     }

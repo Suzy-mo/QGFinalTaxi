@@ -441,4 +441,17 @@ public class CarTrafficFlowFragment extends Fragment {
             }
         }
     };
+
+
+    @Override
+    public void onDestroy() {
+        popupWindow.dismiss();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        popupWindow.dismiss();
+        super.onDestroyView();
+    }
 }
