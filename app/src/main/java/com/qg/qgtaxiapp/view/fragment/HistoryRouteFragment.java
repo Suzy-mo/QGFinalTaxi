@@ -5,16 +5,13 @@ import static com.qg.qgtaxiapp.utils.MapUtils.getAssetsStyleExtra;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.amap.api.maps.AMap;
@@ -51,12 +49,10 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.qg.qgtaxiapp.R;
 import com.qg.qgtaxiapp.databinding.FragmentHistoryRouteBinding;
-import com.qg.qgtaxiapp.databinding.SearchDateLayoutBinding;
 import com.qg.qgtaxiapp.databinding.SelectBinLayoutBinding;
-import com.qg.qgtaxiapp.utils.Constants;
+import com.qg.qgtaxiapp.entity.RouteData;
 import com.qg.qgtaxiapp.utils.PolygonRunnable;
 import com.qg.qgtaxiapp.view.activity.MainActivity;
-import com.qg.qgtaxiapp.view.activity.SkipSearchCarRouteActivity;
 import com.qg.qgtaxiapp.viewmodel.HistoryMapViewModel;
 import com.qg.qgtaxiapp.viewmodel.MainAndHistoryRouteViewModel;
 
@@ -64,7 +60,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created with Android studio
@@ -75,16 +70,8 @@ import java.util.List;
  */
 public class HistoryRouteFragment extends Fragment {
     private FragmentHistoryRouteBinding binding;
-    private SearchDateLayoutBinding binding1;
     private UiSettings uiSettings;
-    private int year;
-    private int monthOfYear;
-    private int dayOfMonth;
     private PolygonRunnable polygonRunnable;
-    private Calendar calendar;
-    private AlertDialog dialog;
-    private String searchMonth;
-    private String searchDay;
     private DistrictSearch districtSearch;
     private TextureMapView mapView;
     private MainAndHistoryRouteViewModel mainAndHistoryRouteViewModel;
@@ -97,7 +84,9 @@ public class HistoryRouteFragment extends Fragment {
     private SelectBinLayoutBinding binLayoutBinding;
     private AMapGestureListener aMapGestureListener;
     private int code = 0;
+    private ArrayList<ArrayList<LatLng>> mList=new ArrayList<>();
     private final ArrayList<BitmapDescriptor> mTexTureList = new ArrayList<BitmapDescriptor>();
+    private ArrayList<RouteData> routeDataList =new ArrayList<>();
 
 
     @Override
@@ -119,6 +108,15 @@ public class HistoryRouteFragment extends Fragment {
         aMap.setAMapGestureListener(aMapGestureListener);
         initBitmapData();
         drawBoundary();
+        viewModel.RouteLiveData.observe(getViewLifecycleOwner(), new Observer<ArrayList<RouteData>>() {
+            @Override
+            public void onChanged(ArrayList<RouteData> routeData) {
+                for (int i = 0; i < routeData.size(); i++) {
+                    RouteData routeData1 = routeData.get(i);
+                    drawMap(routeData1.getRouteDataList(),routeData1.getCode());
+                }
+            }
+        });
         return binding.getRoot();
     }
 
@@ -235,6 +233,7 @@ public class HistoryRouteFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         aMap.clear();
+                        mList.clear();
                         drawBoundary();
                         dialog.dismiss();
                     }
@@ -431,13 +430,21 @@ public class HistoryRouteFragment extends Fragment {
                 if(list==null){
                     return;
                 }
-                PolylineOptions options = new PolylineOptions();
-                LatLng start = list.get(0);
-                LatLng end = list.get(list.size() - 1);
-                aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-                aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-                aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
+                RouteData routeData=new RouteData(list,code);
+                routeDataList.add(routeData);
+                viewModel.RouteLiveData.setValue(routeDataList);
+                drawMap(list, code);
+                mList.add(list);
             }
         });
+    }
+
+    private void drawMap(ArrayList<LatLng> list, int code) {
+        PolylineOptions options = new PolylineOptions();
+        LatLng start = list.get(0);
+        LatLng end = list.get(list.size() - 1);
+        aMap.addMarker(new MarkerOptions().position(start).icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        aMap.addMarker(new MarkerOptions().position(end).icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+        aMap.addPolyline(options.setCustomTexture(mTexTureList.get(code)).addAll(list).width(15));
     }
 }

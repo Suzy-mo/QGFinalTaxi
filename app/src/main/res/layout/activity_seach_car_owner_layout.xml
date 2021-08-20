@@ -32,6 +32,7 @@
             android:textSize="17sp" />
 
         <RelativeLayout
+            android:layout_marginBottom="20dp"
             android:id="@+id/route_layout_search_view"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -43,22 +44,22 @@
 
             <ImageView
                 android:id="@+id/search_route_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:background="@mipmap/search_btn" />
 
             <EditText
                 android:id="@+id/search_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/search_route_btn"
                 android:background="@null"
                 android:hint="输入车牌号"
                 android:textColorHint="#61FFFFFF"
-                android:textSize="15dp" />
+                android:textSize="13dp" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -67,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/owner_layout_search_rl"
-        android:background="#FF292929"
+        android:background="#FF000000"
         android:paddingBottom="20dp">
 
         <TextView
@@ -96,6 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/owner_layout_history_layout">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/owner_rv"
             android:layout_width="match_parent"
