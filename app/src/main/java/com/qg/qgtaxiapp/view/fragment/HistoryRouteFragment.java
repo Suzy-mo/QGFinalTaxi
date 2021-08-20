@@ -234,6 +234,12 @@ public class HistoryRouteFragment extends Fragment {
                     public void onClick(View v) {
                         aMap.clear();
                         mList.clear();
+                        viewModel.RouteLiveData.observe(getViewLifecycleOwner(), new Observer<ArrayList<RouteData>>() {
+                            @Override
+                            public void onChanged(ArrayList<RouteData> routeData) {
+                                routeData.clear();
+                            }
+                        });
                         drawBoundary();
                         dialog.dismiss();
                     }
