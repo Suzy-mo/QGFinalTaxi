@@ -1,6 +1,7 @@
 package com.qg.qgtaxiapp.view.fragment;
 
 import android.app.Dialog;
+import android.graphics.BlendMode;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -403,6 +404,7 @@ public class CarAvailabilityFragment extends Fragment {
         binding.currentPieChart.setRotationEnabled(false);
         binding.currentPieChart.setHighlightPerTapEnabled(false);
         //设置字体颜色
+
         Legend legend=binding.currentPieChart.getLegend();
         legend.setTextColor(Color.WHITE);
         getActivity().runOnUiThread(new Runnable() {

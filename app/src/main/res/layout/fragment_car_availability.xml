@@ -71,11 +71,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:padding="10dp"
             android:layout_weight="1"
             android:background="@drawable/car_availability_info_background">
 
             <TextView
+                android:id="@+id/current_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -99,8 +99,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
+                android:gravity="right"
                 android:popupBackground="@drawable/car_availability_spinner_background" />
         </RelativeLayout>
 
@@ -108,7 +109,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="10dp"
-            android:padding="10dp"
             android:layout_weight="1"
             android:background="@drawable/car_availability_info_background">
 

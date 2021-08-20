@@ -35,9 +35,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -127,6 +130,10 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
     }
 
     private void requestData(String carID, String searchStr) {
+        extracted(carID, searchStr);
+    }
+
+    private void extracted(String carID, String searchStr) {
         netUtils.getRouteData(carID, searchStr, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -151,13 +158,13 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                         }
                         history.add(carID);
                         instance.setDataList(Tag, history);
-                        Message message1=new Message();
-                        message1.what=0;
+                        Message message1 = new Message();
+                        message1.what = 0;
                         handler.sendMessage(message1);
                     } else {
-                       Message message1=new Message();
-                       message1.what=1;
-                       handler.sendMessage(message1);
+                        Message message1 = new Message();
+                        message1.what = 1;
+                        handler.sendMessage(message1);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -187,11 +194,11 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
     }
 
 
-    private Handler handler=new Handler(Looper.myLooper()){
+    private Handler handler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     changeView();
                     break;
