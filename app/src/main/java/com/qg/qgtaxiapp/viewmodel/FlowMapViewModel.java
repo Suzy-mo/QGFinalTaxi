@@ -2,6 +2,7 @@ package com.qg.qgtaxiapp.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.amap.api.maps.model.PolylineOptions;
 import com.qg.qgtaxiapp.entity.FlowAllData;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class FlowMapViewModel extends ViewModel {
 
+    public ViewPager2 vp2;
     public MutableLiveData<Integer> selectTab = new MutableLiveData<>();
     public PolylineOptions polylineOptions = null;
     public MutableLiveData<String> flow_date = new MutableLiveData<>();
