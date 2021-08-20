@@ -76,6 +76,7 @@ public class BarChartUtils {
         xAxis.setGridColor(Color.parseColor("#61FFFFFF"));
         xAxis.setAxisLineColor(Color.parseColor("#61FFFFFF"));   //X轴颜色
         xAxis.setAxisLineWidth(3);           //X轴粗细
+        xAxis.setTextSize(11);
         xAxis.setTextColor(Color.parseColor("#61FFFFFF"));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);        //X轴所在位置   默认为上面
         xAxis.setValueFormatter(new ValueFormatter() {

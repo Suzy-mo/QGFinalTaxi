@@ -44,20 +44,20 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
             android:text="工作日"
             android:textColor="#FF1E6BFF"
-            android:layout_marginLeft="15dp"
-            android:gravity="center"
             android:textSize="12dp" />
+
         <ImageView
             android:id="@+id/car_traffic_now_blue"
             android:layout_width="15dp"
             android:layout_height="5dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/line_char_work_title"
-            android:layout_centerVertical="true"
-            android:background="@drawable/car_trafic_line_blue"
-            />
+            android:background="@drawable/car_traffic_line_blue" />
 
         <TextView
             android:id="@+id/line_char_nowork_title"
@@ -70,30 +70,58 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/car_traffic_now_blue"
             android:gravity="center"/>
+
         <ImageView
             android:id="@+id/car_traffic_now_green"
             android:layout_width="15dp"
             android:layout_height="5dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/line_char_nowork_title"
-            android:layout_centerVertical="true"
-            android:background="@drawable/car_trafic_line_green"
-            />
+            android:background="@drawable/car_traffic_line_green" />
 
         <ImageView
             android:id="@+id/car_trafic_choose_iv"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_width="72dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:background="#ff292929" />
+            />
+
+        <TextView
+            android:id="@+id/car_trafic_choose_tv"
+            android:layout_width="72dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+
+            android:gravity="center"
+            android:text="分析        预测"
+            android:textColor="#DEFFFFFF"
+            android:textSize="@dimen/dp_10" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/line_dan_wei"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="15dp"
+            android:text="辆"
+            android:textColor="#61FFFFFF"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_char"
         android:layout_width="320dp"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="40dp"
         android:layout_below="@+id/line_char_title"
         android:layout_marginBottom="25dp"

@@ -44,8 +44,8 @@ public class FlowMapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //新建
-        titles.add("全流图");
-        titles.add("主流图");
+        titles.add("区域流向");
+        titles.add("主流向图");
         fragments.add(new FlowMapAllFragment());
         fragments.add(new FlowMapMainFragment());
 

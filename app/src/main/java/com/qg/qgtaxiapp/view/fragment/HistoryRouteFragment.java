@@ -266,7 +266,7 @@ public class HistoryRouteFragment extends Fragment {
 //                intent.putExtra("searchStr", selectDate);
 //                startActivityForResult(intent, Constants.REQUEST_ROUTE_CODE);
             }
-        }).setLayoutRes(R.layout.route_dialog_view, new CustomListener() {
+        }).setLayoutRes(R.layout.timepicker_date_single, new CustomListener() {
             @Override
             public void customLayout(View v) {
                 TextView next = v.findViewById(R.id.timepicker_date_next);
@@ -293,6 +293,7 @@ public class HistoryRouteFragment extends Fragment {
                 .setTextColorOut(getActivity().getResources().getColor(R.color.timepicker_unselectText))//未选中字体颜色
                 .isCenterLabel(true)//只显示中央标签
                 .setItemVisibleCount(5)//可见标签数
+                .setContentTextSize(16)
                 .setDividerColor(Color.argb(0, 0, 0, 0))
                 .setType(new boolean[]{false, true, true, false, false, false})//是否显示年月日，时分秒
                 .isAlphaGradient(true)//滚轮透明
