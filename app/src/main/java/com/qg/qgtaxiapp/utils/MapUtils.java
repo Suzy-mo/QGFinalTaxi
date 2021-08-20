@@ -340,7 +340,7 @@ public class MapUtils {
             Marker marker1 = mAMap.addMarker(new MarkerOptions()
                     .position(new LatLng(data.getData().get(i).getLatitude(),data.getData().get(i).getLongitude()))
                    // .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
-            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_round1)));
+            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.car_traffic_iconnew)));
 
             Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
         }
@@ -358,29 +358,19 @@ public class MapUtils {
                 "#E6556F","#E3843C","#EEC055","#1EC78A","#4E72E2","#E24ED7","#71E24E","#7F4EE2","#4ECEE2","#BB4EE2"
         };
 
-        String centerColor1 [] = new String[]{
-                "#E62044","#E46B0E","#ECAD1C","#01C880","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#AC11E3"
-        };
-        String fillColor2 [] = new String[]{
-                "#EA96A5","#E1A06F","#EFCE7F","#A1D3C1","#4E72E2","#50E24ED7","#5071E24E","#807F4EE2","#804ECEE2","#80BB4EE2"
-        };
-
-        String centerColor2 [] = new String[]{
-                "#E62044","#E46B0E","#ECAD1C","#28CF93","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#AC11E3"
-        };
         String fillColor [] = new String[]{
                 "#40E6556F","#40E3843C","#40EEC055","#401EC78A","#404E72E2","#40E24ED7","#4071E24E","#407F4EE2","#404ECEE2","#40BB4EE2"
         };
 
-        String centerColor [] = new String[]{
-                "#E62044","#E46B0E","#ECAD1C","#01C880","#0D42E6","#E40ED5","#42E40F","#5713E1","#02C6E4","#80AC11E3"
-        };
         for(int i = 0 ; i < 10 ;i++){
             double latitude = dataArea.getData().get(i).getLatitude();
             double longitude = dataArea.getData().get(i).getLongitude();
             double radius = dataArea.getData().get(i).getRadius();
             circles.add(drawFlowMainArea(aMap,new LatLng(latitude,longitude),fillColor[i],fillColor[i],radius/8));
-            circles.add(drawFlowMainArea(aMap,new LatLng(latitude,longitude),centerColor[i],centerColor[i],radius/70));
+            aMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude,longitude))
+                    // .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.car_traffic_iconnew)));
         }
         return circles;
     }
