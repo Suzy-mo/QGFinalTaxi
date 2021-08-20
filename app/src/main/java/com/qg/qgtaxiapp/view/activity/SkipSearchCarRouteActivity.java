@@ -2,6 +2,9 @@ package com.qg.qgtaxiapp.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +80,6 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
         adapter = new HistoryInfoAdapter(R.layout.car_search_history_item, searchData);
         binding.routeHistoryRv.setLayoutManager(manager);
         binding.routeHistoryRv.setAdapter(adapter);
-        Log.d("==============", searchStr);
         initListener();
     }
 
@@ -147,22 +149,15 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                             double longitude = data.getDouble("longitude");
                             latLngList.add(new LatLng(latitude, longitude));
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("data", latLngList);
-                                Intent intent = new Intent();
-                                intent.putExtra("key", bundle);
-                                setResult(Constants.ROUTE_CODE, intent);
-                                history.add(carID);
-                                instance.setDataList(Tag, history);
-                                Toast.makeText(SkipSearchCarRouteActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
-                                SkipSearchCarRouteActivity.this.finish();
-                            }
-                        });
+                        history.add(carID);
+                        instance.setDataList(Tag, history);
+                        Message message1=new Message();
+                        message1.what=0;
+                        handler.sendMessage(message1);
                     } else {
-                        Toast.makeText(SkipSearchCarRouteActivity.this, "查无此车，请重试!", Toast.LENGTH_SHORT).show();
+                       Message message1=new Message();
+                       message1.what=1;
+                       handler.sendMessage(message1);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -172,7 +167,37 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
         });
     }
 
+    private void changeView() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", latLngList);
+                Intent intent = new Intent();
+                intent.putExtra("key", bundle);
+                setResult(Constants.ROUTE_CODE, intent);
+                showMsg("查询成功");
+                SkipSearchCarRouteActivity.this.finish();
+            }
+        });
+    }
+
     private void showMsg(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+
+    private Handler handler=new Handler(Looper.myLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    changeView();
+                    break;
+                case 1:
+                    showMsg("查无此车，请重试");
+            }
+        }
+    };
 }
