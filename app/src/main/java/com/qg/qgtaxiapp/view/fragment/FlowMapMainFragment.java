@@ -294,8 +294,13 @@ public class FlowMapMainFragment extends Fragment {
                     showLog(response.toString());
                     if (response.isSuccessful()) {
                         showLog("getMainData: onResponse: 拿到数据");
-                        viewModel.MainDataLine.setValue(response.body());
-                        showLog("拿到的第一个数据是：" + response.body().getData().get(0).getLocation().get(0).getLatitude() + "\n主流图拿到数成功");
+                        if(response.body()!=null&&!s.equals("2017-02-28")){
+                            viewModel.MainDataLine.setValue(response.body());
+                            showLog("拿到的第一个数据是：" + response.body().getData().get(0).getLocation().get(0).getLatitude() + "\n主流图拿到数成功");
+                        }else {
+                            showLog("getMainData：数据为空");
+                        }
+
                     } else {
                         showMsg("暂时没有相关数据");
                     }
