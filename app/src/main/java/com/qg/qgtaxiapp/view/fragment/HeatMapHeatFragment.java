@@ -1,6 +1,8 @@
 package com.qg.qgtaxiapp.view.fragment;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -146,7 +148,6 @@ public class HeatMapHeatFragment extends Fragment {
                 heatMapViewModel.heatTime = timePickerUtils.getDate(date);
                 timePickerUtils.setmDate(heatMapViewModel.heatTime);
                 showTimeSlotSet();
-
             }
         };
         datePickerView = timePickerUtils.initDatePicker(getContext(),getActivity(),onTimeSelectListener);
@@ -341,10 +342,11 @@ public class HeatMapHeatFragment extends Fragment {
         dialog.show();
 
         Window window = dialog.getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         WindowManager manager = getActivity().getWindowManager();
         Display display = manager.getDefaultDisplay();
         WindowManager.LayoutParams params = window.getAttributes();
-        params.width = (int) (display.getWidth() * 0.98);
+        params.width = (int) (display.getWidth() * 0.9);
         window.setAttributes(params);
     }
 

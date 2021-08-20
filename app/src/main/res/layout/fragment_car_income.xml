@@ -8,7 +8,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_car_timeSet"
         android:layout_width="match_parent"
@@ -40,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="时间段:"
+            android:text="日期:"
             android:textColor="#99FFFFFF"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,6 +54,7 @@
             android:text="2017-12-01"
             android:textColor="#99FFFFFF"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.459"
@@ -99,14 +99,15 @@
                 android:padding="10dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/car_income_chart_bg">
+
                 <TextView
                     android:id="@+id/income_now_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
                     android:text="司机收入分析"
                     android:textColor="#DEFFFFFF"
                     android:textSize="16sp" />
@@ -135,8 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
                     android:text="司机收入预测"
                     android:textColor="#DEFFFFFF"
                     android:textSize="16sp" />
