@@ -87,7 +87,12 @@
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/car_owner_item.xml" value="0.33" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/exception_check_dialog_layout.xml" value="0.28940217391304346" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/exception_item.xml" value="0.5" />
+        <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/flow_timepicker_data.xml" value="0.28940217391304346" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_car_availability.xml" value="0.33" />
+        <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_car_information.xml" value="0.28940217391304346" />
+        <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_car_trafic_flow.xml" value="0.28940217391304346" />
+        <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_flow_map.xml" value="0.28940217391304346" />
+        <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_flow_map_all.xml" value="0.28940217391304346" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_history_car_owner.xml" value="0.33" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_history_exception.xml" value="0.28940217391304346" />
         <entry key="..\:/QGFinalProjects/QGFinaltaxi/app/src/main/res/layout/fragment_history_route.xml" value="0.28940217391304346" />

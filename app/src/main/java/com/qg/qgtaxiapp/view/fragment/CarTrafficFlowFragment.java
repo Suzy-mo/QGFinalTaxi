@@ -217,6 +217,7 @@ public class CarTrafficFlowFragment extends Fragment {
         popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
         popupWindow.setOutsideTouchable(true);//点击外部可消失
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
         chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
         lineChart = contentView.findViewById(R.id.line_char);
         //popupWindow.getBackground().setAlpha(50);
