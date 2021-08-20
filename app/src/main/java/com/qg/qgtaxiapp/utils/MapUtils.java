@@ -340,7 +340,7 @@ public class MapUtils {
             Marker marker1 = mAMap.addMarker(new MarkerOptions()
                     .position(new LatLng(data.getData().get(i).getLatitude(),data.getData().get(i).getLongitude()))
                    // .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
-            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.car_traffic_iconnew)));
+            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cai_trafic_ic72)));
 
             Log.d("TAG",marker1.getPosition().latitude+"\n"+marker1.getPosition().longitude);
         }
@@ -370,7 +370,7 @@ public class MapUtils {
             aMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latitude,longitude))
                     // .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker_logo)));
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.car_traffic_iconnew)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_traffic_ic24)));
         }
         return circles;
     }
