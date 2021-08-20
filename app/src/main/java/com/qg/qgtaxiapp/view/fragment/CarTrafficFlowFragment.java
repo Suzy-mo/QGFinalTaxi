@@ -368,7 +368,7 @@ public class CarTrafficFlowFragment extends Fragment {
         showLog("进入initMapMarkers进行坐标的初始化");
         //markers = mapUtils.setCarTrafficMarkers(mapUtils.testTrafficMarkers(),aMap);
         new Thread(()->{
-            IPost iPost = BaseCreator.createCarTraffic(IPost.class);
+            IPost iPost = BaseCreator.create06(IPost.class);
             iPost.getCarMarkers().enqueue(new Callback<CarTrafficMarkBean>() {
                 @Override
                 public void onResponse(Call<CarTrafficMarkBean> call, Response<CarTrafficMarkBean> response) {

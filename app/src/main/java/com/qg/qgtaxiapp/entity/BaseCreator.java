@@ -26,4 +26,11 @@ public class BaseCreator {
     public static <T> T createCarTraffic(Class<T> retrofitClass){
         return retrofitMain.create(retrofitClass);
     }
+
+    public static <T> T create00(Class<T> retrofitClass){
+        return retrofitAll.create(retrofitClass);
+    }
+    public static <T> T create06(Class<T> retrofitClass){
+        return retrofitMain.create(retrofitClass);
+    }
 }
