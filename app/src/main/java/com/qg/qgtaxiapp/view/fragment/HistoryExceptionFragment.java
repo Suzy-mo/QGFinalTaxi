@@ -127,6 +127,10 @@ public class HistoryExceptionFragment extends Fragment {
                 if(select!=null){
                     initData(select);
                     dialog.dismiss();
+                    if(select.length()==0){
+                        select="全部异常";
+                    }
+                    binding.exceptionMainTv.setText(select);
                 }
             }
         });
