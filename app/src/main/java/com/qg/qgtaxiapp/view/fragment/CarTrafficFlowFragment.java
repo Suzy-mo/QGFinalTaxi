@@ -226,10 +226,14 @@ public class CarTrafficFlowFragment extends Fragment {
         chooseIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLog("点击了分析预测的按钮");
+                showLog("carLineChartBean: 的一个数据是"+carLineChartBean.getData().get(0).getFeature().get(0));
                 if(viewModel.choose.getValue() == FEATURE){
-                    setNowLineChart(viewModel.lineChartData.getValue());
+                    showLog("原来是预测的现在改为现在展示的");
+                    setNowLineChart(carLineChartBean);
                 }else if(viewModel.choose.getValue() == NOW_LINE){
-                    setFeatureChart(viewModel.lineChartData.getValue());
+                    showLog("原来是现在的现在改为预测展示的");
+                    setFeatureChart(carLineChartBean);
                 }else{
                     showLog("选择出错");
                 }
