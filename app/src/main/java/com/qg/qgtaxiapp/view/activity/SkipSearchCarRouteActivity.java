@@ -96,8 +96,6 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                     return;
                 }
                 Log.d("==============1", carID);
-                searchData.add(new HistoryInfo(carID));
-                adapter.notifyDataSetChanged();
                 requestData(carID, searchStr);
 
             }
@@ -138,15 +136,31 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseData = response.body().string();
                 try {
+                    if(responseData==null||responseData.length()==0){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showMsg("没有数据，请检查输入");
+                            }
+                        });
+                        return;
+                    }
                     JSONObject jsonObject = new JSONObject(responseData);
                     String message = jsonObject.getString("message");
                     if (message.equals("无数据")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showMsg("没有数据，请检查输入");
+                            }
+                        });
                         return;
                     } else if (message.equals("查询数据成功")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -156,6 +170,13 @@ public class SkipSearchCarRouteActivity extends AppCompatActivity {
                             double longitude = data.getDouble("longitude");
                             latLngList.add(new LatLng(latitude, longitude));
                         }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchData.add(new HistoryInfo(carID));
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
                         history.add(carID);
                         instance.setDataList(Tag, history);
                         Message message1 = new Message();

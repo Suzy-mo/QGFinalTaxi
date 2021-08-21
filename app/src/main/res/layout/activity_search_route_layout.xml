@@ -65,6 +65,8 @@
                     android:layout_toRightOf="@id/search_route_btn"
                     android:background="@null"
                     android:hint="输入车牌号"
+                    android:maxLength="7"
+                    android:maxLines="1"
                     android:inputType="text"
                     android:textColorHint="#61FFFFFF"
                     android:textSize="13dp" />
