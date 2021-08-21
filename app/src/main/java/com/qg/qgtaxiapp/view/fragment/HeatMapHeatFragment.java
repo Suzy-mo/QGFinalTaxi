@@ -324,7 +324,9 @@ public class HeatMapHeatFragment extends Fragment {
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timePickerUtils.h2 < timePickerUtils.h1) {
+                if ((timePickerUtils.h2 < timePickerUtils.h1)
+                        || (timePickerUtils.h2 == timePickerUtils.h1 && timePickerUtils.m2 < timePickerUtils.m1 )
+                        || (timePickerUtils.h2 == timePickerUtils.h1 && timePickerUtils.m2 == timePickerUtils.m1 )) {
                     Toast.makeText(getContext(),"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
                 } else {
 
