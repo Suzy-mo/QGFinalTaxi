@@ -103,6 +103,7 @@ public class CarAvailabilityFragment extends Fragment {
         mCurrentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.currentSpinner.setAdapter(mCurrentAdapter);
         binding.currentSpinner.setDropDownVerticalOffset(70);
+        binding.currentSpinner.setDropDownHorizontalOffset(80);
         binding.currentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -121,6 +122,7 @@ public class CarAvailabilityFragment extends Fragment {
         mFutureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.futureSpinner.setAdapter(mFutureAdapter);
         binding.futureSpinner.setDropDownVerticalOffset(70);
+        binding.futureSpinner.setDropDownHorizontalOffset(80);
         binding.futureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -388,7 +390,7 @@ public class CarAvailabilityFragment extends Fragment {
         binding.currentPieChart.setData(currentPieData);
         binding.currentPieChart.setEntryLabelTextSize(0f);
         //圆心中间字体颜色
-        String text = "已利用\n" + data1 + "%";
+        String text = "已利用\n\n" + data1 + "%";
         currentText = new SpannableString(text);
         ForegroundColorSpan span = new ForegroundColorSpan(Color.parseColor("#DEFFFFFF"));
         ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#FF03DAC5"));
@@ -440,7 +442,7 @@ public class CarAvailabilityFragment extends Fragment {
         binding.futurePieChart.setRotationEnabled(false);
         binding.futurePieChart.setHighlightPerTapEnabled(false);
 
-        String text = "已利用\n" + data1 + "%";
+        String text = "已利用\n\n" + data1 + "%";
         futureText = new SpannableString(text);
         ForegroundColorSpan span = new ForegroundColorSpan(Color.parseColor("#DEFFFFFF"));
         ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#FF03DAC5"));

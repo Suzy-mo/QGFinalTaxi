@@ -127,6 +127,10 @@ public class HistoryExceptionFragment extends Fragment {
                 if(select!=null){
                     initData(select);
                     dialog.dismiss();
+                    if(select.length()==0){
+                        select="全部异常";
+                    }
+                    binding.exceptionMainTv.setText(select);
                 }
             }
         });
@@ -196,7 +200,7 @@ public class HistoryExceptionFragment extends Fragment {
         WindowManager.LayoutParams p =window.getAttributes();
         windowManager.getDefaultDisplay().getMetrics(dm);
         p.height= (int) (dm.heightPixels*0.45);
-        p.width= (int) (dm.widthPixels*0.8);
+        p.width= (int) (dm.widthPixels*0.83);
         window.setAttributes(p);
     }
     private void showMsg(String msg) {

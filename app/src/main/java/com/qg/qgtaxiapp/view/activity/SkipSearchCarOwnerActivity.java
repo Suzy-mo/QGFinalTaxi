@@ -78,7 +78,7 @@ public class SkipSearchCarOwnerActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        binding.searchRouteBtn.setOnClickListener(new View.OnClickListener() {
+        binding.searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 carID = binding.searchText.getText().toString();

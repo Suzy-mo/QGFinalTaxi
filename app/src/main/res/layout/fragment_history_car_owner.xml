@@ -16,7 +16,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/car_owner_search_view_background">
+            android:background="@drawable/search_view_background">
 
             <ImageView
                 android:id="@+id/search_route_btn"
