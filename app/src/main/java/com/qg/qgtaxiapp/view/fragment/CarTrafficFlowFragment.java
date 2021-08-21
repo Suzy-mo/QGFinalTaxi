@@ -1,15 +1,20 @@
 package com.qg.qgtaxiapp.view.fragment;
 
+import android.app.AlertDialog;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
@@ -32,6 +37,7 @@ import com.amap.api.services.district.DistrictSearchQuery;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.qg.qgtaxiapp.R;
+import com.qg.qgtaxiapp.databinding.ExceptionCheckDialogLayoutBinding;
 import com.qg.qgtaxiapp.databinding.FragmentCarTraficFlowBinding;
 import com.qg.qgtaxiapp.databinding.PoWindowLineBinding;
 import com.qg.qgtaxiapp.entity.BaseCreator;
@@ -80,6 +86,8 @@ public class CarTrafficFlowFragment extends Fragment {
     LineChart lineChart;
     List<Entry> weekendData = new ArrayList<>(), workdayData = new ArrayList<>(),featureData = new ArrayList<>();
 
+    private AlertDialog dialog;//选择
+    private AlertDialog.Builder builder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +95,7 @@ public class CarTrafficFlowFragment extends Fragment {
         districtSearch = new DistrictSearch(getContext());
         viewModel = new ViewModelProvider(getActivity()).get(CarTrafficViewModel.class);
         mapUtils = new MapUtils();
+
 
         /*
             获取边界数据回调
@@ -139,9 +148,169 @@ public class CarTrafficFlowFragment extends Fragment {
         initMapMarkers();
         setMarkerListener();
 
-        setLineDataObserve();
+        builder = new AlertDialog.Builder(getContext());
+        pwBinding = PoWindowLineBinding.inflate(getLayoutInflater());
+        backIV = pwBinding.backTv;
+        chooseIv = pwBinding.carTraficChooseIv;
+        lineChart = pwBinding.lineChar;
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        builder.setView(pwBinding.getRoot());
+        if(dialog == null){
+            dialog = builder.create();
+        }
+        dialog.dismiss();
+        setLineDataObserve();
+    }
+
+    @Override
+    public void onResume() {
+        dialog.dismiss();
+        super.onResume();
+    }
+
+    private void setLineDataObserve() {
+        showLog("setLineDataObserve:设置数据变化的监听");
+        viewModel.lineChartData.observe(getActivity(), new Observer<CarLineChartBean>() {
+            @Override
+            public void onChanged(CarLineChartBean carLineChartBean) {
+                if(carLineChartBean!=null){
+                    showLog("setLineDataObserve:监听成功 数据更新");
+                    showDialogWindows(carLineChartBean);
+                    //showPopupWindows(carLineChartBean);
+                }
+            }
+        });
+    }
+
+    private void showDialogWindows(CarLineChartBean carLineChartBean){
+        viewModel.choose.setValue(NOW_LINE);
+        initDialogListener(carLineChartBean);
+        setCharline(carLineChartBean);
+        dialog.show();
+        binding.windowsPwIv.setVisibility(View.INVISIBLE);
+        //changeDialogSize(dialog);
+    }
+
+    private void changeDialogSize(AlertDialog dialog) {
+        WindowManager windowManager= getActivity().getWindowManager();
+        DisplayMetrics dm = new DisplayMetrics();
+        Window window=dialog.getWindow();
+        WindowManager.LayoutParams p =window.getAttributes();
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        p.height= (int) (dm.heightPixels*0.38);
+        p.width= (int) (dm.widthPixels*0.8);
+        window.setAttributes(p);
+    }
+
+    private void initDialogListener(CarLineChartBean carLineChartBean) {
+        binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                binding.windowsPwIv.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                binding.windowsPwIv.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        chooseIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewModel.choose.getValue() == FEATURE){
+                    setNowLineChart(viewModel.lineChartData.getValue());
+                }else if(viewModel.choose.getValue() == NOW_LINE){
+                    setFeatureChart(viewModel.lineChartData.getValue());
+                }else{
+                    showLog("选择出错");
+                }
+            }
+        });
+    }
+
+    private void showPopupWindows(CarLineChartBean carLineChartBean) {
+        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
+        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
+        viewModel.choose.setValue(NOW_LINE);
+        binding.windowsPwIv.setVisibility(View.VISIBLE);
+        pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
+        popupWindow = new PopupWindow(getContext());
+        popupWindow.setContentView(contentView);//加载子布局
+        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        popupWindow.setWidth((int) (width * 0.95));//设置大小
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
+        popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
+        popupWindow.setOutsideTouchable(false);//点击外部可消失
+        popupWindow.setFocusable(false);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
+        lineChart = contentView.findViewById(R.id.line_char);
+        //popupWindow.getBackground().setAlpha(50);
+
+        showLog("弹窗初始化完成");
+        setCharline(carLineChartBean);
+        binding.windowsPwIv.setVisibility(View.VISIBLE);
+        binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//
+//            }
+//        });
+
+
+
+        backIV = contentView.findViewById(R.id.back_tv);
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                binding.windowsPwIv.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        chooseIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewModel.choose.getValue() == FEATURE){
+                    setNowLineChart(viewModel.lineChartData.getValue());
+                }else if(viewModel.choose.getValue() == NOW_LINE){
+                    setFeatureChart(viewModel.lineChartData.getValue());
+                }else{
+                    showLog("选择出错");
+                }
+            }
+        });
+        showLog("弹窗监听及初始化完成");
+    }
+
+    private void setCharline(CarLineChartBean carLineChartBean) {
+        showLog("setCharline: 根据传入的总数据进行判断后展示");
+        if(viewModel.choose.getValue() == NOW_LINE){
+            setNowLineChart(carLineChartBean);
+        }else if(viewModel.choose.getValue() == FEATURE){
+            setFeatureChart(carLineChartBean);
+        }else{
+            showLog("选择出错");
+        }
+
     }
 
     private void initListener() {
@@ -188,90 +357,6 @@ public class CarTrafficFlowFragment extends Fragment {
         };
     }
 
-
-    private void setLineDataObserve() {
-        showLog("setLineDataObserve:设置数据变化的监听");
-        viewModel.lineChartData.observe(getActivity(), new Observer<CarLineChartBean>() {
-            @Override
-            public void onChanged(CarLineChartBean carLineChartBean) {
-                if(carLineChartBean!=null){
-                    showLog("setLineDataObserve:监听成功 数据更新");
-                    showPopupWindows(carLineChartBean);
-                }
-            }
-        });
-    }
-
-    private void showPopupWindows(CarLineChartBean carLineChartBean) {
-        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
-        viewModel.choose.setValue(NOW_LINE);
-        binding.windowsPwIv.setVisibility(View.VISIBLE);
-        pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
-        popupWindow = new PopupWindow(getContext());
-        popupWindow.setContentView(contentView);//加载子布局
-        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        popupWindow.setWidth((int) (width * 0.95));//设置大小
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
-        popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
-        popupWindow.setOutsideTouchable(true);//点击外部可消失
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
-        lineChart = contentView.findViewById(R.id.line_char);
-        //popupWindow.getBackground().setAlpha(50);
-
-        showLog("弹窗初始化完成");
-        setCharline(carLineChartBean);
-        binding.windowsPwIv.setVisibility(View.VISIBLE);
-        binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                binding.windowsPwIv.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        backIV = contentView.findViewById(R.id.back_tv);
-        backIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-
-        chooseIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(viewModel.choose.getValue() == FEATURE){
-                    setNowLineChart(viewModel.lineChartData.getValue());
-                }else if(viewModel.choose.getValue() == NOW_LINE){
-                    setFeatureChart(viewModel.lineChartData.getValue());
-                }else{
-                    showLog("选择出错");
-                }
-            }
-        });
-        showLog("弹窗监听及初始化完成");
-    }
-
-    private void setCharline(CarLineChartBean carLineChartBean) {
-        showLog("setCharline: 根据传入的总数据进行判断后展示");
-        if(viewModel.choose.getValue() == NOW_LINE){
-            setNowLineChart(carLineChartBean);
-        }else if(viewModel.choose.getValue() == FEATURE){
-            setFeatureChart(carLineChartBean);
-        }else{
-            showLog("选择出错");
-        }
-
-    }
-
     private void setFeatureChart(CarLineChartBean carLineChartBean) {
         showLog("setFeatureChart: 设置预测的折线图");
         featureData.clear();
@@ -282,7 +367,6 @@ public class CarTrafficFlowFragment extends Fragment {
         }
         showLog("setFeatureChart: 数据转换完毕 准备画折线图");
         LineChartsUtils chartsUtils = new LineChartsUtils(getContext());
-        lineChart = contentView.findViewById(R.id.line_char);
         //lineChart = new LineChart(getContext());
         chartsUtils.setFeatureLine(lineChart, featureData);
 
@@ -302,7 +386,6 @@ public class CarTrafficFlowFragment extends Fragment {
                 weekendData.add(new Entry(i,carLineChartBean.getData().get(0).getWeekend().get(i).getNumber().floatValue()));
             }showLog("setNowLineChart: 数据转换完毕 准备画折线图");
             LineChartsUtils chartsUtils = new LineChartsUtils(getContext());
-            lineChart = contentView.findViewById(R.id.line_char);
             chartsUtils.setNowLine(lineChart, workdayData, weekendData);
         }else {
             showLog("数据为空");
@@ -328,7 +411,6 @@ public class CarTrafficFlowFragment extends Fragment {
     private void getLineChartData(Marker marker) {
         showLog("getLineChartData: 根据点击的坐标去获取数据");
         //viewModel.lineChartData.setValue(mapUtils.testChartLine());
-        showLog("getLineChartData: 数据设置成功");
         String latitude = String.valueOf(marker.getPosition().latitude);
         String longitude = String.valueOf(marker.getPosition().longitude);
 //        String latitude = "23.14174901";
@@ -359,6 +441,7 @@ public class CarTrafficFlowFragment extends Fragment {
                 }
             });
         }).start();
+        showLog("getLineChartData: 数据设置成功");
     }
 
     /**
@@ -442,16 +525,31 @@ public class CarTrafficFlowFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onPause() {
+        dialog.dismiss();
+        viewModel.lineChartData.setValue(null);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        dialog.dismiss();
+        viewModel.lineChartData.setValue(null);
+        super.onStop();
+    }
 
     @Override
     public void onDestroy() {
-        popupWindow.dismiss();
+        dialog.dismiss();
+        viewModel.lineChartData.setValue(null);
         super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
-        popupWindow.dismiss();
+        dialog.dismiss();
+        viewModel.lineChartData.setValue(null);
         super.onDestroyView();
     }
 }
