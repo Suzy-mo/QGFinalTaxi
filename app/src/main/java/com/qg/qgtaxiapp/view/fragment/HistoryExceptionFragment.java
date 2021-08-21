@@ -1,6 +1,8 @@
 package com.qg.qgtaxiapp.view.fragment;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -201,6 +203,7 @@ public class HistoryExceptionFragment extends Fragment {
         windowManager.getDefaultDisplay().getMetrics(dm);
         p.height= (int) (dm.heightPixels*0.45);
         p.width= (int) (dm.widthPixels*0.83);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         window.setAttributes(p);
     }
     private void showMsg(String msg) {

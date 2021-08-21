@@ -1,7 +1,9 @@
 package com.qg.qgtaxiapp.view.fragment;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -148,29 +150,31 @@ public class CarTrafficFlowFragment extends Fragment {
         initMapMarkers();
         setMarkerListener();
 
-        builder = new AlertDialog.Builder(getContext());
-        pwBinding = PoWindowLineBinding.inflate(getLayoutInflater());
-        backIV = pwBinding.backTv;
-        chooseIv = pwBinding.carTraficChooseIv;
-        lineChart = pwBinding.lineChar;
-
         return binding.getRoot();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        builder.setView(pwBinding.getRoot());
-        if(dialog == null){
-            dialog = builder.create();
+
+        if(viewModel.lineChartData.getValue()==null){
+            builder = new AlertDialog.Builder(getContext());
+            pwBinding = PoWindowLineBinding.inflate(getLayoutInflater());
+            backIV = pwBinding.backTv;
+            chooseIv = pwBinding.carTraficChooseIv;
+            lineChart = pwBinding.lineChar;
+            builder.setView(pwBinding.getRoot());
+            if(dialog == null){
+                dialog = builder.create();
+            }
+            dialog.dismiss();
+            setLineDataObserve();
         }
-        dialog.dismiss();
-        setLineDataObserve();
+
     }
 
     @Override
     public void onResume() {
-        dialog.dismiss();
         super.onResume();
     }
 
@@ -194,18 +198,12 @@ public class CarTrafficFlowFragment extends Fragment {
         setCharline(carLineChartBean);
         dialog.show();
         binding.windowsPwIv.setVisibility(View.INVISIBLE);
-        //changeDialogSize(dialog);
+        changeDialogSize(dialog);
     }
 
     private void changeDialogSize(AlertDialog dialog) {
-        WindowManager windowManager= getActivity().getWindowManager();
-        DisplayMetrics dm = new DisplayMetrics();
         Window window=dialog.getWindow();
-        WindowManager.LayoutParams p =window.getAttributes();
-        windowManager.getDefaultDisplay().getMetrics(dm);
-        p.height= (int) (dm.heightPixels*0.38);
-        p.width= (int) (dm.widthPixels*0.8);
-        window.setAttributes(p);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     private void initDialogListener(CarLineChartBean carLineChartBean) {
@@ -239,67 +237,6 @@ public class CarTrafficFlowFragment extends Fragment {
         });
     }
 
-    private void showPopupWindows(CarLineChartBean carLineChartBean) {
-        contentView = LayoutInflater.from(getContext()).inflate(R.layout.po_window_line,null);
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_car_trafic_flow,null);//加载父布局
-        viewModel.choose.setValue(NOW_LINE);
-        binding.windowsPwIv.setVisibility(View.VISIBLE);
-        pwBinding = PoWindowLineBinding.inflate(LayoutInflater.from(getContext()),null,false);
-        popupWindow = new PopupWindow(getContext());
-        popupWindow.setContentView(contentView);//加载子布局
-        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        popupWindow.setWidth((int) (width * 0.95));//设置大小
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(getActivity().getDrawable(R.drawable.po_windows_bg));//设置背景
-        popupWindow.showAtLocation(rootView, Gravity.CENTER,0,0);//设置位置
-        popupWindow.setOutsideTouchable(false);//点击外部可消失
-        popupWindow.setFocusable(false);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        chooseIv = contentView.findViewById(R.id.car_trafic_choose_iv);
-        lineChart = contentView.findViewById(R.id.line_char);
-        //popupWindow.getBackground().setAlpha(50);
-
-        showLog("弹窗初始化完成");
-        setCharline(carLineChartBean);
-        binding.windowsPwIv.setVisibility(View.VISIBLE);
-        binding.windowsPwIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//            @Override
-//            public void onDismiss() {
-//
-//            }
-//        });
-
-
-
-        backIV = contentView.findViewById(R.id.back_tv);
-        backIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                binding.windowsPwIv.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        chooseIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(viewModel.choose.getValue() == FEATURE){
-                    setNowLineChart(viewModel.lineChartData.getValue());
-                }else if(viewModel.choose.getValue() == NOW_LINE){
-                    setFeatureChart(viewModel.lineChartData.getValue());
-                }else{
-                    showLog("选择出错");
-                }
-            }
-        });
-        showLog("弹窗监听及初始化完成");
-    }
 
     private void setCharline(CarLineChartBean carLineChartBean) {
         showLog("setCharline: 根据传入的总数据进行判断后展示");
