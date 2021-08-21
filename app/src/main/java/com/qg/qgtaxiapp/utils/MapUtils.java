@@ -209,22 +209,6 @@ public class MapUtils {
      * @time
      */
 
-    public Polyline setFlowAllLineTest(List<LatLng> list,AMap aMap) {
-
-        // 设置当前地图级别为4
-        //aMap.moveCamera(CameraUpdateFactory.zoomTo(4));
-        // 设置地图底图文字的z轴指数，默认为0
-        //aMap.setMapTextZIndex(2);
-
-        // 绘制流向图
-        Polyline mPolyline = aMap.addPolyline((new PolylineOptions())//.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)))
-                .addAll(list)
-                .width(2)
-                .color(Color.parseColor("#03DAC5")));
-        return mPolyline;
-    }
-
-
     public List<Polyline> setFlowAllLine(List<LatLng> list, AMap aMap) {
         Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>进入");
         List<Polyline> polylines = new ArrayList<>();
@@ -241,6 +225,14 @@ public class MapUtils {
                     .width(14));//.color(Color.parseColor("#03DAC5"))
             polylines.add(mPolyline);
         }
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();//存放所有点的经纬度
+
+        for(int i=0;i<list.size();i++){
+            boundsBuilder.include(list.get(i));//把所有点都include进去（LatLng类型）
+        }
+
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 60));//第二个参数为四周留空宽度
         Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>转换完成");
         return polylines;
     }
@@ -362,7 +354,7 @@ public class MapUtils {
                 "#40E6556F","#40E3843C","#40EEC055","#401EC78A","#404E72E2","#40E24ED7","#4071E24E","#407F4EE2","#404ECEE2","#40BB4EE2"
         };
 
-        for(int i = 0 ; i < 10 ;i++){
+        for(int i = 0 ; i < dataArea.getData().size() ;i++){
             double latitude = dataArea.getData().get(i).getLatitude();
             double longitude = dataArea.getData().get(i).getLongitude();
             double radius = dataArea.getData().get(i).getRadius();
