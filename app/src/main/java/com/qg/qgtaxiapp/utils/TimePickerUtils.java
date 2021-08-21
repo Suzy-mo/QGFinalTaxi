@@ -53,8 +53,8 @@ public class TimePickerUtils{
     private WheelView min2;
     public int h1;
     public int h2;
-    private int m1;
-    private int m2;
+    public int m1;
+    public int m2;
     /*
        获取日期 yyyy-MM-dd
     */
