@@ -20,6 +20,7 @@ public class NetUtils {
     private String getHeatMapURL = "http://39.98.41.126:31100/selectByTimeSlot2/";
     private String getPassengerURL = "http://39.98.41.126:31100/getHotPoints2";
     private String getPieDataURL="http://39.98.41.126:31100/getUtilization2/";
+    private String getBoard = "http://39.98.41.126:31106/getBillboard2";
     private static NetUtils instance=new NetUtils();
     private static OkHttpClient okHttpClient;
 
@@ -75,6 +76,11 @@ public class NetUtils {
     public void getCurrentPieData(Callback callback){
         String requestStr=getPieDataURL+"-----";
         Request request=new Request.Builder().url(requestStr).build();
+        okHttpClient.newCall(request).enqueue(callback);
+    }
+
+    public void getBoard(Callback callback){
+        Request request=new Request.Builder().url(getBoard).build();
         okHttpClient.newCall(request).enqueue(callback);
     }
 }

@@ -187,7 +187,6 @@ public class HeatMapPassengerFragment extends Fragment {
                     list1.add(markerOptions);
                 }
                 binding.pbPassenger.setVisibility(View.GONE);
-                aMap.addPolyline(heatMapViewModel.polylineOptions);
                 aMap.addMarkers(list1,false);
             }
         });
@@ -231,7 +230,6 @@ public class HeatMapPassengerFragment extends Fragment {
             getPassengerData();
         }
 
-       //getTest();
         return binding.getRoot();
     }
 
@@ -345,32 +343,5 @@ public class HeatMapPassengerFragment extends Fragment {
 
             }
         });
-    }
-
-    private void getTest(){
-
-        InputStream fis = null;
-        try {
-            fis = getResources().getAssets().open("test.txt");
-
-        int size = fis.available();
-
-        byte[] bytes = new byte[size];
-        fis.read(bytes);
-        fis.close();
-
-        String s = new String(bytes, StandardCharsets.UTF_8);
-        Gson gson = new Gson();
-        HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
-        List<HeatMapData.data> data = heatMapData.getData();
-        List<LatLng> latLngs = mapUtils.initHeatMapData(data);
-        Message message = handler.obtainMessage();
-        message.what = 1;
-        message.obj = latLngs;
-        handler.sendMessage(message);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
