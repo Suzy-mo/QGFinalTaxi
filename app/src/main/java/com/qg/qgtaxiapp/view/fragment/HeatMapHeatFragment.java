@@ -324,7 +324,7 @@ public class HeatMapHeatFragment extends Fragment {
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timePickerUtils.h2 != 0 && timePickerUtils.h2 < timePickerUtils.h1) {
+                if (timePickerUtils.h2 < timePickerUtils.h1) {
                     Toast.makeText(getContext(),"结束时间应高于起始时间",Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -332,6 +332,7 @@ public class HeatMapHeatFragment extends Fragment {
                     heatMapViewModel.heat_timeslot.setValue(timePickerUtils.getTimeslot());
                     heatMapViewModel.heatTime = timePickerUtils.getTime();
                     showLog(heatMapViewModel.heatTime);
+
                     getHeatData();
                     binding.pbHeat.setVisibility(View.VISIBLE);
                     dialog.dismiss();
@@ -339,6 +340,7 @@ public class HeatMapHeatFragment extends Fragment {
             }
         };
         dialog = timePickerUtils.initTimeSlotDialog(getContext(), getActivity(), onClickListener);
+        timePickerUtils.reSetTime();
         dialog.show();
 
         Window window = dialog.getWindow();
@@ -385,5 +387,7 @@ public class HeatMapHeatFragment extends Fragment {
 
             }
         });
+
+
     }
 }

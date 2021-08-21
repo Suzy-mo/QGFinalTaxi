@@ -47,6 +47,10 @@ public class TimePickerUtils{
     private AlertDialog dialog = null;
     private List<Integer> hour;
     private List<Integer> min;
+    private WheelView hour1;
+    private WheelView hour2;
+    private WheelView min1;
+    private WheelView min2;
     public int h1;
     public int h2;
     private int m1;
@@ -308,10 +312,10 @@ public class TimePickerUtils{
             }
         });
 
-        WheelView hour1 = view.findViewById(R.id.options1);
-        WheelView min1 = view.findViewById(R.id.options2);
-        WheelView hour2 = view.findViewById(R.id.options3);
-        WheelView min2 = view.findViewById(R.id.options4);
+         hour1 = view.findViewById(R.id.options1);
+         min1 = view.findViewById(R.id.options2);
+         hour2 = view.findViewById(R.id.options3);
+         min2 = view.findViewById(R.id.options4);
 
         hour1.setCyclic(false);
         min1.setCyclic(false);
@@ -440,5 +444,12 @@ public class TimePickerUtils{
 
     public void setmDate(String mDate) {
         this.mDate = mDate;
+    }
+
+    public void reSetTime(){
+        hour1.setCurrentItem(h1);
+        hour2.setCurrentItem(h2);
+        min1.setCurrentItem(m1);
+        min2.setCurrentItem(m2);
     }
 }
