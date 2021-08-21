@@ -55,7 +55,7 @@ public class TimePickerUtils{
        获取日期 yyyy-MM-dd
     */
     public String getDate(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy - MM - dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
     /*
