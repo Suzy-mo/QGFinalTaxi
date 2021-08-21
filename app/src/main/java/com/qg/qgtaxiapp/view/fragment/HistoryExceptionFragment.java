@@ -155,6 +155,10 @@ public class HistoryExceptionFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 try {
+                    if(data==null||data.length()==0){
+                        showMsg("服务器异常");
+                        return;
+                    }
                     JSONObject jsonObject=new JSONObject(data);
                     String message = jsonObject.getString("message");
                     if(message.equals("查询数据成功")){
