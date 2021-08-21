@@ -235,10 +235,10 @@ public class MapUtils {
 
         // 绘制流向图
         for (int i = 0; i < list.size() ; i += 2){
-            Polyline mPolyline = aMap.addPolyline((new PolylineOptions())//.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)))
+            Polyline mPolyline = aMap.addPolyline((new PolylineOptions())
+                    .setCustomTexture(BitmapDescriptorFactory.fromResource(R.mipmap.flow_main_green1))
                     .add(list.get(i),list.get(i+1))
-                    .width(2)
-                    .color(Color.parseColor("#03DAC5")));
+                    .width(14));//.color(Color.parseColor("#03DAC5"))
             polylines.add(mPolyline);
         }
         Log.d("Flow_TAG","setFlowAllLine2: LatLng-->List<Polyline>转换完成");
