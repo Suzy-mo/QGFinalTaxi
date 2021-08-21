@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 /**
  * @author: Hx
  * @date: 2021年08月14日 23:23
@@ -66,6 +71,7 @@ public class HeatMapADFragment extends Fragment {
     private Marker mMarker;
     private GeocodeSearch.OnGeocodeSearchListener geocodeSearchListener;
     private CustomInfoWindowAdapter customInfoWindowAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,12 +183,13 @@ public class HeatMapADFragment extends Fragment {
                 for (LatLng latLng : list){
                     MarkerOptions markerOptions = new MarkerOptions()
                             .position(latLng)
-                            .title("AD")
+                            .draggable(false)
                             .title(latLng.toString())
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ad));
-                    list1.add(markerOptions);
 
+                    list1.add(markerOptions);
                 }
+                binding.pbAd.setVisibility(View.GONE);
                 aMap.addMarkers(list1,false);
             }
         });
@@ -220,7 +227,13 @@ public class HeatMapADFragment extends Fragment {
         };
         aMap.setAMapGestureListener(aMapGestureListener);
         drawBoundary();
-        getTest();
+
+
+        if (heatMapViewModel.adData.getValue() == null){
+            binding.pbAd.setVisibility(View.VISIBLE);
+            getBoard();
+        }
+
         return binding.getRoot();
     }
 
@@ -237,7 +250,13 @@ public class HeatMapADFragment extends Fragment {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
+    /**
+     * Toast提示
+     * @param msg 提示内容
+     */
+    private void showMsg(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
     /**
      * Log.d打印日志
      */
@@ -283,35 +302,49 @@ public class HeatMapADFragment extends Fragment {
                 }break;
 
                 case 2:{
-
+                    binding.pbAd.setVisibility(View.GONE);
+                    showMsg("获取数据失败");
                 }
             }
         }
     };
 
-    private void getTest(){
+    /*
+        获取载客热点数据
+     */
+    private void getBoard(){
 
-        InputStream fis = null;
-        try {
-            fis = getResources().getAssets().open("test.txt");
+        netUtils.getBoard(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                showLog("载客热点数据获取失败");
+                Message message = handler.obtainMessage();
+                message.what = 2;
+                handler.sendMessage(message);
+                e.printStackTrace();
+            }
 
-            int size = fis.available();
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
 
-            byte[] bytes = new byte[size];
-            fis.read(bytes);
-            fis.close();
-            String s = new String(bytes, StandardCharsets.UTF_8);
-            Gson gson = new Gson();
-            HeatMapData heatMapData = gson.fromJson(s,HeatMapData.class);
-            List<HeatMapData.data> data = heatMapData.getData();
-            List<LatLng> latLngs = mapUtils.initHeatMapData(data);
-            Message message = handler.obtainMessage();
-            message.what = 1;
-            message.obj = latLngs;
-            handler.sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                String json = response.body().string();
+                Gson gson = new Gson();
+                Message message = handler.obtainMessage();
+                HeatMapData heatMapData = gson.fromJson(json, HeatMapData.class);
+                if (heatMapData != null && heatMapData.getCode() == 1) {
+                    List<HeatMapData.data> data = heatMapData.getData();
+                    List<LatLng> latLngs = mapUtils.initHeatMapData(data);
+                    message.what = 1;
+                    message.obj = latLngs;
+                    handler.sendMessage(message);
+                }else {
+                    message.what = 2;
+                    handler.sendMessage(message);
+                    showLog("无数据");
+                }
+
+            }
+        });
     }
 
 }
