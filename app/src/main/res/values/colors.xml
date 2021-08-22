@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_500">#B3000000</color>
+    <color name="purple_700">#B3000000</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="home_tab_selected">#FF03DAC5</color>
+    <color name="home_tab_unselected">#99FFFFFF</color>
+    <color name="bottom_item_background">#292929</color>
+    <color name="timepicker_outside">#B3000000</color>
+    <color name="timepicker_background">#FF292929</color>
+    <color name="timepicker_selectText">#FF03DAC5</color>
+    <color name="timepicker_unselectText">#99FFFFFF</color>
+    <color name="select_bin_unselect">#FF292929</color>
+    <color name="select_bin_select">#1403DAC5</color>
+    <color name="zone">#E6556F</color>
+    <color name="timepicker_timeslot_center">#FF03DAC5</color>
+    <color name="timepicker_timeslot_out">#61FFFFFF</color>
 </resources>

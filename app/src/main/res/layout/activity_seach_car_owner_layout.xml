@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF292929">
+
+    <RelativeLayout
+        android:layout_marginTop="30dp"
+        android:id="@+id/owner_layout_search_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FF292929">
+
+        <ImageView
+            android:id="@+id/owner_select_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/select_back" />
+
+        <TextView
+            android:id="@+id/route_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/owner_select_back"
+            android:text="车主信息"
+            android:textColor="#DEFFFFFF"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/route_tv"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/route_layout_search_view"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/route_tv"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/search_view_background">
+
+                <ImageView
+                    android:id="@+id/search_route_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@mipmap/search_btn" />
+
+                <EditText
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/search_route_btn"
+                    android:background="@null"
+                    android:hint="输入车牌号"
+                    android:inputType="text"
+                    android:textColorHint="#61FFFFFF"
+                    android:textSize="13dp" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/search_btn"
+                android:layout_width="60dp"
+                android:layout_height="42dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/search_btn_background"
+                android:text="搜索"
+                android:textColor="#DEFFFFFF" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/owner_layout_history_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/owner_layout_search_rl"
+        android:background="#FF000000"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/text_history_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="历史搜索"
+            android:textColor="#99FFFFFF"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/owner_delete_bin"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@mipmap/bin" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rv_rl"
+        android:background="#FF000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/owner_layout_history_layout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/owner_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>

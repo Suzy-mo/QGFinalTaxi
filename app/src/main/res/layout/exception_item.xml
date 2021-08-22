@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/exception_item_background"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="8dp">
+
+    <TextView
+        android:id="@+id/exception_car_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="粤Q66666"
+        android:textColor="#DEFFFFFF"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/exception_date_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="10dp"
+        android:text="2017.08.22 13:00:06"
+        android:textColor="#FF03DAC5"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/exception_start_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_car_id_tv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:text="起点:"
+        android:textColor="#ff03dac5"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/exception_start_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_car_id_tv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_toRightOf="@id/exception_start_tv"
+        android:text="广东省广州市天河区天河南街道天河路999号广东省广州市天河区天河南街道天河路999号"
+        android:textColor="#99FFFFFF"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/exception_end_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_start_location_tv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/exception_end_tv"
+        android:text="广东省广州市天河区天河南街道天河路999号广东省广州市天河区天河南街道天河路999号"
+        android:textColor="#99FFFFFF"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/exception_end_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_start_tv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="终点:"
+        android:textColor="#ff03dac5"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/exception_info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exception_end_location_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="熄火"
+        android:textColor="#99FFFFFF"
+        android:textSize="17sp" />
+</RelativeLayout>

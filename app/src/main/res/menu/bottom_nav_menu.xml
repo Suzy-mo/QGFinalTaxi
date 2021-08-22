@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_car_info"
+        android:icon="@mipmap/bottom4"
+        android:title="车辆信息"/>
+    <item
+        android:id="@+id/navigation_heat"
+        android:icon="@mipmap/bottom1"
+        android:title="热力图" />
+
+    <item
+        android:id="@+id/navigation_flow"
+        android:icon="@mipmap/bottom2"
+        android:title="流向图" />
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@mipmap/bottom3"
+        android:title="历史记录" />
+</menu>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF292929">
+
+    <RelativeLayout
+        android:id="@+id/info_rv"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <TextView
+            android:id="@+id/exception_info_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="信息类型:"
+            android:textColor="#FF03DAC5"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/exception_main_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="全部异常"
+            android:textColor="#99FFFFFF"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/exception_change_btn"
+            android:layout_width="46dp"
+            android:layout_height="33dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/change_exception_btn_background"
+            android:text="修改"
+            android:textColor="#DEFFFFFF"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/info_rv"
+        android:background="#FF000000">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exception_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</RelativeLayout>

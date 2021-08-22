@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/car_owner_item_layout">
+
+    <TextView
+        android:id="@+id/car_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="粤Q66666"
+        android:textColor="#DEFFFFFF"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/company_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/car_id_tv"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:text="公司ID:123456789"
+        android:textColor="#61FFFFFF"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/score_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="11dp"
+        android:layout_marginRight="12dp"
+        android:text="4.8"
+        android:textColor="#FF03DAC5"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/mile_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/score_id_tv"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="12dp"
+        android:text="1873.95公里"
+        android:textColor="#99FFFFFF"
+        android:textSize="15sp" />
+</RelativeLayout>
